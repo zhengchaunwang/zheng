@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PM 专属 RAG 课程 | Codex Edition</title>
+  <meta name="description" content="产品经理专属 RAG 课程，从入门到落地，聚焦产品认知、场景适配、产品设计、落地实操、问题优化">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-aurora" aria-hidden="true"></div>
+  <div class="page-grain" aria-hidden="true"></div>
+
+  <header class="mobile-bar">
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="打开导航" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+    <div class="mobile-brand">
+      <span>Codex Edition</span>
+      <strong>RAG for PM</strong>
+    </div>
+  </header>
+
+  <aside class="floating-nav" id="sidebar" aria-label="章节导航">
+    <div class="floating-nav__brand">RAG · PM</div>
+
+    <div class="search-bar">
+      <span class="search-bar__icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="搜索课程内容...">
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#hero" class="nav-pill nav-pill--chapter active" data-nav-link="hero">
+        <span class="nav-pill__index">00</span>
+        <span class="nav-pill__label">课程概览</span>
+      </a>
+      <div class="nav-subpills">
+        <a href="#s0-position" class="nav-pill nav-pill--sub" data-nav-link="s0-position">核心定位</a>
+        <a href="#s0-goals" class="nav-pill nav-pill--sub" data-nav-link="s0-goals">学习目标</a>
+      </div>
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#section-1" class="nav-pill nav-pill--chapter" data-nav-link="section-1">
+        <span class="nav-pill__index">01</span>
+        <span class="nav-pill__label">课程大纲</span>
+      </a>
+      <div class="nav-subpills">
+        <a href="#s1-prep" class="nav-pill nav-pill--sub" data-nav-link="s1-prep">课前准备</a>
+        <a href="#s1-chapters" class="nav-pill nav-pill--sub" data-nav-link="s1-chapters">8 节详细大纲</a>
+      </div>
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#section-2" class="nav-pill nav-pill--chapter" data-nav-link="section-2">
+        <span class="nav-pill__index">02</span>
+        <span class="nav-pill__label">核心知识</span>
+      </a>
+      <div class="nav-subpills">
+        <a href="#s2-fit" class="nav-pill nav-pill--sub" data-nav-link="s2-fit">场景适配</a>
+        <a href="#s2-pipeline" class="nav-pill nav-pill--sub" data-nav-link="s2-pipeline">4 大环节</a>
+        <a href="#s2-kb" class="nav-pill nav-pill--sub" data-nav-link="s2-kb">知识库设计</a>
+        <a href="#s2-fallback" class="nav-pill nav-pill--sub" data-nav-link="s2-fallback">兜底逻辑</a>
+      </div>
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#section-3" class="nav-pill nav-pill--chapter" data-nav-link="section-3">
+        <span class="nav-pill__index">03</span>
+        <span class="nav-pill__label">提示词撰写</span>
+      </a>
+      <div class="nav-subpills">
+        <a href="#s3-diff" class="nav-pill nav-pill--sub" data-nav-link="s3-diff">核心差异</a>
+        <a href="#s3-principles" class="nav-pill nav-pill--sub" data-nav-link="s3-principles">4 大原则</a>
+        <a href="#s3-templates" class="nav-pill nav-pill--sub" data-nav-link="s3-templates">通用模板</a>
+      </div>
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#section-4" class="nav-pill nav-pill--chapter" data-nav-link="section-4">
+        <span class="nav-pill__index">04</span>
+        <span class="nav-pill__label">课程特色</span>
+      </a>
+    </div>
+
+    <div class="nav-chapter">
+      <a href="#section-5" class="nav-pill nav-pill--chapter" data-nav-link="section-5">
+        <span class="nav-pill__index">05</span>
+        <span class="nav-pill__label">工具推荐</span>
+      </a>
+    </div>
+  </aside>
+
+  <button class="mobile-scrim" id="mobileScrim" type="button" aria-label="关闭导航"></button>
+
+  <main class="page">
+
+    <!-- ===== HERO ===== -->
+    <section id="hero" class="section hero-section" data-section="hero">
+      <div class="hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Codex Edition · PM 专属</p>
+          <h1 class="display-title">
+            <span class="display-title__line">产品经理专属</span>
+            <strong class="display-title__line">RAG 课程</strong>
+          </h1>
+          <p class="hero-lead">从入门到落地，聚焦产品认知、场景适配、产品设计、落地实操、问题优化。非技术开发课，是产品经理的 RAG 产品设计与落地实操课。</p>
+
+          <div class="hero-meta">
+            <div class="hero-meta__item">
+              <span>面向谁</span>
+              <p>想理解 RAG 产品逻辑，但不写代码的 AI PM</p>
+            </div>
+            <div class="hero-meta__item">
+              <span>核心能力</span>
+              <p>独立判断 RAG 场景、设计产品方案、撰写提示词</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-side reveal reveal-delay-1">
+          <div class="hero-summary">
+            <span class="hero-summary__tag">课程规模</span>
+            <strong>8 节 · 5 模块 · 4 案例</strong>
+            <p>6-8 小时完整知识体系，含行政智能助手实战，3 套可复用提示词模板。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-row reveal reveal-delay-2">
+        <div class="stat-pill">
+          <span class="stat-pill__value">8</span>
+          <span class="stat-pill__label">课程节数</span>
+          <span class="stat-pill__sub">6-8 小时</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill__value">5</span>
+          <span class="stat-pill__label">核心模块</span>
+          <span class="stat-pill__sub">完整知识体系</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill__value">4</span>
+          <span class="stat-pill__label">实战案例</span>
+          <span class="stat-pill__sub">含行政智能助手</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill__value">3</span>
+          <span class="stat-pill__label">提示词模板</span>
+          <span class="stat-pill__sub">可直接复用</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 00: 核心定位 ===== -->
+    <section id="s0-position" class="section" data-section="s0-position">
+      <div class="section-head reveal">
+        <span class="section-number">00</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">核心定位</p>
+          <h2>非技术开发课，是<strong>产品经理的 RAG 产品设计与落地实操课</strong></h2>
+          <p class="section-summary">重点回答：产品经理该如何判断场景是否适合 RAG？如何设计 RAG 产品的核心架构和功能？如何和算法/开发配合落地 RAG？如何通过提示词/检索策略优化产品体验？</p>
+        </div>
+      </div>
+
+      <blockquote class="editorial-quote reveal">
+        先找答案，再写答案。
+      </blockquote>
+    </section>
+
+    <!-- ===== 00: 学习目标 ===== -->
+    <section id="s0-goals" class="section" data-section="s0-goals">
+      <div class="section-head reveal">
+        <span class="section-number">00</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">学习目标</p>
+          <h2>学完这门课，你将具备 <strong>6 项核心能力</strong></h2>
+        </div>
+      </div>
+
+      <div class="card-grid reveal">
+        <div class="info-card">
+          <span class="info-card__num">①</span>
+          <h3>理解核心逻辑</h3>
+          <p>理解 RAG 的核心逻辑，能区分"纯大模型问答"和"RAG 问答"的产品差异</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">②</span>
+          <h3>判断业务场景</h3>
+          <p>掌握 RAG 的产品适配场景，能独立判断业务需求是否适合做 RAG 落地</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">③</span>
+          <h3>全流程设计</h3>
+          <p>掌握 RAG 产品的全流程设计方法，能输出 RAG 产品的核心设计方案</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">④</span>
+          <h3>撰写提示词</h3>
+          <p>学会撰写产品视角的 RAG 提示词，能结合场景设计提示词模板并优化</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">⑤</span>
+          <h3>优化常见问题</h3>
+          <p>掌握 RAG 落地的常见问题（幻觉、检索不准等）的产品侧优化策略</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">⑥</span>
+          <h3>输出产品方案</h3>
+          <p>能结合实际业务（如智能助手、知识库问答、客服机器人）输出简易 RAG 产品方案</p>
+        </div>
+      </div>
+
+      <a href="#section-1" class="next-link reveal">
+        <span>下一章</span>
+        <strong>课程大纲</strong>
+      </a>
+    </section>
+
+    <!-- ===== 01: 课程大纲 ===== -->
+    <section id="section-1" class="section" data-section="section-1">
+      <div class="section-head reveal">
+        <span class="section-number">01</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">Chapter 01 · Syllabus</p>
+          <h2>课程详细大纲：<strong>6 节核心 + 1 实战 + 1 答疑</strong></h2>
+          <p class="section-summary">从课前准备到实战演练，构建完整的 RAG 产品知识体系。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s1-prep" class="section" data-section="s1-prep">
+      <div class="section-head reveal">
+        <span class="section-number">1.0</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">课前准备</p>
+          <h2>前置资料：<strong>三类准备</strong>，提前到位</h2>
+        </div>
+      </div>
+
+      <div class="step-cards reveal">
+        <div class="step-card active">
+          <span class="step-card__num">①</span>
+          <h3>基础认知</h3>
+          <p>大模型核心能力（生成、理解）、大模型产品的常见问题（幻觉、知识过时）</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">②</span>
+          <h3>实操工具</h3>
+          <p>推荐免费易上手的 RAG 工具（讯飞星火 RAG、智谱清言知识库、LangChain 快搭、豆包企业版），提前注册熟悉</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">③</span>
+          <h3>案例素材</h3>
+          <p>3 个 RAG 落地案例（企业智能助手、电商客服知识库、政务问答机器人）+ 行政制度智能助手素材</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s1-chapters" class="section" data-section="s1-chapters">
+      <div class="section-head reveal">
+        <span class="section-number">1.1</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">8 节详细大纲</p>
+          <h2>点击展开每节课的<strong>完整内容</strong></h2>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 1 节：RAG 基础认知 —— 产品经理必懂的 RAG 核心概念</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：搞懂 RAG 是什么、解决什么问题、和纯大模型的产品差异，建立产品视角的 RAG 认知框架</p>
+            <ul>
+              <li>从产品痛点切入：纯大模型产品的 3 大核心问题（知识过时、幻觉、专业领域回答不准），结合行政智能助手案例说明</li>
+              <li>RAG 的定义：检索增强生成（Retrieval-Augmented Generation）产品视角的解读 ——"先找答案，再写答案"</li>
+              <li>RAG 的核心价值：产品层面的 3 个核心作用（解决知识过时、降低幻觉、提升专业领域回答准确性）</li>
+              <li>RAG 与纯大模型、传统知识库的产品差异（表格对比，聚焦回答灵活性、知识准确性、更新成本、开发成本）</li>
+              <li>RAG 的适用边界：哪些场景不适合做 RAG（如无固定知识库、开放性创意生成）</li>
+              <li>小练习：判断 3 个业务场景是否适合 RAG</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 2 节：RAG 核心原理 —— 产品经理只需懂这些（避开纯技术）</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：理解 RAG 的 4 大核心环节，知道每个环节的产品影响点，能和开发/算法高效沟通</p>
+            <h4>RAG 的 4 大核心环节（产品视角拆解）</h4>
+            <ul>
+              <li><strong>知识库构建</strong>：把非结构化文档变成大模型能"检索"的格式，产品关注文档解析精度、知识库更新方式、权限管理</li>
+              <li><strong>检索</strong>：用户提问后，从知识库中找匹配的"上下文"，产品关注检索精度、检索速度、多关键词匹配能力</li>
+              <li><strong>提示词拼接</strong>：把"检索到的上下文 + 用户问题 + 指令"拼接成提示词发给大模型，产品关注提示词结构、上下文筛选规则</li>
+              <li><strong>生成</strong>：大模型基于拼接后的提示词输出答案，产品关注生成范围、答案贴合度、格式规范</li>
+            </ul>
+            <h4>核心组件（产品价值解读）</h4>
+            <ul>
+              <li><strong>向量数据库</strong>：影响"检索快慢/准度"</li>
+              <li><strong>嵌入模型</strong>：影响"文档和问题的匹配精度"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 3 节：RAG 产品设计全流程 —— 产品经理的核心工作</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：掌握从"需求分析"到"产品落地"的 RAG 产品设计全流程，能输出核心设计方案</p>
+            <h4>第一步：需求分析与场景适配</h4>
+            <ul>
+              <li>核心判断标准：是否有结构化/非结构化的固定知识库？是否需要基于知识库的精准问答？是否需要频繁更新知识？</li>
+              <li>需求拆解要点：明确问答边界、答案格式要求、知识库更新频率</li>
+            </ul>
+            <h4>第二步：知识库产品设计</h4>
+            <ul>
+              <li>知识库类型设计：结构化/非结构化/混合</li>
+              <li>核心功能设计：文档上传、文档解析、知识更新、知识分册/标签、权限管理</li>
+            </ul>
+            <h4>第三步：检索策略产品设计</h4>
+            <ul>
+              <li>核心检索方式：关键词检索、向量检索（前者快，后者准，建议混合）</li>
+              <li>优化点：检索结果数量限制、相似度阈值设置、多轮检索</li>
+            </ul>
+            <h4>第四步：生成环节产品设计</h4>
+            <ul>
+              <li>答案格式规范：结构化/标注答案来源</li>
+              <li>兜底逻辑设计：检索不到匹配内容时的回复策略</li>
+            </ul>
+            <h4>第五步：产品架构与交互设计</h4>
+            <ul>
+              <li>核心架构：用户端→问答模块→检索模块→知识库→大模型→生成结果→用户端</li>
+              <li>交互设计：问答界面、知识库管理界面</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 4 节：RAG 提示词撰写 —— 产品经理专属方法论（核心重点）</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：掌握 RAG 提示词的核心逻辑，能撰写/设计不同场景的 RAG 提示词模板</p>
+            <ul>
+              <li>RAG 提示词与普通大模型提示词的核心差异：必须绑定"检索上下文"</li>
+              <li>产品经理撰写 RAG 提示词的核心原则（4 个）</li>
+              <li>RAG 提示词的通用结构（可直接复用）</li>
+              <li>不同场景的 RAG 提示词模板设计</li>
+              <li>产品侧的提示词优化技巧（无需改代码）</li>
+              <li>实操练习：为行政智能助手撰写基础问答提示词模板</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 5 节：RAG 落地常见问题 —— 产品侧优化策略</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：掌握 RAG 落地的 5 大常见问题，能从产品角度提出可落地的优化方案</p>
+            <ul>
+              <li><strong>检索不准</strong> —— 知识标签/切分、检索阈值调整、关键词补充</li>
+              <li><strong>仍有幻觉</strong> —— 强化提示词指令、限制生成范围、标注答案来源</li>
+              <li><strong>答案冗长/不贴合</strong> —— 提示词指定答案格式、上下文筛选</li>
+              <li><strong>知识库更新不及时</strong> —— 自动更新功能、更新提醒</li>
+              <li><strong>多轮追问混乱</strong> —— 多轮检索、加入历史对话信息</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 6 节：RAG 行业落地案例拆解 —— 产品设计思路复用</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：拆解 3 个典型 RAG 落地案例，提炼产品设计共性</p>
+            <ul>
+              <li><strong>案例 1</strong>：企业内部智能助手 —— 知识库轻量化、问答精准化</li>
+              <li><strong>案例 2</strong>：电商智能客服 —— 按品类/问题类型切分、多轮检索</li>
+              <li><strong>案例 3</strong>：政务问答机器人 —— 知识权威化、答案结构化</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 7 节：实战演练 —— 从 0 到 1 设计一个 RAG 产品</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>核心目标</strong>：整合前 6 节知识，完成简易 RAG 产品的设计 + 实操</p>
+            <p><strong>实战场景：</strong>公司行政制度智能助手（RAG 版）</p>
+            <h4>实战步骤</h4>
+            <ul>
+              <li><strong>步骤 1</strong>：需求分析与场景适配</li>
+              <li><strong>步骤 2</strong>：知识库设计（文档上传、切分、标签设置）</li>
+              <li><strong>步骤 3</strong>：检索策略设计（混合检索）</li>
+              <li><strong>步骤 4</strong>：撰写提示词模板</li>
+              <li><strong>步骤 5</strong>：落地实操（用免费工具搭建并测试）</li>
+              <li><strong>步骤 6</strong>：输出产品设计方案</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="accordion-title">第 8 节：答疑 + RAG 产品未来趋势</span>
+            <span class="accordion-icon">▾</span>
+          </div>
+          <div class="accordion-content">
+            <ul>
+              <li>学员问题答疑（聚焦产品设计、落地实操、提示词优化）</li>
+              <li>未来趋势：多模态 RAG、RAG 与 Agent 结合、轻量化 RAG</li>
+              <li>能力提升建议：实操工具练习、行业案例拆解、与技术团队多沟通</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <a href="#section-2" class="next-link reveal">
+        <span>下一章</span>
+        <strong>核心知识</strong>
+      </a>
+    </section>
+
+    <!-- ===== 02: 核心知识 ===== -->
+    <section id="section-2" class="section" data-section="section-2">
+      <div class="section-head reveal">
+        <span class="section-number">02</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">Chapter 02 · Core Knowledge</p>
+          <h2>各章节<strong>核心知识</strong>（产品视角，避技术）</h2>
+          <p class="section-summary">四块核心知识，帮你建立 RAG 产品的完整认知体系。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s2-fit" class="section" data-section="s2-fit">
+      <div class="section-head reveal">
+        <span class="section-number">2.1</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">场景适配</p>
+          <h2>RAG 的产品适配与<strong>非适配场景</strong></h2>
+        </div>
+      </div>
+
+      <div class="two-column reveal">
+        <div class="info-card">
+          <span class="info-card__num">✓</span>
+          <h3>适配场景</h3>
+          <p class="info-card__lead">满足 1+2 即可</p>
+          <ul>
+            <li>有固定的知识库（文档/表格/数据库）</li>
+            <li>需要基于知识库的精准问答</li>
+            <li>知识需要频繁更新</li>
+            <li>专业领域问答（如企业制度、医疗、法律）</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">✗</span>
+          <h3>非适配场景</h3>
+          <p class="info-card__lead">不建议使用 RAG</p>
+          <ul>
+            <li>无固定知识库，纯开放性创意生成（如文案、故事）</li>
+            <li>不需要精准回答，只求灵感</li>
+            <li>知识几乎不更新，且内容极少</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="s2-pipeline" class="section" data-section="s2-pipeline">
+      <div class="section-head reveal">
+        <span class="section-number">2.2</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">4 大环节</p>
+          <h2>RAG 4 大环节的<strong>产品影响点</strong></h2>
+        </div>
+      </div>
+
+      <div class="table-wrap reveal">
+        <table>
+          <tr>
+            <th>核心环节</th>
+            <th>产品关注重点</th>
+            <th>对产品体验的影响</th>
+          </tr>
+          <tr>
+            <td>知识库构建</td>
+            <td>文档解析精度、知识切分粒度、更新方式、权限管理</td>
+            <td>解析不准→知识缺失；切分不合理→检索不准；更新复杂→知识过时</td>
+          </tr>
+          <tr>
+            <td>检索</td>
+            <td>检索精度、速度、结果数量、相似度阈值</td>
+            <td>精度低→答非所问；速度慢→交互卡顿；结果过多→答案冗长</td>
+          </tr>
+          <tr>
+            <td>提示词拼接</td>
+            <td>结构合理性、上下文筛选、指令清晰度</td>
+            <td>结构差→大模型理解错；指令模糊→幻觉/脱离上下文</td>
+          </tr>
+          <tr>
+            <td>生成</td>
+            <td>答案格式、来源标注、兜底逻辑</td>
+            <td>格式不规范→体验差；无来源→可信度低；无兜底→用户迷茫</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="s2-kb" class="section" data-section="s2-kb">
+      <div class="section-head reveal">
+        <span class="section-number">2.3</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">知识库设计</p>
+          <h2>知识库产品设计的<strong>核心要点</strong></h2>
+        </div>
+      </div>
+
+      <div class="step-cards reveal">
+        <div class="step-card active">
+          <span class="step-card__num">①</span>
+          <h3>文档支持</h3>
+          <p>优先支持企业常用格式（docx、pdf、excel、txt），如需解析图片/表格，需提前和技术确认</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">②</span>
+          <h3>知识切分</h3>
+          <p>建议按"问题粒度"切分，比按章节切分检索更准</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">③</span>
+          <h3>知识标签</h3>
+          <p>为每个知识块加标签（如"假期制度 - 年假"），支持按标签检索</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">④</span>
+          <h3>更新方式</h3>
+          <p>轻量场景设计手动更新，高频更新场景设计自动更新</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">⑤</span>
+          <h3>权限管理</h3>
+          <p>企业内部场景需设计按部门/角色权限</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s2-fallback" class="section" data-section="s2-fallback">
+      <div class="section-head reveal">
+        <span class="section-number">2.4</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">兜底逻辑</p>
+          <h2>RAG 产品的<strong>核心兜底逻辑</strong>（产品必须设计）</h2>
+        </div>
+      </div>
+
+      <div class="card-grid reveal">
+        <div class="info-card">
+          <span class="info-card__num">①</span>
+          <h3>检索不到匹配内容</h3>
+          <p>"暂无相关知识解答，建议咨询 XX 部门"，不允许大模型编造</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">②</span>
+          <h3>知识库未更新</h3>
+          <p>"当前知识库暂未更新该内容，敬请期待"</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">③</span>
+          <h3>超出问答边界</h3>
+          <p>"本助手仅解答 XX 问题，该问题请咨询 XX 部门"</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">④</span>
+          <h3>答案存疑</h3>
+          <p>"当前相关知识内容暂不明确，建议查阅 XX 文档或咨询 XX 部门"</p>
+        </div>
+      </div>
+
+      <a href="#section-3" class="next-link reveal">
+        <span>下一章</span>
+        <strong>提示词撰写</strong>
+      </a>
+    </section>
+
+    <!-- ===== 03: 提示词撰写 ===== -->
+    <section id="section-3" class="section" data-section="section-3">
+      <div class="section-head reveal">
+        <span class="section-number">03</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">Chapter 03 · Prompt Engineering</p>
+          <h2>RAG 提示词撰写 ——<strong>产品经理专属方法</strong></h2>
+          <p class="section-summary">掌握 RAG 提示词的核心差异、4 大原则和 3 套可直接复用的通用模板。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3-diff" class="section" data-section="s3-diff">
+      <div class="section-head reveal">
+        <span class="section-number">3.1</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">核心差异</p>
+          <h2>RAG 提示词与普通提示词的<strong>本质区别</strong></h2>
+        </div>
+      </div>
+
+      <div class="step-cards reveal">
+        <div class="step-card">
+          <span class="step-card__num">普通</span>
+          <h3>普通大模型提示词</h3>
+          <p>指令 + 用户问题（如"请简洁回答，年假怎么申请？"）</p>
+        </div>
+        <div class="step-card active">
+          <span class="step-card__num">RAG</span>
+          <h3>RAG 提示词</h3>
+          <p>指令 + 检索上下文 + 用户问题（核心：绑定上下文，限制大模型仅基于上下文回答）</p>
+        </div>
+        <div class="step-card">
+          <span class="step-card__num">PM</span>
+          <h3>产品经理核心要求</h3>
+          <p>让提示词"标准化、模板化"，便于开发落地，且能快速优化</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3-principles" class="section" data-section="s3-principles">
+      <div class="section-head reveal">
+        <span class="section-number">3.2</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">4 大原则</p>
+          <h2>产品经理撰写 RAG 提示词的<strong>核心原则</strong></h2>
+        </div>
+      </div>
+
+      <div class="card-grid reveal">
+        <div class="info-card">
+          <span class="info-card__num">①</span>
+          <h3>边界明确</h3>
+          <p>必须加"仅基于以下提供的上下文回答，不编造、不添加额外信息"</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">②</span>
+          <h3>格式指定</h3>
+          <p>明确答案格式（如"分点回答，条理清晰"），适配产品体验</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">③</span>
+          <h3>上下文聚焦</h3>
+          <p>"请从上下文中提取关键信息回答，不要冗长，无关信息无需提及"</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">④</span>
+          <h3>适配场景</h3>
+          <p>根据产品场景调整语气（企业助手：正式简洁；客服：口语亲切）</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3-templates" class="section" data-section="s3-templates">
+      <div class="section-head reveal">
+        <span class="section-number">3.3</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">通用模板</p>
+          <h2>3 套<strong>可直接复用</strong>的 RAG 提示词模板</h2>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="scene-strip">
+          <div class="scene-strip__head">
+            <span class="scene-strip__tag">基础版</span>
+            <span class="scene-strip__title">适用于单轮精准问答，如行政智能助手</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+指令：请你作为XX（产品角色，如公司行政智能助手），仅基于以下提供的上下文回答用户问题，严格遵循以下要求：
+1. 仅使用上下文的信息，不编造、不添加任何额外信息；
+2. 答案分点回答，条理清晰，语言简洁正式，贴合企业内部沟通场景；
+3. 若上下文无相关问题的解答，直接回复"暂无相关知识解答，建议咨询公司行政/财务部门"；
+4. 提取上下文关键信息即可，无需冗长表述。
+
+上下文：{检索到的知识库内容，由系统自动填充}
+
+用户问题：{用户的实际问题}
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="scene-strip" style="margin-top:24px;">
+          <div class="scene-strip__head">
+            <span class="scene-strip__tag">多轮版</span>
+            <span class="scene-strip__title">适用于需要上下文的多轮对话</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+指令：请你作为XX（产品角色），基于以下提供的上下文和历史对话信息，回答用户的最新问题，严格遵循以下要求：
+1. 仅使用上下文和历史对话中的信息，不编造、不添加任何额外信息；
+2. 答案分点回答，条理清晰，语言简洁正式；
+3. 若上下文和历史对话中无相关问题的解答，直接回复"暂无相关知识解答"；
+4. 提取关键信息即可，无需冗长表述。
+
+历史对话：{历史对话内容，由系统自动填充}
+
+上下文：{检索到的知识库内容，由系统自动填充}
+
+用户最新问题：{用户的实际问题}
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="scene-strip" style="margin-top:24px;">
+          <div class="scene-strip__head">
+            <span class="scene-strip__tag">客服版</span>
+            <span class="scene-strip__title">适用于电商客服场景</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+指令：请你作为电商客服智能助手，基于以下提供的上下文回答用户问题，严格遵循以下要求：
+1. 仅使用上下文的信息，不编造、不添加任何额外信息；
+2. 答案口语化、亲切友好，符合客服沟通风格；
+3. 若上下文无相关问题的解答，直接回复"抱歉，暂时没有相关信息，建议您联系在线客服"；
+4. 回答简洁明了，重点突出。
+
+上下文：{检索到的知识库内容，由系统自动填充}
+
+用户问题：{用户的实际问题}
+        </div>
+      </div>
+
+      <a href="#section-4" class="next-link reveal">
+        <span>下一章</span>
+        <strong>课程特色</strong>
+      </a>
+    </section>
+
+    <!-- ===== 04: 课程特色 ===== -->
+    <section id="section-4" class="section" data-section="section-4">
+      <div class="section-head reveal">
+        <span class="section-number">04</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">Chapter 04 · Features</p>
+          <h2>课程<strong>四大特色</strong></h2>
+        </div>
+      </div>
+
+      <div class="card-grid reveal">
+        <div class="info-card">
+          <span class="info-card__num">①</span>
+          <h3>产品视角 · 实战导向</h3>
+          <p>全程从产品经理角度出发，避开技术细节，聚焦产品设计与落地实操</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">②</span>
+          <h3>案例驱动 · 即学即用</h3>
+          <p>结合行政智能助手等真实场景，提供可直接复用的产品设计模板和提示词模板</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">③</span>
+          <h3>工具推荐 · 快速上手</h3>
+          <p>推荐免费易上手的 RAG 工具，无需技术背景也能快速搭建和测试</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">④</span>
+          <h3>系统学习 · 完整体系</h3>
+          <p>从基础认知到实战落地，构建完整的 RAG 产品知识体系</p>
+        </div>
+      </div>
+
+      <a href="#section-5" class="next-link reveal">
+        <span>下一章</span>
+        <strong>工具推荐</strong>
+      </a>
+    </section>
+
+    <!-- ===== 05: 工具推荐 ===== -->
+    <section id="section-5" class="section" data-section="section-5">
+      <div class="section-head reveal">
+        <span class="section-number">05</span>
+        <div class="section-head__copy">
+          <p class="section-kicker">Chapter 05 · Tools</p>
+          <h2>推荐<strong>4 款 RAG 工具</strong></h2>
+          <p class="section-summary">免费易上手，让学员无需技术背景也能快速搭建和测试 RAG 应用。</p>
+        </div>
+      </div>
+
+      <div class="card-grid reveal">
+        <div class="info-card">
+          <span class="info-card__num">①</span>
+          <h3>讯飞星火 RAG</h3>
+          <p>免费易用，支持多文档上传和知识库管理</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">②</span>
+          <h3>智谱清言知识库</h3>
+          <p>智能解析文档，支持多轮对话</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">③</span>
+          <h3>LangChain 快搭</h3>
+          <p>快速搭建 RAG 应用，支持自定义流程</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card__num">④</span>
+          <h3>豆包企业版</h3>
+          <p>企业级知识库解决方案，安全可靠</p>
+        </div>
+      </div>
+
+      <div class="hook-box reveal">
+        <p>RAG 不是一个技术方案，而是一种产品思维 ——</p>
+        <strong>让 AI 基于事实回答，而不是凭记忆猜测。</strong>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <p>PM 专属 RAG 课程 · Codex Edition · 从入门到落地</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
