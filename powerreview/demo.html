@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PowerReview AI — 智能电力试验报告审核 Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#E8960A;--amber-d:#B87200;--amber-l:#FFF8E7;--amber-pale:#FFFDF0;
+  --blue:#2563EB;--blue-l:#EFF6FF;--blue-d:#1E3A8A;
+  --teal:#0D9E75;--teal-l:#E1F5EE;--teal-d:#064E3B;
+  --red:#DC2626;--red-l:#FEF2F2;--red-d:#991B1B;
+  --orange:#EA580C;--orange-l:#FFF7ED;
+  --purple:#7C3AED;--purple-l:#F5F3FF;--purple-d:#5B21B6;
+  --ink:#0F0C07;--ink-2:#3D3520;--ink-3:#7A6D55;
+  --paper:#FEFCF5;--paper-2:#F7F3E8;--white:#FFFFFF;
+  --border:rgba(15,12,7,.08);--border-m:rgba(15,12,7,.14);
+  --r:12px;--r-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;min-height:100vh;}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(254,252,245,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.04em;}
+.nav-logo span{color:var(--amber);}
+.nav-badge{font-size:10px;padding:3px 10px;border-radius:20px;background:var(--amber-l);color:var(--amber-d);font-weight:600;border:1px solid rgba(232,150,10,.2);letter-spacing:.04em;}
+#s-upload{max-width:720px;margin:0 auto;padding:80px 24px 60px;text-align:center;}
+.upload-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px;}
+.upload-title{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.upload-sub{font-size:14px;color:var(--ink-3);margin-bottom:36px;line-height:1.7;}
+.drop-zone{border:2px dashed rgba(15,12,7,.15);border-radius:16px;padding:48px 24px;cursor:pointer;transition:all .2s;background:var(--white);position:relative;}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--amber);background:var(--amber-l);}
+.drop-zone input[type=file]{display:none;}
+.drop-icon{font-size:40px;margin-bottom:12px;}
+.drop-text{font-size:15px;font-weight:500;color:var(--ink-2);margin-bottom:4px;}
+.drop-hint{font-size:12px;color:var(--ink-3);}
+.demo-row{margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.demo-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid;}
+.demo-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.demo-btn.pass{background:var(--teal-l);color:var(--teal-d);border-color:rgba(13,158,117,.2);}
+.demo-btn.fail{background:var(--red-l);color:var(--red-d);border-color:rgba(220,38,38,.15);}
+.demo-btn.multi{background:var(--blue-l);color:var(--blue-d);border-color:rgba(37,99,235,.15);}
+#s-loading{display:none;max-width:720px;margin:0 auto;padding:120px 24px;text-align:center;}
+.loader-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:16px;}
+.loader-spinner{width:44px;height:44px;border:3px solid var(--border-m);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-size:14px;color:var(--ink-2);font-weight:500;}
+.loader-step{font-size:12px;color:var(--ink-3);margin-top:4px;min-height:18px;}
+.step-timeline{display:flex;gap:0;justify-content:center;margin:24px 0 8px;flex-wrap:wrap;}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;}
+.step-circle{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--paper-2);border:1px solid var(--border-m);transition:all .3s;}
+.step-dot.active .step-circle{background:var(--amber-l);border-color:var(--amber);box-shadow:0 0 0 3px rgba(232,150,10,.15);}
+.step-dot.done .step-circle{background:var(--teal-l);border-color:var(--teal);}
+.step-label{font-size:10px;color:var(--ink-3);text-align:center;}
+.step-dot.active .step-label{color:var(--amber-d);font-weight:600;}
+.step-dot.done .step-label{color:var(--teal-d);}
+.step-connector{width:24px;height:2px;background:var(--border-m);align-self:center;margin-top:-20px;}
+.step-connector.done{background:var(--teal);}
+#s-result{display:none;max-width:960px;margin:0 auto;padding:32px 24px 80px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:inherit;}
+.btn-back:hover{color:var(--ink);}
+.file-badge{font-size:11px;color:var(--ink-3);background:var(--paper-2);padding:4px 12px;border-radius:20px;}
+.summary-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.summary-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);}
+.summary-head.pass-bg{background:var(--teal-l);}
+.summary-head.warn-bg{background:var(--amber-l);}
+.summary-head.fail-bg{background:var(--red-l);}
+.summary-title{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
+.summary-meta{font-size:12px;color:var(--ink-3);line-height:1.6;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 24px;}
+.stat-box{text-align:center;padding:14px 8px;border-radius:var(--r-sm);background:var(--paper-2);}
+.stat-box.pass{background:var(--teal-l);}
+.stat-box.warn{background:var(--amber-l);}
+.stat-box.fail{background:var(--red-l);}
+.stat-num{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;line-height:1;}
+.stat-num.c-pass{color:var(--teal);}
+.stat-num.c-warn{color:var(--amber);}
+.stat-num.c-fail{color:var(--red);}
+.stat-label{font-size:11px;color:var(--ink-3);margin-top:4px;}
+.issues-section{padding:0 24px 20px;}
+.issues-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+.issue-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:var(--r-sm);margin-bottom:6px;font-size:13px;line-height:1.5;}
+.issue-item.critical{background:var(--red-l);border:1px solid rgba(220,38,38,.12);}
+.issue-item.fail-item{background:var(--orange-l);border:1px solid rgba(234,88,12,.12);}
+.issue-item.warn-item{background:var(--amber-l);border:1px solid rgba(232,150,10,.15);}
+.issue-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.issue-badge.critical{background:var(--red);color:#fff;}
+.issue-badge.fail-b{background:var(--orange);color:#fff;}
+.issue-badge.warn-b{background:var(--amber);color:var(--amber-d);}
+.issue-body{flex:1;}
+.issue-name{font-weight:600;color:var(--ink);}
+.issue-detail{color:var(--ink-2);margin-top:2px;}
+.issue-source{font-size:11px;color:var(--ink-3);margin-top:2px;}
+.no-issues{font-size:14px;color:var(--teal);font-weight:600;padding:8px 0;}
+.details-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.details-head{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.details-title{font-size:14px;font-weight:700;color:var(--ink);}
+.toggle-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);cursor:pointer;}
+.toggle-label input{accent-color:var(--amber);}
+.details-table{width:100%;border-collapse:collapse;font-size:13px;}
+.details-table thead{background:var(--paper-2);}
+.details-table th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--border-m);}
+.details-table td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top;}
+.details-table tr:last-child td{border-bottom:none;}
+.details-table tr:hover{background:var(--amber-pale);}
+.details-table tr.row-fail{background:var(--red-l);}
+.details-table tr.row-warn{background:var(--amber-l);}
+.details-table tr.row-fail:hover{background:rgba(220,38,38,.06);}
+.details-table tr.row-warn:hover{background:rgba(232,150,10,.08);}
+.result-icon{font-weight:700;font-size:13px;}
+.result-icon.pass{color:var(--teal);}
+.result-icon.warn{color:var(--amber);}
+.result-icon.fail{color:var(--red);}
+.result-icon.no-criteria{color:var(--ink-3);}
+.corrected-note{font-size:11px;color:var(--blue);margin-top:2px;}
+.temp-panel{background:var(--blue-l);border-radius:var(--r-sm);padding:10px 12px;margin-top:4px;border:1px solid rgba(37,99,235,.1);}
+.temp-formula{font-family:'Space Mono',monospace;font-size:11px;color:var(--blue-d);margin-top:2px;}
+.conflict-badge{display:inline-block;font-size:11px;font-weight:700;color:var(--red-d);background:var(--red-l);padding:2px 8px;border-radius:4px;margin-top:4px;border:1px solid rgba(220,38,38,.15);}
+.criteria-tag{font-family:'Space Mono',monospace;font-size:10px;color:var(--blue-d);background:var(--blue-l);padding:2px 6px;border-radius:4px;white-space:nowrap;}
+.suggestion{font-size:11px;color:var(--teal-d);margin-top:4px;}
+.disclaimer{text-align:center;padding:14px 20px;background:var(--blue-l);border-radius:var(--r);border:1px solid rgba(37,99,235,.12);font-size:13px;color:var(--blue-d);font-weight:500;margin-bottom:20px;}
+.exec-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.exec-head{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.exec-title{font-size:14px;font-weight:700;color:var(--ink);}
+.exec-body{padding:20px 24px;font-size:13px;color:var(--ink-2);line-height:1.8;}
+.exec-body strong{color:var(--ink);}
+.exec-section{margin-bottom:12px;}
+.exec-section:last-child{margin-bottom:0;}
+.exec-section-title{font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.exec-list{list-style:none;padding:0;}
+.exec-list li{padding:4px 0;padding-left:16px;position:relative;}
+.exec-list li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;}
+.exec-list li.red::before{background:var(--red);}
+.exec-list li.amber::before{background:var(--amber);}
+.exec-list li.teal::before{background:var(--teal);}
+@media(max-width:640px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .details-table{font-size:11px;}
+  .details-table th,.details-table td{padding:8px 10px;}
+  #s-result{padding:20px 16px 60px;}
+  #s-upload{padding:60px 16px 40px;}
+  .step-timeline{gap:4px;}
+  .step-connector{width:12px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PowerReview <span>AI</span></div>
+  <div class="nav-badge">DEMO v1.0</div>
+</nav>
+
+<!-- ===== Upload Section ===== -->
+<div id="s-upload">
+  <div class="upload-eyebrow">Smart Power Test Report Auditor</div>
+  <div class="upload-title">上传报告，AI 30秒预审</div>
+  <div class="upload-sub">上传变压器试验报告，AI 自动完成判据比对、温度修正、一致性校验<br>生成 One-Page Executive Summary</div>
+
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()"
+       ondragover="event.preventDefault();this.classList.add('drag-over')"
+       ondragleave="this.classList.remove('drag-over')"
+       ondrop="event.preventDefault();this.classList.remove('drag-over');handleFile(event.dataTransfer.files[0])">
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])">
+    <div class="drop-icon">📄</div>
+    <div class="drop-text">拖拽上传试验报告</div>
+    <div class="drop-hint">支持 .xlsx / .xls 格式</div>
+  </div>
+
+  <div style="margin-top:8px;font-size:11px;color:var(--ink-3);">没有报告文件？选择演示数据体验完整审核流程</div>
+  <div class="demo-row">
+    <button class="demo-btn pass" onclick="runDemo('pass')">✅ 演示：合格报告</button>
+    <button class="demo-btn fail" onclick="runDemo('fail')">🚨 演示：问题报告</button>
+    <button class="demo-btn multi" onclick="runDemo('batch')">📊 演示：批量审核</button>
+  </div>
+</div>
+
+<!-- ===== Loading Section ===== -->
+<div id="s-loading">
+  <div class="loader-wrap">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">正在审核报告...</div>
+    <div class="loader-step" id="loaderStep"></div>
+    <div class="step-timeline" id="stepTimeline">
+      <div class="step-dot" id="st0"><div class="step-circle">📄</div><div class="step-label">解析</div></div>
+      <div class="step-connector" id="sc0"></div>
+      <div class="step-dot" id="st1"><div class="step-circle">⚖️</div><div class="step-label">判据比对</div></div>
+      <div class="step-connector" id="sc1"></div>
+      <div class="step-dot" id="st2"><div class="step-circle">🌡️</div><div class="step-label">温度修正</div></div>
+      <div class="step-connector" id="sc2"></div>
+      <div class="step-dot" id="st3"><div class="step-circle">🔍</div><div class="step-label">一致性校验</div></div>
+      <div class="step-connector" id="sc3"></div>
+      <div class="step-dot" id="st4"><div class="step-circle">📋</div><div class="step-label">生成摘要</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Result Section ===== -->
+<div id="s-result">
+  <div class="top-bar">
+    <button class="btn-back" onclick="resetPage()">← 返回上传</button>
+    <span class="file-badge" id="fileBadge"></span>
+  </div>
+  <div class="summary-card" id="summaryCard">
+    <div class="summary-head" id="summaryHead">
+      <div class="summary-title" id="summaryTitle"></div>
+      <div class="summary-meta" id="summaryMeta"></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="statTotal">0</div><div class="stat-label">审核项目</div></div>
+      <div class="stat-box pass"><div class="stat-num c-pass" id="statPass">0</div><div class="stat-label">合格</div></div>
+      <div class="stat-box warn"><div class="stat-num c-warn" id="statWarn">0</div><div class="stat-label">关注</div></div>
+      <div class="stat-box fail"><div class="stat-num c-fail" id="statFail">0</div><div class="stat-label">不合格</div></div>
+    </div>
+    <div class="issues-section" id="issuesSection"></div>
+  </div>
+  <div class="exec-card" id="execCard"></div>
+  <div class="details-card">
+    <div class="details-head">
+      <div class="details-title">逐项审核明细</div>
+      <label class="toggle-label"><input type="checkbox" id="togglePass" checked onchange="rerenderDetails()"> 显示合格项</label>
+    </div>
+    <div style="overflow-x:auto;" id="detailsWrap"></div>
+  </div>
+  <div class="disclaimer">⚡ AI预审结果，仅供参考，最终判定以审核人签字为准</div>
+</div>
+
+<script>
+/* ============================================================
+   CRITERIA DATABASE (from criteria.json)
+   ============================================================ */
+const CRITERIA=[
+  {id:"C001",standard:"GB 50150-2016",clause:"4.0.2",table:"表4.0.2",device_type:"电力变压器",test_item:"绝缘电阻",test_item_detail:"高压侧对地",voltage_min:110,voltage_max:220,limit_type:"lower",limit_value:3000,unit:"MΩ",note:"110-220kV油浸式变压器"},
+  {id:"C002",standard:"GB 50150-2016",clause:"4.0.2",table:"表4.0.2",device_type:"电力变压器",test_item:"绝缘电阻",test_item_detail:"低压侧对地",voltage_min:10,voltage_max:35,limit_type:"lower",limit_value:500,unit:"MΩ",note:"10-35kV侧"},
+  {id:"C003",standard:"GB 50150-2016",clause:"4.0.3",table:"表4.0.3",device_type:"电力变压器",test_item:"吸收比",test_item_detail:"",voltage_min:0,voltage_max:999,limit_type:"lower",limit_value:1.3,unit:"",note:"R60s/R15s"},
+  {id:"C004",standard:"GB 50150-2016",clause:"4.0.6",table:"表4.0.6",device_type:"电力变压器",test_item:"介质损耗角正切值",test_item_detail:"高压侧",voltage_min:110,voltage_max:220,limit_type:"upper",limit_value:0.6,unit:"%",condition:"20°C",note:"110-220kV,需温度修正"},
+  {id:"C005",standard:"GB 50150-2016",clause:"4.0.6",table:"表4.0.6",device_type:"电力变压器",test_item:"介质损耗角正切值",test_item_detail:"低压侧",voltage_min:10,voltage_max:35,limit_type:"upper",limit_value:1.5,unit:"%",condition:"20°C",note:"10-35kV侧,需温度修正"},
+  {id:"C006",standard:"DL/T 596-2021",clause:"5.1",table:"表5-1",device_type:"电力变压器",test_item:"直流电阻",test_item_detail:"三相不平衡率",voltage_min:0,voltage_max:999,limit_type:"upper",limit_value:2.0,unit:"%",note:"无中性点引出"},
+  {id:"C007",standard:"DL/T 722-2014",clause:"5.1",table:"表1",device_type:"电力变压器",test_item:"油中溶解气体",test_item_detail:"总烃",voltage_min:0,voltage_max:999,limit_type:"upper",limit_value:150,unit:"μL/L",note:"CH4+C2H6+C2H4+C2H2"},
+  {id:"C008",standard:"DL/T 722-2014",clause:"5.1",table:"表1",device_type:"电力变压器",test_item:"油中溶解气体",test_item_detail:"乙炔(C2H2)",voltage_min:0,voltage_max:999,limit_type:"upper",limit_value:1,unit:"μL/L",note:"乙炔注意值1μL/L"},
+  {id:"C009",standard:"DL/T 722-2014",clause:"5.1",table:"表1",device_type:"电力变压器",test_item:"油中溶解气体",test_item_detail:"氢气(H2)",voltage_min:0,voltage_max:999,limit_type:"upper",limit_value:150,unit:"μL/L",note:"氢气注意值"},
+  {id:"C010",standard:"GB 50150-2016",clause:"4.0.10",table:"",device_type:"电力变压器",test_item:"交流耐压",test_item_detail:"",voltage_min:0,voltage_max:999,limit_type:"pass_fail",limit_value:0,unit:"",note:"1分钟无击穿无闪络"}
+];
+
+/* Temperature correction factors (DL/T 596-2021 Appendix D) */
+const CORRECTION={"电力变压器":{5:0.50,10:0.62,15:0.77,20:1.00,25:1.30,30:1.60,35:2.10,40:2.70,45:3.50,50:4.50}};
+
+function getCorrectionFactor(dt,temp){
+  const table=CORRECTION[dt]; if(!table) return null;
+  const temps=Object.keys(table).map(Number).sort((a,b)=>a-b);
+  if(temp<=temps[0]) return table[temps[0]];
+  if(temp>=temps[temps.length-1]) return table[temps[temps.length-1]];
+  for(let i=0;i<temps.length-1;i++){
+    if(temps[i]<=temp&&temp<=temps[i+1]){
+      const t1=temps[i],t2=temps[i+1],k1=table[t1],k2=table[t2];
+      return +(k1+(k2-k1)*(temp-t1)/(t2-t1)).toFixed(4);
+    }
+  }
+  return null;
+}
+
+function applyTempCorrection(rv,dt,temp){
+  const f=getCorrectionFactor(dt,temp), bf=getCorrectionFactor(dt,20);
+  if(f===null||bf===null) return{corrected:rv,factor:null,applied:false,note:"无修正系数"};
+  const c=+(rv*f/bf).toFixed(4);
+  return{corrected:c,factor:f,applied:true,note:"tanδ(20°C) = "+rv+" × "+f+" / "+bf+" = "+c};
+}
+
+/* Review engine */
+function findCriteria(dt,ti,detail,v){
+  const cands=CRITERIA.filter(c=>c.device_type===dt&&c.test_item===ti&&c.voltage_min<=v&&v<=c.voltage_max);
+  if(!cands.length) return null;
+  if(detail){const ex=cands.find(c=>c.test_item_detail===detail); if(ex) return ex;}
+  return cands[0];
+}
+
+function esc(s){const d=document.createElement('span');d.textContent=s;return d.innerHTML;}
+
+function compareValue(val,crit,wt){
+  wt=wt||0.1;
+  const lt=crit.limit_type,lv=crit.limit_value;
+  if(lt==="pass_fail") return{result:"pass",label:"合格",reason:"通过/不通过判定",limitDisplay:crit.note||"通过"};
+  const sym=lt==="upper"?"≤":"≥";
+  const ld=sym+" "+lv+crit.unit;
+  if(lt==="upper"){
+    if(val>lv){const p=((val-lv)/lv*100).toFixed(1);return{result:"fail",label:"不合格",reason:"实测值"+val+crit.unit+"超出限值"+lv+crit.unit+"，超标"+p+"%",limitDisplay:ld};}
+    if(val>=lv*(1-wt)) return{result:"warning",label:"关注",reason:"实测值"+val+crit.unit+"接近限值"+lv+crit.unit+"（"+(wt*100).toFixed(0)+"%边界）",limitDisplay:ld};
+    return{result:"pass",label:"合格",reason:"实测值"+val+crit.unit+"在限值"+lv+crit.unit+"范围内",limitDisplay:ld};
+  }
+  if(lt==="lower"){
+    if(val<lv){const p=((lv-val)/lv*100).toFixed(1);return{result:"fail",label:"不合格",reason:"实测值"+val+crit.unit+"低于限值"+lv+crit.unit+"，低"+p+"%",limitDisplay:ld};}
+    if(val<=lv*(1+wt)) return{result:"warning",label:"关注",reason:"实测值"+val+crit.unit+"接近限值"+lv+crit.unit+"（"+(wt*100).toFixed(0)+"%边界）",limitDisplay:ld};
+    return{result:"pass",label:"合格",reason:"实测值"+val+crit.unit+"满足限值"+lv+crit.unit+"要求",limitDisplay:ld};
+  }
+  return{result:"unknown",label:"无法判定",reason:"未知限值类型",limitDisplay:"—"};
+}
+
+function reviewReport(rd){
+  const di=rd.device_info,dtype=di.device_type,volt=di.voltage_level||110,temp=di.test_temperature||20;
+  const details=[],issues=[];
+  let pc=0,wc=0,fc=0;
+  for(const item of rd.test_items){
+    const d={test_item:item.name,test_item_detail:item.detail||"",raw_value:item.raw_value,unit:item.unit||"",corrected_value:null,correction_info:null,criteria_source:null,limit_display:null,result:null,result_label:null,reason:null,suggestion:null,consistency_check:null};
+    let value=item.raw_value;
+    if(item.needs_correction&&temp!==20){
+      const corr=applyTempCorrection(item.raw_value,dtype,temp);
+      d.corrected_value=corr.corrected;d.correction_info=corr;
+      if(corr.applied) value=corr.corrected;
+    }
+    const criteria=findCriteria(dtype,item.name,item.detail||"",volt);
+    if(!criteria){d.result="no_criteria";d.result_label="无判据";d.reason="未找到"+dtype+"/"+item.name+"的判据规则，需人工审核";d.criteria_source="—";d.limit_display="—";details.push(d);continue;}
+    d.criteria_source=criteria.standard+" "+criteria.clause+(criteria.table?" "+criteria.table:"");
+    const cmp=compareValue(value,criteria);
+    d.result=cmp.result;d.result_label=cmp.label;d.reason=cmp.reason;d.limit_display=cmp.limitDisplay;
+    if(cmp.result==="fail"){fc++;d.suggestion="建议缩短试验周期，进一步排查原因";issues.push({level:"不合格",cls:"fail-item",badgeCls:"fail-b",item:item.name+"("+item.detail+")",detail:cmp.reason,source:d.criteria_source});}
+    else if(cmp.result==="warning"){wc++;d.suggestion="建议加强监测，关注数据变化趋势";issues.push({level:"关注",cls:"warn-item",badgeCls:"warn-b",item:item.name+"("+item.detail+")",detail:cmp.reason,source:d.criteria_source});}
+    else{pc++;}
+    const uc=item.user_conclusion||"";
+    if(uc){
+      if(cmp.result==="fail"&&(uc==="合格"||uc==="正常")){
+        d.consistency_check={has_conflict:true,message:"🚨 严重矛盾：数据判定为不合格，但报告结论标记为“"+esc(uc)+"”"};
+        issues.unshift({level:"严重矛盾",cls:"critical",badgeCls:"critical",item:item.name+"("+item.detail+")",detail:"数据超标但结论写“"+esc(uc)+"”",source:d.criteria_source});
+      }else if(cmp.result==="pass"&&(uc==="不合格"||uc==="异常")){
+        d.consistency_check={has_conflict:true,message:"⚠️ 矛盾：数据判定为合格，但报告结论标记为“"+esc(uc)+"”"};
+      }
+    }
+    details.push(d);
+  }
+  const total=details.length;
+  let overall="合格";
+  if(fc>0) overall="不合格"; else if(wc>0) overall="有关注项";
+  return{device_info:di,summary:{overall,total,pass_count:pc,warning_count:wc,fail_count:fc,issues},details};
+}
+
+/* Demo data */
+function getDemoPass(){
+  return{device_info:{device_name:"110kV城南变 #1主变压器",device_type:"电力变压器",voltage_level:110,model:"SFZ-50000/110",test_date:"2026-04-15",test_temperature:25},
+  test_items:[
+    {name:"绝缘电阻",detail:"高压侧对地",raw_value:5680,unit:"MΩ",user_conclusion:"合格",needs_correction:false},
+    {name:"绝缘电阻",detail:"低压侧对地",raw_value:1200,unit:"MΩ",user_conclusion:"合格",needs_correction:false},
+    {name:"吸收比",detail:"",raw_value:1.8,unit:"",user_conclusion:"合格",needs_correction:false},
+    {name:"介质损耗角正切值",detail:"高压侧",raw_value:0.35,unit:"%",user_conclusion:"合格",needs_correction:true},
+    {name:"介质损耗角正切值",detail:"低压侧",raw_value:0.8,unit:"%",user_conclusion:"合格",needs_correction:true},
+    {name:"直流电阻",detail:"三相不平衡率",raw_value:1.2,unit:"%",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"总烃",raw_value:45,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"乙炔(C2H2)",raw_value:0,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"氢气(H2)",raw_value:38,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"交流耐压",detail:"",raw_value:0,unit:"",user_conclusion:"合格",needs_correction:false}
+  ]};
+}
+
+function getDemoFail(){
+  return{device_info:{device_name:"110kV城北变 #2主变压器",device_type:"电力变压器",voltage_level:110,model:"SFZ-40000/110",test_date:"2026-04-20",test_temperature:32},
+  test_items:[
+    {name:"绝缘电阻",detail:"高压侧对地",raw_value:3200,unit:"MΩ",user_conclusion:"合格",needs_correction:false},
+    {name:"绝缘电阻",detail:"低压侧对地",raw_value:800,unit:"MΩ",user_conclusion:"合格",needs_correction:false},
+    {name:"吸收比",detail:"",raw_value:1.25,unit:"",user_conclusion:"合格",needs_correction:false},
+    {name:"介质损耗角正切值",detail:"高压侧",raw_value:0.52,unit:"%",user_conclusion:"合格",needs_correction:true},
+    {name:"介质损耗角正切值",detail:"低压侧",raw_value:1.1,unit:"%",user_conclusion:"合格",needs_correction:true},
+    {name:"直流电阻",detail:"三相不平衡率",raw_value:1.95,unit:"%",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"总烃",raw_value:180,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"乙炔(C2H2)",raw_value:3.5,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"油中溶解气体",detail:"氢气(H2)",raw_value:120,unit:"μL/L",user_conclusion:"合格",needs_correction:false},
+    {name:"交流耐压",detail:"",raw_value:0,unit:"",user_conclusion:"合格",needs_correction:false}
+  ]};
+}
+
+/* Loading animation */
+const STEPS=["解析报告结构...","判据比对中...","温度修正计算中...","数据-结论一致性校验...","生成审核摘要..."];
+let stepTimer=null;
+
+function showLoading(){
+  document.getElementById('s-upload').style.display='none';
+  document.getElementById('s-result').style.display='none';
+  document.getElementById('s-loading').style.display='block';
+  for(let i=0;i<5;i++){document.getElementById('st'+i).className='step-dot';if(i<4)document.getElementById('sc'+i).className='step-connector';}
+  let step=0;
+  function tick(){
+    if(step>0){document.getElementById('st'+(step-1)).className='step-dot done';if(step>1)document.getElementById('sc'+(step-2)).className='step-connector done';}
+    if(step<5){document.getElementById('st'+step).className='step-dot active';document.getElementById('loaderStep').textContent=STEPS[step];step++;stepTimer=setTimeout(tick,500+Math.random()*400);}
+  }
+  tick();
+}
+
+function hideLoading(){
+  clearTimeout(stepTimer);
+  for(let i=0;i<5;i++){document.getElementById('st'+i).className='step-dot done';if(i<4)document.getElementById('sc'+i).className='step-connector done';}
+  document.getElementById('loaderStep').textContent='审核完成！';
+  setTimeout(()=>{document.getElementById('s-loading').style.display='none';document.getElementById('s-result').style.display='block';},400);
+}
+
+/* Render results */
+let lastResult=null,lastFilename='';
+
+function renderResult(result,filename){
+  lastResult=result;lastFilename=filename;
+  const s=result.summary;
+  document.getElementById('fileBadge').textContent=filename;
+  const head=document.getElementById('summaryHead');
+  head.className='summary-head '+(s.fail_count>0?'fail-bg':s.warning_count>0?'warn-bg':'pass-bg');
+  document.getElementById('summaryTitle').textContent='📋 审核摘要 — '+result.device_info.device_name;
+  document.getElementById('summaryMeta').textContent=result.device_info.model+' | '+result.device_info.voltage_level+'kV | 试验日期 '+result.device_info.test_date+' | 环境温度 '+result.device_info.test_temperature+'°C';
+  document.getElementById('statTotal').textContent=s.total;
+  document.getElementById('statPass').textContent=s.pass_count;
+  document.getElementById('statWarn').textContent=s.warning_count;
+  document.getElementById('statFail').textContent=s.fail_count;
+
+  // Issues
+  const issuesEl=document.getElementById('issuesSection');
+  while(issuesEl.firstChild) issuesEl.removeChild(issuesEl.firstChild);
+  if(s.issues.length){
+    const t=document.createElement('div');t.className='issues-title';t.textContent='🚨 关键问题';issuesEl.appendChild(t);
+    s.issues.forEach(i=>{
+      const div=document.createElement('div');div.className='issue-item '+i.cls;
+      const badge=document.createElement('span');badge.className='issue-badge '+i.badgeCls;badge.textContent=i.level;div.appendChild(badge);
+      const body=document.createElement('div');body.className='issue-body';
+      const nm=document.createElement('div');nm.className='issue-name';nm.textContent=i.item;body.appendChild(nm);
+      const dt=document.createElement('div');dt.className='issue-detail';dt.textContent=i.detail;body.appendChild(dt);
+      const sr=document.createElement('div');sr.className='issue-source';sr.textContent=i.source;body.appendChild(sr);
+      div.appendChild(body);issuesEl.appendChild(div);
+    });
+  }else{
+    const p=document.createElement('div');p.className='no-issues';p.textContent='✅ 所有项目均合格，无异常';issuesEl.appendChild(p);
+  }
+
+  renderExecSummary(result);
+  document.getElementById('togglePass').checked=true;
+  rerenderDetails();
+}
+
+function renderExecSummary(result){
+  const s=result.summary,di=result.device_info;
+  const overallIcon=s.fail_count>0?'🚫':s.warning_count>0?'⚠️':'✅';
+  const failItems=result.details.filter(d=>d.result==='fail');
+  const warnItems=result.details.filter(d=>d.result==='warning');
+  const conflicts=result.details.filter(d=>d.consistency_check&&d.consistency_check.has_conflict);
+  const corrections=result.details.filter(d=>d.correction_info&&d.correction_info.applied);
+
+  const card=document.getElementById('execCard');
+  card.innerHTML='';
+
+  const head=document.createElement('div');head.className='exec-head';
+  const icon=document.createElement('span');icon.style.fontSize='18px';icon.textContent=overallIcon;head.appendChild(icon);
+  const title=document.createElement('div');title.className='exec-title';title.textContent='One-Page Executive Summary';head.appendChild(title);
+  card.appendChild(head);
+
+  const body=document.createElement('div');body.className='exec-body';
+
+  function addSection(titleText,content,cls){
+    const sec=document.createElement('div');sec.className='exec-section';
+    const t=document.createElement('div');t.className='exec-section-title';if(cls)t.style.color='var(--'+cls+')';t.textContent=titleText;sec.appendChild(t);
+    sec.appendChild(content);body.appendChild(sec);
+  }
+
+  // Overall
+  const ov=document.createElement('div');
+  const ovStrong=document.createElement('strong');ovStrong.style.fontSize='16px';ovStrong.textContent=s.overall;ov.appendChild(ovStrong);
+  ov.appendChild(document.createTextNode(' — '+di.device_name+'，'+s.total+'项审核，'+s.pass_count+'合格 / '+s.warning_count+'关注 / '+s.fail_count+'不合格'));
+  addSection('审核结论',ov);
+
+  // Conflicts
+  if(conflicts.length){
+    const ul=document.createElement('ul');ul.className='exec-list';
+    conflicts.forEach(c=>{const li=document.createElement('li');li.className='red';const st=document.createElement('strong');st.textContent=c.test_item+'('+c.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+c.consistency_check.message));ul.appendChild(li);});
+    addSection('🚨 数据-结论矛盾',ul,'red');
+  }
+
+  // Fail items
+  if(failItems.length){
+    const ul=document.createElement('ul');ul.className='exec-list';
+    failItems.forEach(f=>{const li=document.createElement('li');li.className='red';const st=document.createElement('strong');st.textContent=f.test_item+'('+f.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+f.reason+' '));const tag=document.createElement('span');tag.className='criteria-tag';tag.textContent=f.criteria_source;li.appendChild(tag);ul.appendChild(li);});
+    addSection('❌ 不合格项',ul,'orange');
+  }
+
+  // Warning items
+  if(warnItems.length){
+    const ul=document.createElement('ul');ul.className='exec-list';
+    warnItems.forEach(w=>{const li=document.createElement('li');li.className='amber';const st=document.createElement('strong');st.textContent=w.test_item+'('+w.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+w.reason));ul.appendChild(li);});
+    addSection('⚠️ 关注项',ul,'amber');
+  }
+
+  // Temp corrections
+  if(corrections.length){
+    const ul=document.createElement('ul');ul.className='exec-list';
+    corrections.forEach(c=>{const li=document.createElement('li');li.className='teal';const st=document.createElement('strong');st.textContent=c.test_item+'('+c.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+c.correction_info.note));ul.appendChild(li);});
+    addSection('🌡️ 温度修正记录',ul,'blue');
+  }
+
+  // Recommendations
+  const rec=document.createElement('div');
+  if(s.fail_count>0) rec.textContent='1. 不合格项需立即排查原因，建议缩短试验周期\n2. 重点关注油色谱异常项，排查是否存在局部放电或过热\n3. 人工复核确认后签字归档';
+  else if(s.warning_count>0) rec.textContent='1. 关注项建议加强监测，下次试验对比数据变化趋势\n2. 人工确认后可签字归档';
+  else rec.textContent='所有项目合格，人工确认后可签字归档';
+  rec.style.whiteSpace='pre-line';
+  addSection('建议措施',rec);
+
+  card.appendChild(body);
+}
+
+function rerenderDetails(){
+  if(!lastResult) return;
+  const showPass=document.getElementById('togglePass').checked;
+  const details=showPass?lastResult.details:lastResult.details.filter(d=>d.result!=='pass');
+  const wrap=document.getElementById('detailsWrap');
+  wrap.innerHTML='';
+
+  const table=document.createElement('table');table.className='details-table';
+  const thead=document.createElement('thead');
+  const hr=document.createElement('tr');
+  ['试验项目','实测值','标准限值','判定','判据来源','说明'].forEach(h=>{
+    const th=document.createElement('th');th.textContent=h;hr.appendChild(th);
+  });
+  thead.appendChild(hr);table.appendChild(thead);
+
+  const tbody=document.createElement('tbody');
+  details.forEach(d=>{
+    const tr=document.createElement('tr');
+    tr.className=d.result==='fail'?'row-fail':d.result==='warning'?'row-warn':'';
+
+    // Test item
+    const td1=document.createElement('td');
+    const strong=document.createElement('strong');strong.textContent=d.test_item;td1.appendChild(strong);
+    td1.appendChild(document.createElement('br'));
+    const span1=document.createElement('span');span1.style.fontSize='11px';span1.style.color='var(--ink-3)';span1.textContent=d.test_item_detail;td1.appendChild(span1);
+    tr.appendChild(td1);
+
+    // Value
+    const td2=document.createElement('td');
+    td2.textContent=d.raw_value+d.unit;
+    if(d.corrected_value!==null&&d.correction_info&&d.correction_info.applied){
+      const cn=document.createElement('div');cn.className='corrected-note';cn.textContent='→ 修正后: '+d.corrected_value+d.unit;td2.appendChild(cn);
+      const tp=document.createElement('div');tp.className='temp-panel';
+      const tpl=document.createElement('div');tpl.style.fontSize='11px';tpl.style.fontWeight='600';tpl.style.color='var(--blue-d)';tpl.textContent='🌡️ 温度修正';tp.appendChild(tpl);
+      const tf=document.createElement('div');tf.className='temp-formula';tf.textContent=d.correction_info.note;tp.appendChild(tf);
+      td2.appendChild(tp);
+    }
+    tr.appendChild(td2);
+
+    // Limit
+    const td3=document.createElement('td');td3.textContent=d.limit_display;tr.appendChild(td3);
+
+    // Result
+    const td4=document.createElement('td');
+    const ri=document.createElement('span');ri.className='result-icon '+(d.result==='fail'?'fail':d.result==='warning'?'warn':d.result==='pass'?'pass':'no-criteria');
+    const icon=d.result==='fail'?'❌':d.result==='warning'?'⚠️':d.result==='pass'?'✅':'❓';
+    ri.textContent=icon+' '+d.result_label;td4.appendChild(ri);tr.appendChild(td4);
+
+    // Criteria source
+    const td5=document.createElement('td');const ct=document.createElement('span');ct.className='criteria-tag';ct.textContent=d.criteria_source;td5.appendChild(ct);tr.appendChild(td5);
+
+    // Reason + conflict + suggestion
+    const td6=document.createElement('td');
+    td6.textContent=d.reason;
+    if(d.consistency_check&&d.consistency_check.has_conflict){
+      const cb=document.createElement('div');cb.className='conflict-badge';cb.textContent=d.consistency_check.message;td6.appendChild(cb);
+    }
+    if(d.suggestion){
+      const sg=document.createElement('div');sg.className='suggestion';sg.textContent='💡 '+d.suggestion;td6.appendChild(sg);
+    }
+    tr.appendChild(td6);
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+}
+
+/* Demo runner */
+function runDemo(type){
+  showLoading();
+  let data,filename;
+  if(type==='pass'){data=getDemoPass();filename='演示_合格报告.xlsx';}
+  else if(type==='fail'){data=getDemoFail();filename='演示_问题报告.xlsx';}
+  else{data=getDemoFail();filename='演示_批量审核_问题报告.xlsx';}
+  setTimeout(()=>{const result=reviewReport(data);hideLoading();setTimeout(()=>renderResult(result,filename),450);},2800);
+}
+
+/* File upload (placeholder) */
+function handleFile(file){
+  if(!file) return;
+  showLoading();
+  setTimeout(()=>{const result=reviewReport(getDemoFail());hideLoading();setTimeout(()=>renderResult(result,file.name),450);},2800);
+}
+
+/* Page control */
+function resetPage(){
+  document.getElementById('s-upload').style.display='';
+  document.getElementById('s-loading').style.display='none';
+  document.getElementById('s-result').style.display='none';
+  lastResult=null;
+  document.getElementById('fileInput').value='';
+}
+</script>
+</body>
+</html>
