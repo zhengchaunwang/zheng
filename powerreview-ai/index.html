@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PowerReview AI — 电力试验报告智能审核工具</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --bg:        #f3f4f6;
+      --surface:   #ffffff;
+      --fg:        #1f2937;
+      --muted:     #6b7280;
+      --border:    #e5e7eb;
+      --accent:    #1e3a5f;
+
+      --status-pass:  #22c55e;
+      --status-warn:  #f59e0b;
+      --status-fail:  #ef4444;
+      --status-info:  #3b82f6;
+
+      --accent-soft: color-mix(in oklch, var(--accent) 10%, transparent);
+      --fg-soft:     color-mix(in oklch, var(--fg) 4%, transparent);
+      --fail-soft:   color-mix(in oklch, var(--status-fail) 10%, transparent);
+      --warn-soft:   color-mix(in oklch, var(--status-warn) 10%, transparent);
+      --pass-soft:   color-mix(in oklch, var(--status-pass) 10%, transparent);
+
+      --font-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono:    ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+      --radius:      8px;
+      --radius-lg:   12px;
+      --sidebar-w:   220px;
+      --topnav-h:    56px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── layout ─── */
+    .app-shell { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--accent);
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 20;
+    }
+    .sidebar-brand {
+      height: var(--topnav-h);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 18px;
+      font-weight: 600;
+      font-size: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-menu { padding: 12px 0; flex: 1; overflow-y: auto; }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      margin: 2px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 13px;
+      opacity: 0.75;
+      transition: all .15s;
+    }
+    .sidebar-item:hover, .sidebar-item.active {
+      opacity: 1;
+      background: rgba(255,255,255,0.08);
+    }
+    .sidebar-item.active { font-weight: 500; }
+    .sidebar-footer {
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      opacity: 0.5;
+    }
+    .main-area {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      display: flex;
+      flex-direction: column;
+    }
+    .row-between { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .topnav {
+      height: var(--topnav-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .page-content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    /* ─── components ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .card + .card { margin-top: 16px; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-top: 4px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .12s;
+      background: transparent;
+      color: var(--fg);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: var(--bg); border-color: var(--border); }
+    .btn-secondary:hover { border-color: var(--muted); }
+    .btn-ghost { border-color: transparent; }
+    .btn-ghost:hover { background: var(--fg-soft); }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-lg { padding: 10px 24px; font-size: 14px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .tag-pass { background: var(--pass-soft); color: #166534; }
+    .tag-warn { background: var(--warn-soft); color: #92400e; }
+    .tag-fail { background: var(--fail-soft); color: #991b1b; }
+
+    .ds-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ds-table th, .ds-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .ds-table th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; background: var(--bg); }
+    .ds-table tbody tr:hover { background: var(--fg-soft); }
+    .ds-table .num { font-family: var(--font-mono); text-align: right; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .field label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .input {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--surface); color: var(--fg); font: inherit; font-size: 13px;
+    }
+    .input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      background: var(--surface);
+    }
+    .upload-zone:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width .3s;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .badge-fail { background: var(--status-fail); }
+    .badge-warn { background: var(--status-warn); }
+    .badge-pass { background: var(--status-pass); }
+
+    .chart-placeholder {
+      height: 180px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ─── login page ─── */
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 460px;
+    }
+    .login-brand {
+      background: linear-gradient(145deg, #1e3a5f 0%, #0f1f35 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+    }
+    .login-form-wrap {
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+    }
+    .role-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .role-option {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all .12s;
+    }
+    .role-option:hover { border-color: var(--accent); }
+    .role-option.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ─── detail page specific ─── */
+    .result-banner {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .result-block {
+      flex: 1;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      color: #fff;
+    }
+    .result-block.fail { background: var(--status-fail); }
+    .result-block.warn { background: var(--status-warn); }
+    .result-block.pass { background: var(--status-pass); }
+    .result-block .num { font-size: 32px; font-weight: 700; }
+    .result-block .lbl { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+
+    .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .breadcrumb span { cursor: pointer; }
+    .breadcrumb span:hover { color: var(--accent); }
+
+    .info-row { display: flex; gap: 24px; flex-wrap: wrap; }
+    .info-item { display: flex; flex-direction: column; gap: 2px; }
+    .info-item .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+    .info-item .val { font-size: 13px; font-weight: 500; }
+
+    .shortcut-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert-warn { background: var(--warn-soft); color: #92400e; }
+    .alert-fail { background: var(--fail-soft); color: #991b1b; }
+
+    @media (max-width: 920px) {
+      .sidebar { display: none; }
+      .main-area { margin-left: 0; }
+      .login-page { grid-template-columns: 1fr; }
+      .login-brand { display: none; }
+      .result-banner { flex-direction: column; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ─── mock data ───
+const REPORTS = [
+  {
+    id: 'R-2026-0418-001',
+    deviceName: '电力变压器 SFZ11-50000/110',
+    deviceType: '变压器',
+    submitter: '张磊',
+    submitTime: '2026-04-18 09:30',
+    aiResult: 'fail',
+    priority: '高',
+    voltage: '110kV',
+    station: '某变电站',
+    testDate: '2026-04-15',
+    items: [
+      { name: '绕组直流电阻', value: '0.52%', threshold: '≤0.5%', unit: '不平衡率', status: 'fail', confidence: 99.5, standard: 'GB 50150 4.0.2', note: 'A相偏高，超出阈值0.02%' },
+      { name: '绕组绝缘电阻', value: '1800', threshold: '≥2000', unit: 'MΩ', status: 'fail', confidence: 99.8, standard: 'GB 50150 4.0.3', note: '低于标准阈值' },
+      { name: '介质损耗角正切(tanδ)', value: '0.85%', threshold: '≤0.7%', unit: '', status: 'fail', confidence: 99.9, standard: 'GB 50150 4.0.6', note: '超标，建议关注' },
+      { name: '绝缘油击穿电压', value: '52', threshold: '≥40', unit: 'kV', status: 'pass', confidence: 99.2, standard: 'GB 50150 4.0.11', note: '' },
+      { name: '绝缘油tanδ', value: '0.35%', threshold: '≤0.5%', unit: '', status: 'pass', confidence: 98.5, standard: 'GB 50150 4.0.12', note: '' },
+      { name: '绕组变形测试', value: '正常', threshold: '正常', unit: '', status: 'pass', confidence: 96.0, standard: 'DL/T 911', note: '' },
+      { name: '交流耐压', value: '185', threshold: '≥180', unit: 'kV', status: 'pass', confidence: 97.8, standard: 'GB 50150 8.0.6', note: '' },
+      { name: '局部放电', value: '45', threshold: '≤100', unit: 'pC', status: 'pass', confidence: 95.5, standard: 'GB 50150 4.0.8', note: '' },
+      { name: '绝缘油色谱分析', value: '总烃78', threshold: '≤150', unit: 'μL/L', status: 'warn', confidence: 72.0, standard: 'DL/T 722', note: '接近临界值，建议跟踪' },
+    ],
+    history: [
+      { date: '2025-04', tanDelta: 0.62 },
+      { date: '2025-10', tanDelta: 0.68 },
+      { date: '2026-04', tanDelta: 0.85 },
+    ],
+    contradiction: { desc: '数据中 tanδ 超标(0.85% > 0.7%)，但报告结论栏填写为"合格"', severity: 'fail' }
+  },
+  {
+    id: 'R-2026-0418-002',
+    deviceName: 'SF6断路器 LW36-126',
+    deviceType: '断路器',
+    submitter: '张磊',
+    submitTime: '2026-04-18 10:15',
+    aiResult: 'warn',
+    priority: '中',
+    voltage: '126kV',
+    station: '某变电站',
+    testDate: '2026-04-16',
+    items: [
+      { name: '导电回路电阻', value: '42', threshold: '≤50', unit: 'μΩ', status: 'pass', confidence: 98.0, standard: 'GB 50150 8.0.4', note: '' },
+      { name: 'SF6气体水分', value: '148', threshold: '≤150', unit: 'μL/L', status: 'warn', confidence: 68.5, standard: 'GB 50150 8.0.3', note: '接近临界值(148/150)' },
+      { name: '交流耐压', value: '230', threshold: '≥230', unit: 'kV', status: 'pass', confidence: 99.0, standard: 'GB 50150 8.0.6', note: '' },
+      { name: '合闸电阻', value: '450', threshold: '≤500', unit: 'μΩ', status: 'pass', confidence: 97.5, standard: 'GB 50150 8.0.8', note: '' },
+    ],
+    history: [
+      { date: '2024-10', tanDelta: null },
+      { date: '2025-04', tanDelta: null },
+      { date: '2025-10', tanDelta: null },
+      { date: '2026-04', tanDelta: null },
+    ],
+    contradiction: null
+  },
+  {
+    id: 'R-2026-0418-003',
+    deviceName: 'GIS组合电器 ZF126',
+    deviceType: 'GIS',
+    submitter: '张磊',
+    submitTime: '2026-04-18 11:00',
+    aiResult: 'pass',
+    priority: '低',
+    voltage: '126kV',
+    station: '某变电站',
+    testDate: '2026-04-17',
+    items: [
+      { name: '导电回路电阻', value: '28', threshold: '≤50', unit: 'μΩ', status: 'pass', confidence: 99.5, standard: 'GB 50150 8.0.4', note: '' },
+      { name: 'SF6气体水分', value: '85', threshold: '≤150', unit: 'μL/L', status: 'pass', confidence: 98.0, standard: 'GB 50150 8.0.3', note: '' },
+      { name: '交流耐压', value: '240', threshold: '≥230', unit: 'kV', status: 'pass', confidence: 99.2, standard: 'GB 50150 8.0.6', note: '' },
+      { name: '局部放电', value: '32', threshold: '≤100', unit: 'pC', status: 'pass', confidence: 96.5, standard: 'GB 50150 4.0.8', note: '' },
+    ],
+    history: [
+      { date: '2024-04', tanDelta: null },
+      { date: '2024-10', tanDelta: null },
+      { date: '2025-04', tanDelta: null },
+      { date: '2025-10', tanDelta: null },
+      { date: '2026-04', tanDelta: null },
+    ],
+    contradiction: null
+  }
+];
+
+const TECH_MENU = [
+  { key: 'upload', label: '报告上传', icon: '⬆' },
+  { key: 'my-reports', label: '我的报告', icon: '📄' },
+  { key: 'history', label: '历史记录', icon: '🕐' },
+];
+
+const REVIEWER_MENU = [
+  { key: 'pending', label: '待审报告', icon: '📋' },
+  { key: 'reviewed', label: '已审报告', icon: '✓' },
+  { key: 'criteria', label: '判据库', icon: '⚖' },
+  { key: 'dashboard', label: '统计看板', icon: '▤' },
+];
+
+const CHIEF_MENU = [
+  { key: 'risk-list', label: '风险清单', icon: '⚠' },
+  { key: 'trends', label: '设备趋势', icon: '📈' },
+  { key: 'quality', label: '质量通报', icon: '📊' },
+  { key: 'approval', label: '签字审批', icon: '✍' },
+];
+
+// ─── helpers ───
+const StatusTag = ({ status }) => {
+  const map = { pass: { cls: 'tag-pass', text: '通过' }, warn: { cls: 'tag-warn', text: '待确认' }, fail: { cls: 'tag-fail', text: '不通过' } };
+  const s = map[status] || map.pass;
+  return <span className={`tag ${s.cls}`}>{s.text}</span>;
+};
+
+const StatusBadge = ({ status }) => {
+  const map = { pass: 'badge-pass', warn: 'badge-warn', fail: 'badge-fail' };
+  return <span className={`badge ${map[status] || map.pass}`}></span>;
+};
+
+const countStatus = (items) => {
+  const c = { pass: 0, warn: 0, fail: 0 };
+  items.forEach(i => c[i.status]++);
+  return c;
+};
+
+// ─── pages ───
+
+function LoginPage({ onLogin }) {
+  const [role, setRole] = React.useState('reviewer');
+  const roles = [
+    { key: 'technician', label: '技术员', desc: '试验班组 | 张磊' },
+    { key: 'reviewer', label: '审核人', desc: '技术专责 | 李建华' },
+    { key: 'chief', label: '总工', desc: '技术主管 | 王德明' },
+  ];
+  return (
+    <div className="login-page">
+      <div className="login-brand">
+        <div style={{ fontSize: 36, fontWeight: 700, marginBottom: 20 }}>PowerReview AI</div>
+        <div style={{ fontSize: 18, opacity: 0.85, lineHeight: 1.6, maxWidth: 400 }}>
+          让电力试验报告审核从"逐行比对"变成"AI预审+人工确认"
+        </div>
+        <div style={{ marginTop: 40, fontSize: 13, opacity: 0.5 }}>
+          电力试验报告智能审核工具 v1.0
+        </div>
+      </div>
+      <div className="login-form-wrap">
+        <h2 style={{ margin: '0 0 6px', fontSize: 22 }}>欢迎使用</h2>
+        <p style={{ margin: '0 0 24px', color: 'var(--muted)', fontSize: 13 }}>请选择您的角色并登录系统</p>
+
+        <div className="field">
+          <label>选择角色</label>
+          <div className="role-selector">
+            {roles.map(r => (
+              <div key={r.key} className={`role-option ${role === r.key ? 'selected' : ''}`} onClick={() => setRole(r.key)}>
+                <div style={{ fontSize: 16, marginBottom: 4 }}>{r.label}</div>
+                <div style={{ fontSize: 11, opacity: 0.7 }}>{r.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="field">
+          <label>用户名</label>
+          <input className="input" defaultValue={role === 'technician' ? 'zhanglei' : role === 'reviewer' ? 'lijianhua' : 'wangdeming'} />
+        </div>
+        <div className="field">
+          <label>密码</label>
+          <input className="input" type="password" defaultValue="********" />
+        </div>
+
+        <button className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: 8 }} onClick={() => onLogin(role)}>
+          登录系统
+        </button>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: 'var(--muted)' }}>
+          私有化部署 · 数据不出内网
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function TechnicianPage({ onBack }) {
+  const [uploaded, setUploaded] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
+  const menu = TECH_MENU;
+  const [active, setActive] = React.useState('upload');
+
+  const handleUpload = () => {
+    setProgress(0);
+    setUploaded(false);
+    let p = 0;
+    const iv = setInterval(() => {
+      p += Math.random() * 25;
+      if (p >= 100) { p = 100; clearInterval(iv); setUploaded(true); }
+      setProgress(p);
+    }, 300);
+  };
+
+  const checks = [
+    { status: 'fail', text: 'tanδ 值 0.85% 超过标准阈值 0.7%（GB 50150 4.0.6）' },
+    { status: 'fail', text: '绕组绝缘电阻 1800 MΩ 低于标准 2000 MΩ（GB 50150 4.0.3）' },
+    { status: 'warn', text: '绝缘油色谱总烃 78 μL/L，接近关注值 150' },
+    { status: 'pass', text: '绝缘油击穿电压 52 kV 满足要求（≥40 kV）' },
+    { status: 'pass', text: '绕组直流电阻不平衡率 0.52%（接近阈值 0.5%，建议复核）' },
+  ];
+
+  const dataRows = [
+    { item: '绕组直流电阻', a: '0.285', b: '0.284', c: '0.286', unbal: '0.52%', status: 'warn' },
+    { item: '绕组绝缘电阻', a: '1800', b: '1950', c: '1920', unit: 'MΩ', status: 'fail' },
+    { item: '介质损耗角正切(tanδ)', a: '0.85%', b: '0.82%', c: '0.84%', threshold: '≤0.7%', status: 'fail' },
+    { item: '绝缘油击穿电压', a: '52', b: '54', c: '53', unit: 'kV', status: 'pass' },
+    { item: '绝缘油tanδ', a: '0.35%', b: '0.34%', c: '0.36%', threshold: '≤0.5%', status: 'pass' },
+  ];
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span style={{ fontSize: 18 }}>⚡</span>
+          <span>PowerReview AI</span>
+        </div>
+        <div className="sidebar-menu">
+          {menu.map(m => (
+            <div key={m.key} className={`sidebar-item ${active === m.key ? 'active' : ''}`} onClick={() => setActive(m.key)}>
+              <span>{m.icon}</span>
+              <span>{m.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sidebar-footer">
+          <div>试验班组 | 张磊</div>
+          <div style={{ marginTop: 4, cursor: 'pointer' }} onClick={onBack}>← 切换角色</div>
+        </div>
+      </aside>
+      <div className="main-area">
+        <header className="topnav">
+          <span style={{ fontWeight: 600 }}>报告上传与实时校验</span>
+          <span style={{ fontSize: 12, color: 'var(--muted)' }}>设备: 电力变压器 SFZ11-50000/110</span>
+        </header>
+        <div className="page-content">
+          {!uploaded && (
+            <div className="upload-zone" onClick={handleUpload}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>⬆</div>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>点击或拖拽上传试验报告 Excel</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>支持 .xlsx 格式，文件大小不超过 10MB</div>
+              {progress > 0 && (
+                <div style={{ marginTop: 16, maxWidth: 300, marginInline: 'auto' }}>
+                  <div className="progress-bar"><div className="progress-fill" style={{ width: progress + '%' }}></div></div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>解析中... {Math.round(progress)}%</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {uploaded && (
+            <>
+              <div className="card" style={{ borderLeft: '4px solid var(--status-warn)' }}>
+                <div className="row-between" style={{ marginBottom: 12 }}>
+                  <div style={{ fontWeight: 600, fontSize: 15 }}>报告基本信息</div>
+                  <StatusTag status="warn" />
+                </div>
+                <div className="info-row">
+                  <div className="info-item"><span className="lbl">设备名称</span><span className="val">电力变压器 SFZ11-50000/110</span></div>
+                  <div className="info-item"><span className="lbl">电压等级</span><span className="val">110kV</span></div>
+                  <div className="info-item"><span className="lbl">试验日期</span><span className="val">2026-04-15</span></div>
+                  <div className="info-item"><span className="lbl">试验地点</span><span className="val">某变电站</span></div>
+                  <div className="info-item"><span className="lbl">试验人员</span><span className="val">张磊、王强</span></div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>实时校验结果 <span style={{ fontWeight: 400, fontSize: 12, color: 'var(--muted)' }}>（共发现 2 项异常）</span></div>
+                {checks.map((c, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: i < checks.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                    <StatusBadge status={c.status} />
+                    <span style={{ fontSize: 13 }}>{c.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>试验数据预览</div>
+                <table className="ds-table">
+                  <thead>
+                    <tr>
+                      <th>试验项目</th>
+                      <th>A相</th>
+                      <th>B相</th>
+                      <th>C相</th>
+                      <th>结果</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataRows.map((r, i) => (
+                      <tr key={i}>
+                        <td>{r.item}</td>
+                        <td className="num">{r.a}</td>
+                        <td className="num">{r.b}</td>
+                        <td className="num">{r.c}</td>
+                        <td className="num">{r.unbal || r.unit || r.threshold}</td>
+                        <td><StatusTag status={r.status} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                <button className="btn btn-secondary" onClick={() => { setUploaded(false); setProgress(0); }}>重新上传</button>
+                <button className="btn btn-primary">修正后提交审核</button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewerListPage({ onSelect, onBack }) {
+  const menu = REVIEWER_MENU;
+  const [active, setActive] = React.useState('pending');
+  const stats = { pending: 3, today: 12, month: 45, avgTime: '4.2min' };
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span style={{ fontSize: 18 }}>⚡</span>
+          <span>PowerReview AI</span>
+        </div>
+        <div className="sidebar-menu">
+          {menu.map(m => (
+            <div key={m.key} className={`sidebar-item ${active === m.key ? 'active' : ''}`} onClick={() => setActive(m.key)}>
+              <span>{m.icon}</span>
+              <span>{m.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sidebar-footer">
+          <div>技术专责 | 李建华</div>
+          <div style={{ marginTop: 4, cursor: 'pointer' }} onClick={onBack}>← 切换角色</div>
+        </div>
+      </aside>
+      <div className="main-area">
+        <header className="topnav">
+          <span style={{ fontWeight: 600 }}>待审报告列表</span>
+          <div className="shortcut-hint">
+            <span>快捷键</span>
+            <span className="kbd">Enter</span><span>确认</span>
+            <span className="kbd">→</span><span>下一项</span>
+            <span className="kbd">←</span><span>上一项</span>
+          </div>
+        </header>
+        <div className="page-content">
+          <div className="grid-4" style={{ marginBottom: 20 }}>
+            <div className="stat-card">
+              <span className="stat-label">待审报告</span>
+              <span className="stat-value" style={{ color: 'var(--status-fail)' }}>{stats.pending}</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-label">今日已审</span>
+              <span className="stat-value">{stats.today}</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-label">本月已审</span>
+              <span className="stat-value">{stats.month}</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-label">平均审核时长</span>
+              <span className="stat-value">{stats.avgTime}</span>
+            </div>
+          </div>
+
+          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', gap: 12 }}>
+              <input className="input" style={{ maxWidth: 240 }} placeholder="搜索报告编号或设备名称..." />
+              <select className="input" style={{ maxWidth: 120 }}>
+                <option>全部状态</option>
+                <option>不通过</option>
+                <option>待确认</option>
+                <option>通过</option>
+              </select>
+              <select className="input" style={{ maxWidth: 120 }}>
+                <option>全部设备</option>
+                <option>变压器</option>
+                <option>断路器</option>
+                <option>GIS</option>
+              </select>
+            </div>
+            <table className="ds-table">
+              <thead>
+                <tr>
+                  <th>报告编号</th>
+                  <th>设备名称</th>
+                  <th>提交人</th>
+                  <th>提交时间</th>
+                  <th>AI预审结果</th>
+                  <th>优先级</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {REPORTS.map(r => (
+                  <tr key={r.id}>
+                    <td className="num">{r.id}</td>
+                    <td>{r.deviceName}</td>
+                    <td>{r.submitter}</td>
+                    <td>{r.submitTime}</td>
+                    <td><StatusTag status={r.aiResult} /></td>
+                    <td><span style={{ fontWeight: 500, color: r.priority === '高' ? 'var(--status-fail)' : r.priority === '中' ? 'var(--status-warn)' : 'var(--status-pass)' }}>{r.priority}</span></td>
+                    <td><button className="btn btn-primary btn-sm" onClick={() => onSelect(r)}>审核</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewerDetailPage({ report, onBack, onComplete }) {
+  const menu = REVIEWER_MENU;
+  const [active] = React.useState('pending');
+  const counts = countStatus(report.items);
+  const [confirming, setConfirming] = React.useState({});
+
+  const toggleConfirm = (idx) => {
+    setConfirming(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span style={{ fontSize: 18 }}>⚡</span>
+          <span>PowerReview AI</span>
+        </div>
+        <div className="sidebar-menu">
+          {menu.map(m => (
+            <div key={m.key} className={`sidebar-item ${active === m.key ? 'active' : ''}`}>
+              <span>{m.icon}</span>
+              <span>{m.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sidebar-footer">
+          <div>技术专责 | 李建华</div>
+          <div style={{ marginTop: 4, cursor: 'pointer' }} onClick={onBack}>← 返回列表</div>
+        </div>
+      </aside>
+      <div className="main-area">
+        <header className="topnav">
+          <span style={{ fontWeight: 600 }}>AI预审结果确认</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-secondary btn-sm" onClick={onBack}>返回列表</button>
+            <button className="btn btn-primary btn-sm" onClick={onComplete}>审核完成</button>
+          </div>
+        </header>
+        <div className="page-content">
+          <div className="breadcrumb">
+            <span onClick={onBack}>待审报告</span>
+            <span style={{ margin: '0 6px' }}>&gt;</span>
+            <span>报告详情</span>
+            <span style={{ margin: '0 6px' }}>&gt;</span>
+            <span style={{ color: 'var(--fg)', fontWeight: 500 }}>{report.id}</span>
+          </div>
+
+          <div className="result-banner">
+            <div className="result-block fail">
+              <div className="num">{counts.fail}</div>
+              <div className="lbl">不通过</div>
+            </div>
+            <div className="result-block warn">
+              <div className="num">{counts.warn}</div>
+              <div className="lbl">待确认</div>
+            </div>
+            <div className="result-block pass">
+              <div className="num">{counts.pass}</div>
+              <div className="lbl">通过</div>
+            </div>
+          </div>
+
+          {report.contradiction && (
+            <div className={`alert alert-${report.contradiction.severity}`} style={{ marginBottom: 16 }}>
+              <span style={{ fontSize: 16 }}>⚠</span>
+              <span><strong>一致性校验警告：</strong>{report.contradiction.desc}</span>
+            </div>
+          )}
+
+          <div className="grid-2" style={{ alignItems: 'start' }}>
+            <div>
+              <div className="card" style={{ marginBottom: 16 }}>
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>设备信息</div>
+                <div className="info-row">
+                  <div className="info-item"><span className="lbl">设备名称</span><span className="val">{report.deviceName}</span></div>
+                  <div className="info-item"><span className="lbl">电压等级</span><span className="val">{report.voltage}</span></div>
+                  <div className="info-item"><span className="lbl">试验日期</span><span className="val">{report.testDate}</span></div>
+                  <div className="info-item"><span className="lbl">试验地点</span><span className="val">{report.station}</span></div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>异常清单</div>
+                <table className="ds-table">
+                  <thead>
+                    <tr>
+                      <th>试验项目</th>
+                      <th>实测值</th>
+                      <th>标准阈值</th>
+                      <th>AI判断</th>
+                      <th>置信度</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {report.items.map((item, i) => (
+                      <tr key={i} style={{ background: item.status === 'fail' ? 'var(--fail-soft)' : item.status === 'warn' ? 'var(--warn-soft)' : 'transparent' }}>
+                        <td>{item.name}</td>
+                        <td className="num">{item.value}</td>
+                        <td className="num">{item.threshold}</td>
+                        <td><StatusTag status={item.status} /></td>
+                        <td className="num">{item.confidence}%</td>
+                        <td>
+                          <button
+                            className={`btn btn-sm ${confirming[i] ? 'btn-primary' : 'btn-ghost'}`}
+                            onClick={() => toggleConfirm(i)}
+                          >
+                            {confirming[i] ? '已确认' : '确认'}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <div className="card" style={{ marginBottom: 16 }}>
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>AI依据溯源</div>
+                {report.items.filter(i => i.status !== 'pass').map((item, i) => (
+                  <div key={i} style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <StatusTag status={item.status} />
+                      <span style={{ fontWeight: 500, fontSize: 13 }}>{item.name}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                      依据：{item.standard} · {item.note}
+                    </div>
+                  </div>
+                ))}
+                {report.items.filter(i => i.status === 'pass').length > 0 && (
+                  <div style={{ padding: '10px 0', fontSize: 12, color: 'var(--muted)' }}>
+                    其余 {report.items.filter(i => i.status === 'pass').length} 项均符合标准
+                  </div>
+                )}
+              </div>
+
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>历史趋势 — 介损 tanδ</div>
+                <div className="chart-placeholder">
+                  <svg width="280" height="140" viewBox="0 0 280 140">
+                    <polyline
+                      fill="none"
+                      stroke={report.history.length > 2 && report.history[2].tanDelta > report.history[1].tanDelta ? 'var(--status-fail)' : 'var(--accent)'}
+                      strokeWidth="2"
+                      points={report.history.map((h, i) => `${20 + i * 80},${130 - (h.tanDelta || 0) * 100}`).join(' ')}
+                    />
+                    {report.history.map((h, i) => (
+                      <g key={i}>
+                        <circle cx={20 + i * 80} cy={130 - (h.tanDelta || 0) * 100} r="4" fill="var(--accent)" />
+                        <text x={20 + i * 80} y={125 - (h.tanDelta || 0) * 100} textAnchor="middle" fontSize="10" fill="var(--muted)">{h.date}</text>
+                        <text x={20 + i * 80} y={145 - (h.tanDelta || 0) * 100} textAnchor="middle" fontSize="10" fill="var(--fg)">{h.tanDelta ? h.tanDelta + '%' : '—'}</text>
+                      </g>
+                    ))}
+                    <line x1="10" y1="130" x2="270" y2="130" stroke="var(--border)" strokeWidth="1" />
+                    <line x1="10" y1="10" x2="10" y2="130" stroke="var(--border)" strokeWidth="1" />
+                  </svg>
+                </div>
+                <div style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)' }}>
+                  变化率：同比 +37.1% · 建议结合油色谱进一步分析
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card" style={{ marginTop: 16 }}>
+            <div style={{ fontWeight: 600, marginBottom: 12 }}>原文标注</div>
+            <div style={{ background: 'var(--bg)', padding: 16, borderRadius: 'var(--radius)', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2 }}>
+              <div><span style={{ color: 'var(--muted)' }}>A1</span>  <span>绕组直流电阻不平衡率</span>  <span style={{ background: 'var(--warn-soft)', padding: '1px 6px', borderRadius: 4 }}>0.52%</span>  <span style={{ color: 'var(--muted)' }}>（标准 ≤0.5%）</span></div>
+              <div><span style={{ color: 'var(--muted)' }}>A2</span>  <span>绕组绝缘电阻</span>  <span style={{ background: 'var(--fail-soft)', padding: '1px 6px', borderRadius: 4 }}>1800 MΩ</span>  <span style={{ color: 'var(--muted)' }}>（标准 ≥2000 MΩ）</span></div>
+              <div><span style={{ color: 'var(--muted)' }}>A3</span>  <span>介质损耗角正切 tanδ</span>  <span style={{ background: 'var(--fail-soft)', padding: '1px 6px', borderRadius: 4 }}>0.85%</span>  <span style={{ color: 'var(--muted)' }}>（标准 ≤0.7%）</span></div>
+              <div><span style={{ color: 'var(--muted)' }}>A4</span>  <span>绝缘油击穿电压</span>  <span style={{ background: 'var(--pass-soft)', padding: '1px 6px', borderRadius: 4 }}>52 kV ✓</span></div>
+              <div><span style={{ color: 'var(--muted)' }}>A5</span>  <span>绝缘油色谱总烃</span>  <span>78 μL/L</span>  <span style={{ color: 'var(--muted)' }}>（标准 ≤150）</span></div>
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
+                <span style={{ background: 'var(--fail-soft)', padding: '1px 6px', borderRadius: 4 }}>结论栏：合格</span>
+                <span style={{ marginLeft: 12 }}>⚠ 与A3项数据矛盾</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChiefPage({ onBack }) {
+  const menu = CHIEF_MENU;
+  const [active, setActive] = React.useState('risk-list');
+  const [selectedReport, setSelectedReport] = React.useState(REPORTS[0]);
+  const [signed, setSigned] = React.useState(false);
+  const riskReports = REPORTS.filter(r => r.aiResult !== 'pass');
+
+  const goToApproval = (r) => { setSelectedReport(r); setActive('approval'); setSigned(false); };
+  const goToTrends = (r) => { setSelectedReport(r); setActive('trends'); };
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span style={{ fontSize: 18 }}>⚡</span>
+          <span>PowerReview AI</span>
+        </div>
+        <div className="sidebar-menu">
+          {menu.map(m => (
+            <div key={m.key} className={`sidebar-item ${active === m.key ? 'active' : ''}`} onClick={() => setActive(m.key)}>
+              <span>{m.icon}</span>
+              <span>{m.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sidebar-footer">
+          <div>技术主管 | 王德明</div>
+          <div style={{ marginTop: 4, cursor: 'pointer' }} onClick={onBack}>← 切换角色</div>
+        </div>
+      </aside>
+      <div className="main-area">
+        <header className="topnav">
+          <span style={{ fontWeight: 600 }}>
+            {active === 'risk-list' ? '高风险报告清单' : active === 'trends' ? '设备劣化趋势' : active === 'quality' ? '质量通报' : '签字审批'}
+          </span>
+        </header>
+        <div className="page-content">
+          {active === 'risk-list' && (
+            <>
+              <div className="grid-3" style={{ marginBottom: 20 }}>
+                <div className="stat-card">
+                  <span className="stat-label">本月高风险报告</span>
+                  <span className="stat-value" style={{ color: 'var(--status-fail)' }}>{riskReports.length}</span>
+                </div>
+                <div className="stat-card">
+                  <span className="stat-label">待终审签字</span>
+                  <span className="stat-value" style={{ color: 'var(--status-warn)' }}>5</span>
+                </div>
+                <div className="stat-card">
+                  <span className="stat-label">平均终审时长</span>
+                  <span className="stat-value">2.1min</span>
+                </div>
+              </div>
+
+              {riskReports.map(r => (
+                <div key={r.id} className="card" style={{ borderLeft: `4px solid ${r.aiResult === 'fail' ? 'var(--status-fail)' : 'var(--status-warn)'}` }}>
+                  <div className="row-between">
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{r.deviceName}</div>
+                      <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                        {r.id} · {r.station} · 试验日期 {r.testDate} · 提交人 {r.submitter}
+                      </div>
+                    </div>
+                    <StatusTag status={r.aiResult} />
+                  </div>
+                  <div style={{ marginTop: 12, fontSize: 13 }}>
+                    <strong>问题摘要：</strong>
+                    {r.items.filter(i => i.status !== 'pass').map(i => i.note).join('；')}
+                  </div>
+                  {r.contradiction && (
+                    <div style={{ marginTop: 8, fontSize: 12, color: 'var(--status-fail)' }}>
+                      ⚠ {r.contradiction.desc}
+                    </div>
+                  )}
+                  <div style={{ marginTop: 14, display: 'flex', gap: 10 }}>
+                    <button className="btn btn-primary btn-sm" onClick={() => goToApproval(r)}>查看详情并签字</button>
+                    <button className="btn btn-secondary btn-sm" onClick={() => goToTrends(r)}>查看设备趋势</button>
+                  </div>
+                </div>
+              ))}
+
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>全局质量视图</div>
+                <div className="chart-placeholder" style={{ height: 220 }}>
+                  <svg width="500" height="200" viewBox="0 0 500 200">
+                    {['一班','二班','三班','检修班','试验班'].map((name, i) => {
+                      const pass = [85, 92, 78, 88, 95][i];
+                      const fail = [15, 8, 22, 12, 5][i];
+                      return (
+                        <g key={name} transform={`translate(${40 + i * 90}, 0)`}>
+                          <rect x={0} y={200 - pass * 1.8} width={36} height={pass * 1.8} fill="var(--status-pass)" rx={4} />
+                          <rect x={0} y={200 - (pass + fail) * 1.8} width={36} height={fail * 1.8} fill="var(--status-fail)" rx={4} />
+                          <text x={18} y={196} textAnchor="middle" fontSize="11" fill="var(--muted)">{name}</text>
+                          <text x={18} y={200 - pass * 1.8 - 6} textAnchor="middle" fontSize="10" fill="var(--fg)">{pass}%</text>
+                        </g>
+                      );
+                    })}
+                    <line x1="20" y1="180" x2="480" y2="180" stroke="var(--border)" strokeDasharray="3 3" />
+                    <text x="24" y="175" fontSize="10" fill="var(--muted)">目标线 90%</text>
+                  </svg>
+                </div>
+              </div>
+            </>
+          )}
+
+          {active === 'trends' && (
+            <>
+              <div className="breadcrumb">
+                <span onClick={() => setActive('risk-list')}>风险清单</span>
+                <span style={{ margin: '0 6px' }}>&gt;</span>
+                <span style={{ color: 'var(--fg)', fontWeight: 500 }}>设备趋势</span>
+              </div>
+              <div className="card">
+                <div style={{ fontWeight: 600, marginBottom: 12 }}>{selectedReport.deviceName} 介损劣化趋势（3年）</div>
+                <div className="chart-placeholder" style={{ height: 260 }}>
+                  <svg width="600" height="240" viewBox="0 0 600 240">
+                    {['2023-04','2023-10','2024-04','2024-10','2025-04','2025-10','2026-04'].map((d, i) => (
+                      <g key={d}>
+                        <text x={60 + i * 80} y={230} textAnchor="middle" fontSize="10" fill="var(--muted)">{d}</text>
+                      </g>
+                    ))}
+                    <polyline fill="none" stroke="var(--status-fail)" strokeWidth="2"
+                      points="60,180 140,170 220,155 300,145 380,130 460,110 540,60" />
+                    {[[60,180],[140,170],[220,155],[300,145],[380,130],[460,110],[540,60]].map(([x,y],i) => (
+                      <circle key={i} cx={x} cy={y} r="4" fill="var(--status-fail)" />
+                    ))}
+                    <line x1="40" y1="195" x2="560" y2="195" stroke="var(--status-warn)" strokeDasharray="4 4" strokeWidth="1.5" />
+                    <text x="45" y="190" fontSize="10" fill="var(--status-warn)">注意值 0.6%</text>
+                    <line x1="40" y1="75" x2="560" y2="75" stroke="var(--status-fail)" strokeDasharray="4 4" strokeWidth="1.5" />
+                    <text x="45" y="70" fontSize="10" fill="var(--status-fail)">警示值 0.7%</text>
+                    <line x1="40" y1="20" x2="40" y2="220" stroke="var(--border)" />
+                    <line x1="40" y1="220" x2="560" y2="220" stroke="var(--border)" />
+                  </svg>
+                </div>
+                <div style={{ marginTop: 12, fontSize: 13, color: 'var(--muted)' }}>
+                  该设备介损值从2023年的0.45%持续上升至2026年的0.85%，已超过警示值0.7%。建议安排B类检修并缩短试验周期。
+                </div>
+                <div style={{ marginTop: 16, display: 'flex', gap: 10 }}>
+                  <button className="btn btn-secondary" onClick={() => setActive('risk-list')}>返回风险清单</button>
+                  <button className="btn btn-primary" onClick={() => goToApproval(selectedReport)}>进入签字审批</button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {active === 'quality' && (
+            <div className="card">
+              <div style={{ fontWeight: 600, marginBottom: 12 }}>2026年4月质量通报</div>
+              <table className="ds-table">
+                <thead>
+                  <tr><th>指标</th><th>本月</th><th>上月</th><th>变化</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>报告总数</td><td className="num">156</td><td className="num">142</td><td className="num" style={{ color: 'var(--status-pass)' }}>+9.9%</td></tr>
+                  <tr><td>一次通过率</td><td className="num">68.5%</td><td className="num">62.3%</td><td className="num" style={{ color: 'var(--status-pass)' }}>+6.2%</td></tr>
+                  <tr><td>退回率</td><td className="num">8.2%</td><td className="num">12.5%</td><td className="num" style={{ color: 'var(--status-pass)' }}>-4.3%</td></tr>
+                  <tr><td>平均审核时长</td><td className="num">4.2min</td><td className="num">5.8min</td><td className="num" style={{ color: 'var(--status-pass)' }}>-28%</td></tr>
+                  <tr><td>AI预审准确率</td><td className="num">94.2%</td><td className="num">91.8%</td><td className="num" style={{ color: 'var(--status-pass)' }}>+2.4%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {active === 'approval' && (
+            <>
+              <div className="breadcrumb">
+                <span onClick={() => setActive('risk-list')}>风险清单</span>
+                <span style={{ margin: '0 6px' }}>&gt;</span>
+                <span style={{ color: 'var(--fg)', fontWeight: 500 }}>终审签字</span>
+              </div>
+              {signed ? (
+                <div className="card" style={{ textAlign: 'center', padding: 48 }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>✓</div>
+                  <h2 style={{ margin: '0 0 8px', fontSize: 20 }}>签字完成</h2>
+                  <p style={{ color: 'var(--muted)', margin: '0 0 24px', fontSize: 13 }}>{selectedReport.id} 已终审通过</p>
+                  <button className="btn btn-primary" onClick={() => setActive('risk-list')}>返回风险清单</button>
+                </div>
+              ) : (
+                <div className="card" style={{ maxWidth: 640 }}>
+                  <div style={{ fontWeight: 600, marginBottom: 16 }}>终审签字 — {selectedReport.id}</div>
+                  <div style={{ marginBottom: 16, padding: 14, background: 'var(--bg)', borderRadius: 'var(--radius)', fontSize: 13 }}>
+                    <div><strong>设备：</strong>{selectedReport.deviceName}</div>
+                    <div style={{ marginTop: 4 }}><strong>审核结论：</strong><span style={{ color: selectedReport.aiResult === 'fail' ? 'var(--status-fail)' : 'var(--status-warn)' }}>{selectedReport.aiResult === 'fail' ? '不通过' : '待确认'}</span></div>
+                    <div style={{ marginTop: 4 }}><strong>主要问题：</strong>{selectedReport.items.filter(i => i.status !== 'pass').map(i => `${i.name}(${i.value})`).join('、')}{selectedReport.contradiction ? '、数据与结论矛盾' : ''}</div>
+                  </div>
+
+                  <div className="card" style={{ background: 'var(--bg)', marginBottom: 16 }}>
+                    <div style={{ fontWeight: 600, marginBottom: 10, fontSize: 13 }}>AI预审结果摘要</div>
+                    {selectedReport.items.filter(i => i.status !== 'pass').map((item, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', fontSize: 12 }}>
+                        <StatusTag status={item.status} />
+                        <span>{item.name}：实测 {item.value}，标准 {item.threshold}</span>
+                        <span style={{ color: 'var(--muted)', marginLeft: 'auto' }}>{item.standard}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="field">
+                    <label>终审意见</label>
+                    <textarea className="input" rows="3" defaultValue={selectedReport.aiResult === 'fail' ? '同意AI预审结论，数据超标明显，建议立即安排检修。' : '数据处于临界区，建议结合历史趋势综合判断，必要时缩短试验周期。'}></textarea>
+                  </div>
+                  <div style={{ border: '2px dashed var(--border)', borderRadius: 'var(--radius-lg)', padding: 32, textAlign: 'center', marginBottom: 16 }}>
+                    <div style={{ fontSize: 28, marginBottom: 8 }}>✍</div>
+                    <div style={{ fontSize: 13, color: 'var(--muted)' }}>在此区域手写电子签名</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+                    <button className="btn btn-secondary" onClick={() => setActive('risk-list')}>退回重审</button>
+                    <button className="btn btn-primary" onClick={() => setSigned(true)}>确认签字</button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SuccessPage({ onBack }) {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+      <div className="card" style={{ textAlign: 'center', maxWidth: 420, padding: 40 }}>
+        <div style={{ fontSize: 56, marginBottom: 16 }}>✓</div>
+        <h2 style={{ margin: '0 0 8px', fontSize: 22 }}>审核完成</h2>
+        <p style={{ color: 'var(--muted)', margin: '0 0 24px', fontSize: 13 }}>报告 R-2026-0418-001 已成功审核</p>
+
+        <div style={{ background: 'var(--bg)', borderRadius: 'var(--radius)', padding: 16, marginBottom: 24, textAlign: 'left' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+            <span style={{ color: 'var(--muted)', fontSize: 12 }}>审核时长</span>
+            <span style={{ fontWeight: 500 }}>3分42秒</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+            <span style={{ color: 'var(--muted)', fontSize: 12 }}>发现问题</span>
+            <span style={{ fontWeight: 500, color: 'var(--status-fail)' }}>2项异常 + 1项矛盾</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0' }}>
+            <span style={{ color: 'var(--muted)', fontSize: 12 }}>审核结论</span>
+            <span style={{ fontWeight: 500, color: 'var(--status-fail)' }}>不通过</span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+          <button className="btn btn-secondary" onClick={onBack}>返回列表</button>
+          <button className="btn btn-primary">导出PDF报告</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── app ───
+function App() {
+  const [page, setPage] = React.useState('login');
+  const [role, setRole] = React.useState(null);
+  const [selectedReport, setSelectedReport] = React.useState(null);
+
+  const handleLogin = (r) => {
+    setRole(r);
+    if (r === 'technician') setPage('technician');
+    else if (r === 'reviewer') setPage('reviewer-list');
+    else if (r === 'chief') setPage('chief');
+  };
+
+  const handleBack = () => {
+    setPage('login');
+    setRole(null);
+    setSelectedReport(null);
+  };
+
+  const handleSelectReport = (r) => {
+    setSelectedReport(r);
+    setPage('reviewer-detail');
+  };
+
+  const handleComplete = () => {
+    setPage('success');
+  };
+
+  switch (page) {
+    case 'login': return <LoginPage onLogin={handleLogin} />;
+    case 'technician': return <TechnicianPage onBack={handleBack} />;
+    case 'reviewer-list': return <ReviewerListPage onSelect={handleSelectReport} onBack={handleBack} />;
+    case 'reviewer-detail': return <ReviewerDetailPage report={selectedReport} onBack={() => setPage('reviewer-list')} onComplete={handleComplete} />;
+    case 'chief': return <ChiefPage onBack={handleBack} />;
+    case 'success': return <SuccessPage onBack={() => setPage('reviewer-list')} />;
+    default: return <LoginPage onLogin={handleLogin} />;
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>
