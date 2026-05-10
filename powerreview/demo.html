@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PowerReview AI — 智能电力试验报告审核 Demo</title>
+<title>实验报告智能预审核 — 智能电力试验报告审核 Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -23,21 +23,21 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;min-height:100vh;}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(254,252,245,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-.nav-logo{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:.04em;}
+.nav-logo{font-family:'Space Mono',monospace;font-size:15px;color:var(--ink-3);letter-spacing:.04em;}
 .nav-logo span{color:var(--amber);}
-.nav-badge{font-size:10px;padding:3px 10px;border-radius:20px;background:var(--amber-l);color:var(--amber-d);font-weight:600;border:1px solid rgba(232,150,10,.2);letter-spacing:.04em;}
+.nav-badge{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--amber-l);color:var(--amber-d);font-weight:600;border:1px solid rgba(232,150,10,.2);letter-spacing:.04em;}
 #s-upload{max-width:720px;margin:0 auto;padding:80px 24px 60px;text-align:center;}
-.upload-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px;}
-.upload-title{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:8px;}
-.upload-sub{font-size:14px;color:var(--ink-3);margin-bottom:36px;line-height:1.7;}
+.upload-eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px;}
+.upload-title{font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.upload-sub{font-size:17px;color:var(--ink-3);margin-bottom:36px;line-height:1.7;}
 .drop-zone{border:2px dashed rgba(15,12,7,.15);border-radius:16px;padding:48px 24px;cursor:pointer;transition:all .2s;background:var(--white);position:relative;}
 .drop-zone:hover,.drop-zone.drag-over{border-color:var(--amber);background:var(--amber-l);}
 .drop-zone input[type=file]{display:none;}
 .drop-icon{font-size:40px;margin-bottom:12px;}
-.drop-text{font-size:15px;font-weight:500;color:var(--ink-2);margin-bottom:4px;}
-.drop-hint{font-size:12px;color:var(--ink-3);}
+.drop-text{font-size:18px;font-weight:500;color:var(--ink-2);margin-bottom:4px;}
+.drop-hint{font-size:15px;color:var(--ink-3);}
 .demo-row{margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.demo-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid;}
+.demo-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--r);font-size:16px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid;}
 .demo-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
 .demo-btn.pass{background:var(--teal-l);color:var(--teal-d);border-color:rgba(13,158,117,.2);}
 .demo-btn.fail{background:var(--red-l);color:var(--red-d);border-color:rgba(220,38,38,.15);}
@@ -46,63 +46,63 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .loader-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:16px;}
 .loader-spinner{width:44px;height:44px;border:3px solid var(--border-m);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loader-text{font-size:14px;color:var(--ink-2);font-weight:500;}
-.loader-step{font-size:12px;color:var(--ink-3);margin-top:4px;min-height:18px;}
+.loader-text{font-size:17px;color:var(--ink-2);font-weight:500;}
+.loader-step{font-size:15px;color:var(--ink-3);margin-top:4px;min-height:18px;}
 .step-timeline{display:flex;gap:0;justify-content:center;margin:24px 0 8px;flex-wrap:wrap;}
 .step-dot{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;}
-.step-circle{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--paper-2);border:1px solid var(--border-m);transition:all .3s;}
+.step-circle{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;background:var(--paper-2);border:1px solid var(--border-m);transition:all .3s;}
 .step-dot.active .step-circle{background:var(--amber-l);border-color:var(--amber);box-shadow:0 0 0 3px rgba(232,150,10,.15);}
 .step-dot.done .step-circle{background:var(--teal-l);border-color:var(--teal);}
-.step-label{font-size:10px;color:var(--ink-3);text-align:center;}
+.step-label{font-size:12px;color:var(--ink-3);text-align:center;}
 .step-dot.active .step-label{color:var(--amber-d);font-weight:600;}
 .step-dot.done .step-label{color:var(--teal-d);}
 .step-connector{width:24px;height:2px;background:var(--border-m);align-self:center;margin-top:-20px;}
 .step-connector.done{background:var(--teal);}
 #s-result{display:none;max-width:960px;margin:0 auto;padding:32px 24px 80px;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:inherit;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:16px;color:var(--ink-3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:inherit;}
 .btn-back:hover{color:var(--ink);}
-.file-badge{font-size:11px;color:var(--ink-3);background:var(--paper-2);padding:4px 12px;border-radius:20px;}
+.file-badge{font-size:14px;color:var(--ink-3);background:var(--paper-2);padding:4px 12px;border-radius:20px;}
 .summary-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
 .summary-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);}
 .summary-head.pass-bg{background:var(--teal-l);}
 .summary-head.warn-bg{background:var(--amber-l);}
 .summary-head.fail-bg{background:var(--red-l);}
-.summary-title{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
-.summary-meta{font-size:12px;color:var(--ink-3);line-height:1.6;}
+.summary-title{font-family:'Noto Serif SC',serif;font-size:21px;font-weight:700;margin-bottom:4px;}
+.summary-meta{font-size:15px;color:var(--ink-3);line-height:1.6;}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 24px;}
 .stat-box{text-align:center;padding:14px 8px;border-radius:var(--r-sm);background:var(--paper-2);}
 .stat-box.pass{background:var(--teal-l);}
 .stat-box.warn{background:var(--amber-l);}
 .stat-box.fail{background:var(--red-l);}
-.stat-num{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;line-height:1;}
+.stat-num{font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;line-height:1;}
 .stat-num.c-pass{color:var(--teal);}
 .stat-num.c-warn{color:var(--amber);}
 .stat-num.c-fail{color:var(--red);}
-.stat-label{font-size:11px;color:var(--ink-3);margin-top:4px;}
+.stat-label{font-size:14px;color:var(--ink-3);margin-top:4px;}
 .issues-section{padding:0 24px 20px;}
-.issues-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
-.issue-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:var(--r-sm);margin-bottom:6px;font-size:13px;line-height:1.5;}
+.issues-title{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+.issue-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:var(--r-sm);margin-bottom:6px;font-size:16px;line-height:1.5;}
 .issue-item.critical{background:var(--red-l);border:1px solid rgba(220,38,38,.12);}
 .issue-item.fail-item{background:var(--orange-l);border:1px solid rgba(234,88,12,.12);}
 .issue-item.warn-item{background:var(--amber-l);border:1px solid rgba(232,150,10,.15);}
-.issue-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.issue-badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
 .issue-badge.critical{background:var(--red);color:#fff;}
 .issue-badge.fail-b{background:var(--orange);color:#fff;}
 .issue-badge.warn-b{background:var(--amber);color:var(--amber-d);}
 .issue-body{flex:1;}
 .issue-name{font-weight:600;color:var(--ink);}
 .issue-detail{color:var(--ink-2);margin-top:2px;}
-.issue-source{font-size:11px;color:var(--ink-3);margin-top:2px;}
-.no-issues{font-size:14px;color:var(--teal);font-weight:600;padding:8px 0;}
+.issue-source{font-size:14px;color:var(--ink-3);margin-top:2px;}
+.no-issues{font-size:17px;color:var(--teal);font-weight:600;padding:8px 0;}
 .details-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
 .details-head{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.details-title{font-size:14px;font-weight:700;color:var(--ink);}
-.toggle-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);cursor:pointer;}
+.details-title{font-size:17px;font-weight:700;color:var(--ink);}
+.toggle-label{display:flex;align-items:center;gap:6px;font-size:15px;color:var(--ink-3);cursor:pointer;}
 .toggle-label input{accent-color:var(--amber);}
-.details-table{width:100%;border-collapse:collapse;font-size:13px;}
+.details-table{width:100%;border-collapse:collapse;font-size:16px;}
 .details-table thead{background:var(--paper-2);}
-.details-table th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--border-m);}
+.details-table th{padding:10px 16px;text-align:left;font-size:14px;font-weight:600;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--border-m);}
 .details-table td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top;}
 .details-table tr:last-child td{border-bottom:none;}
 .details-table tr:hover{background:var(--amber-pale);}
@@ -110,26 +110,26 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .details-table tr.row-warn{background:var(--amber-l);}
 .details-table tr.row-fail:hover{background:rgba(220,38,38,.06);}
 .details-table tr.row-warn:hover{background:rgba(232,150,10,.08);}
-.result-icon{font-weight:700;font-size:13px;}
+.result-icon{font-weight:700;font-size:16px;}
 .result-icon.pass{color:var(--teal);}
 .result-icon.warn{color:var(--amber);}
 .result-icon.fail{color:var(--red);}
 .result-icon.no-criteria{color:var(--ink-3);}
-.corrected-note{font-size:11px;color:var(--blue);margin-top:2px;}
+.corrected-note{font-size:14px;color:var(--blue);margin-top:2px;}
 .temp-panel{background:var(--blue-l);border-radius:var(--r-sm);padding:10px 12px;margin-top:4px;border:1px solid rgba(37,99,235,.1);}
-.temp-formula{font-family:'Space Mono',monospace;font-size:11px;color:var(--blue-d);margin-top:2px;}
-.conflict-badge{display:inline-block;font-size:11px;font-weight:700;color:var(--red-d);background:var(--red-l);padding:2px 8px;border-radius:4px;margin-top:4px;border:1px solid rgba(220,38,38,.15);}
-.criteria-tag{font-family:'Space Mono',monospace;font-size:10px;color:var(--blue-d);background:var(--blue-l);padding:2px 6px;border-radius:4px;white-space:nowrap;}
-.suggestion{font-size:11px;color:var(--teal-d);margin-top:4px;}
-.disclaimer{text-align:center;padding:14px 20px;background:var(--blue-l);border-radius:var(--r);border:1px solid rgba(37,99,235,.12);font-size:13px;color:var(--blue-d);font-weight:500;margin-bottom:20px;}
+.temp-formula{font-family:'Space Mono',monospace;font-size:14px;color:var(--blue-d);margin-top:2px;}
+.conflict-badge{display:inline-block;font-size:14px;font-weight:700;color:var(--red-d);background:var(--red-l);padding:2px 8px;border-radius:4px;margin-top:4px;border:1px solid rgba(220,38,38,.15);}
+.criteria-tag{font-family:'Space Mono',monospace;font-size:12px;color:var(--blue-d);background:var(--blue-l);padding:2px 6px;border-radius:4px;white-space:nowrap;}
+.suggestion{font-size:14px;color:var(--teal-d);margin-top:4px;}
+.disclaimer{text-align:center;padding:14px 20px;background:var(--blue-l);border-radius:var(--r);border:1px solid rgba(37,99,235,.12);font-size:16px;color:var(--blue-d);font-weight:500;margin-bottom:20px;}
 .exec-card{background:var(--white);border-radius:16px;border:1px solid var(--border-m);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
 .exec-head{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.exec-title{font-size:14px;font-weight:700;color:var(--ink);}
-.exec-body{padding:20px 24px;font-size:13px;color:var(--ink-2);line-height:1.8;}
+.exec-title{font-size:17px;font-weight:700;color:var(--ink);}
+.exec-body{padding:20px 24px;font-size:16px;color:var(--ink-2);line-height:1.8;}
 .exec-body strong{color:var(--ink);}
 .exec-section{margin-bottom:12px;}
 .exec-section:last-child{margin-bottom:0;}
-.exec-section-title{font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.exec-section-title{font-size:15px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
 .exec-list{list-style:none;padding:0;}
 .exec-list li{padding:4px 0;padding-left:16px;position:relative;}
 .exec-list li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;}
@@ -138,7 +138,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .exec-list li.teal::before{background:var(--teal);}
 @media(max-width:640px){
   .stats-row{grid-template-columns:repeat(2,1fr);}
-  .details-table{font-size:11px;}
+  .details-table{font-size:14px;}
   .details-table th,.details-table td{padding:8px 10px;}
   #s-result{padding:20px 16px 60px;}
   #s-upload{padding:60px 16px 40px;}
@@ -150,7 +150,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 <body>
 
 <nav>
-  <div class="nav-logo">PowerReview <span>AI</span></div>
+  <div class="nav-logo">实验报告智能预审核 <span>AI</span></div>
   <div class="nav-badge">DEMO v1.0</div>
 </nav>
 
@@ -165,16 +165,16 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
        ondragleave="this.classList.remove('drag-over')"
        ondrop="event.preventDefault();this.classList.remove('drag-over');handleFile(event.dataTransfer.files[0])">
     <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])">
-    <div class="drop-icon">📄</div>
+    <div class="drop-icon"></div>
     <div class="drop-text">拖拽上传试验报告</div>
     <div class="drop-hint">支持 .xlsx / .xls 格式</div>
   </div>
 
-  <div style="margin-top:8px;font-size:11px;color:var(--ink-3);">没有报告文件？选择演示数据体验完整审核流程</div>
+  <div style="margin-top:8px;font-size:14px;color:var(--ink-3);">没有报告文件？选择演示数据体验完整审核流程</div>
   <div class="demo-row">
-    <button class="demo-btn pass" onclick="runDemo('pass')">✅ 演示：合格报告</button>
+    <button class="demo-btn pass" onclick="runDemo('pass')">✓ 演示：合格报告</button>
     <button class="demo-btn fail" onclick="runDemo('fail')">🚨 演示：问题报告</button>
-    <button class="demo-btn multi" onclick="runDemo('batch')">📊 演示：批量审核</button>
+    <button class="demo-btn multi" onclick="runDemo('batch')">演示：批量审核</button>
   </div>
 </div>
 
@@ -185,15 +185,15 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
     <div class="loader-text">正在审核报告...</div>
     <div class="loader-step" id="loaderStep"></div>
     <div class="step-timeline" id="stepTimeline">
-      <div class="step-dot" id="st0"><div class="step-circle">📄</div><div class="step-label">解析</div></div>
+      <div class="step-dot" id="st0"><div class="step-circle"></div><div class="step-label">解析</div></div>
       <div class="step-connector" id="sc0"></div>
-      <div class="step-dot" id="st1"><div class="step-circle">⚖️</div><div class="step-label">判据比对</div></div>
+      <div class="step-dot" id="st1"><div class="step-circle">️</div><div class="step-label">判据比对</div></div>
       <div class="step-connector" id="sc1"></div>
       <div class="step-dot" id="st2"><div class="step-circle">🌡️</div><div class="step-label">温度修正</div></div>
       <div class="step-connector" id="sc2"></div>
-      <div class="step-dot" id="st3"><div class="step-circle">🔍</div><div class="step-label">一致性校验</div></div>
+      <div class="step-dot" id="st3"><div class="step-circle"></div><div class="step-label">一致性校验</div></div>
       <div class="step-connector" id="sc3"></div>
-      <div class="step-dot" id="st4"><div class="step-circle">📋</div><div class="step-label">生成摘要</div></div>
+      <div class="step-dot" id="st4"><div class="step-circle"></div><div class="step-label">生成摘要</div></div>
     </div>
   </div>
 </div>
@@ -225,7 +225,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
     </div>
     <div style="overflow-x:auto;" id="detailsWrap"></div>
   </div>
-  <div class="disclaimer">⚡ AI预审结果，仅供参考，最终判定以审核人签字为准</div>
+  <div class="disclaimer">AI预审结果，仅供参考，最终判定以审核人签字为准</div>
 </div>
 
 <script>
@@ -324,7 +324,7 @@ function reviewReport(rd){
         d.consistency_check={has_conflict:true,message:"🚨 严重矛盾：数据判定为不合格，但报告结论标记为“"+esc(uc)+"”"};
         issues.unshift({level:"严重矛盾",cls:"critical",badgeCls:"critical",item:item.name+"("+item.detail+")",detail:"数据超标但结论写“"+esc(uc)+"”",source:d.criteria_source});
       }else if(cmp.result==="pass"&&(uc==="不合格"||uc==="异常")){
-        d.consistency_check={has_conflict:true,message:"⚠️ 矛盾：数据判定为合格，但报告结论标记为“"+esc(uc)+"”"};
+        d.consistency_check={has_conflict:true,message:"️ 矛盾：数据判定为合格，但报告结论标记为“"+esc(uc)+"”"};
       }
     }
     details.push(d);
@@ -401,7 +401,7 @@ function renderResult(result,filename){
   document.getElementById('fileBadge').textContent=filename;
   const head=document.getElementById('summaryHead');
   head.className='summary-head '+(s.fail_count>0?'fail-bg':s.warning_count>0?'warn-bg':'pass-bg');
-  document.getElementById('summaryTitle').textContent='📋 审核摘要 — '+result.device_info.device_name;
+  document.getElementById('summaryTitle').textContent='审核摘要 — '+result.device_info.device_name;
   document.getElementById('summaryMeta').textContent=result.device_info.model+' | '+result.device_info.voltage_level+'kV | 试验日期 '+result.device_info.test_date+' | 环境温度 '+result.device_info.test_temperature+'°C';
   document.getElementById('statTotal').textContent=s.total;
   document.getElementById('statPass').textContent=s.pass_count;
@@ -423,7 +423,7 @@ function renderResult(result,filename){
       div.appendChild(body);issuesEl.appendChild(div);
     });
   }else{
-    const p=document.createElement('div');p.className='no-issues';p.textContent='✅ 所有项目均合格，无异常';issuesEl.appendChild(p);
+    const p=document.createElement('div');p.className='no-issues';p.textContent='✓ 所有项目均合格，无异常';issuesEl.appendChild(p);
   }
 
   renderExecSummary(result);
@@ -433,7 +433,7 @@ function renderResult(result,filename){
 
 function renderExecSummary(result){
   const s=result.summary,di=result.device_info;
-  const overallIcon=s.fail_count>0?'🚫':s.warning_count>0?'⚠️':'✅';
+  const overallIcon=s.fail_count>0?'🚫':s.warning_count>0?'️':'✓';
   const failItems=result.details.filter(d=>d.result==='fail');
   const warnItems=result.details.filter(d=>d.result==='warning');
   const conflicts=result.details.filter(d=>d.consistency_check&&d.consistency_check.has_conflict);
@@ -472,14 +472,14 @@ function renderExecSummary(result){
   if(failItems.length){
     const ul=document.createElement('ul');ul.className='exec-list';
     failItems.forEach(f=>{const li=document.createElement('li');li.className='red';const st=document.createElement('strong');st.textContent=f.test_item+'('+f.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+f.reason+' '));const tag=document.createElement('span');tag.className='criteria-tag';tag.textContent=f.criteria_source;li.appendChild(tag);ul.appendChild(li);});
-    addSection('❌ 不合格项',ul,'orange');
+    addSection('✗ 不合格项',ul,'orange');
   }
 
   // Warning items
   if(warnItems.length){
     const ul=document.createElement('ul');ul.className='exec-list';
     warnItems.forEach(w=>{const li=document.createElement('li');li.className='amber';const st=document.createElement('strong');st.textContent=w.test_item+'('+w.test_item_detail+')';li.appendChild(st);li.appendChild(document.createTextNode(' — '+w.reason));ul.appendChild(li);});
-    addSection('⚠️ 关注项',ul,'amber');
+    addSection('️ 关注项',ul,'amber');
   }
 
   // Temp corrections
@@ -545,7 +545,7 @@ function rerenderDetails(){
     // Result
     const td4=document.createElement('td');
     const ri=document.createElement('span');ri.className='result-icon '+(d.result==='fail'?'fail':d.result==='warning'?'warn':d.result==='pass'?'pass':'no-criteria');
-    const icon=d.result==='fail'?'❌':d.result==='warning'?'⚠️':d.result==='pass'?'✅':'❓';
+    const icon=d.result==='fail'?'✗':d.result==='warning'?'️':d.result==='pass'?'✓':'❓';
     ri.textContent=icon+' '+d.result_label;td4.appendChild(ri);tr.appendChild(td4);
 
     // Criteria source
@@ -558,7 +558,7 @@ function rerenderDetails(){
       const cb=document.createElement('div');cb.className='conflict-badge';cb.textContent=d.consistency_check.message;td6.appendChild(cb);
     }
     if(d.suggestion){
-      const sg=document.createElement('div');sg.className='suggestion';sg.textContent='💡 '+d.suggestion;td6.appendChild(sg);
+      const sg=document.createElement('div');sg.className='suggestion';sg.textContent=''+d.suggestion;td6.appendChild(sg);
     }
     tr.appendChild(td6);
 
