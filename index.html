@@ -1,840 +1,1386 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PM 专属 RAG 课程 | Codex Edition</title>
-  <meta name="description" content="产品经理专属 RAG 课程，从入门到落地，聚焦产品认知、场景适配、产品设计、落地实操、问题优化">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>郑传望 — AI 产品经理作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* 米色 + 橙色 浅色配色 */
+    --bg: #f5efe4;
+    --bg-2: #ede4d3;
+    --paper: #faf6ec;
+    --ink: #1a1410;
+    --ink-dim: #5c5249;
+    --ink-mute: #8a7f72;
+    --orange: #e85d1a;
+    --orange-2: #ff7a2c;
+    --orange-deep: #c4471a;
+    --orange-soft: #fde4d3;
+    --line: rgba(26, 20, 16, 0.08);
+    --line-strong: rgba(26, 20, 16, 0.16);
+
+    --display: 'Fraunces', 'Noto Serif SC', serif;
+    --display-cn: 'Noto Serif SC', serif;
+    --sans: 'Noto Sans SC', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* 纸张纹理 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    background: rgba(245, 239, 228, 0.78);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--orange-2), var(--orange-deep));
+    box-shadow: 0 4px 16px rgba(232, 93, 26, 0.35);
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink-dim);
+  }
+  .nav-links a {
+    color: inherit;
+    text-decoration: none;
+    transition: color .25s ease;
+  }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 18px 10px 22px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .nav-cta:hover { transform: translateY(-2px); }
+  .nav-cta .dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--orange);
+    display: grid; place-items: center;
+    color: white;
+    font-size: 12px;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 140px 48px 80px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 25%, rgba(232, 93, 26, 0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 25% 75%, rgba(255, 122, 44, 0.18) 0%, transparent 55%);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    opacity: 0.7;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s cubic-bezier(.2,.8,.2,1) 0.1s both;
+  }
+  .hero-eyebrow .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 12px var(--orange);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: var(--display-cn);
+    font-weight: 300;
+    font-size: clamp(56px, 8vw, 132px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .hero h1 .accent {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .hero h1 .en {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--orange);
+  }
+  .hero h1 .line {
+    display: block;
+    overflow: hidden;
+  }
+  .hero h1 .line span {
+    display: inline-block;
+    animation: slideUp 1s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .hero h1 .line:nth-child(1) span { animation-delay: 0.2s; }
+  .hero h1 .line:nth-child(2) span { animation-delay: 0.35s; }
+  .hero h1 .line:nth-child(3) span { animation-delay: 0.5s; }
+
+  @keyframes slideUp {
+    from { transform: translateY(110%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .hero-side {
+    animation: fadeUp 1s cubic-bezier(.2,.8,.2,1) 0.7s both;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-portrait {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 3/4;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 28px;
+    box-shadow: 0 20px 60px rgba(26, 20, 16, 0.18), 0 4px 12px rgba(232, 93, 26, 0.12);
+    border: 1px solid var(--line-strong);
+    position: relative;
+  }
+  .hero-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .hero-portrait:hover img {
+    transform: scale(1.03);
+  }
+  .hero-portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(26,20,16,0.25) 100%);
+    pointer-events: none;
+  }
+  .hero-side .quote {
+    font-family: var(--display-cn);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-bottom: 24px;
+    border-left: 3px solid var(--orange);
+    padding-left: 20px;
+  }
+  .hero-side .desc {
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.85;
+    max-width: 400px;
+    margin-bottom: 32px;
+  }
+  .hero-side .meta {
+    display: flex;
+    gap: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-strong);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+  }
+  .hero-side .meta strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    margin-top: 6px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  .hero-stats {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    width: 100%;
+    margin: 80px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .stat {
+    animation: fadeUp 0.8s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .stat:nth-child(1) { animation-delay: 0.9s; }
+  .stat:nth-child(2) { animation-delay: 1.0s; }
+  .stat:nth-child(3) { animation-delay: 1.1s; }
+  .stat:nth-child(4) { animation-delay: 1.2s; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+  }
+  .stat-label {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-top: 8px;
+    color: var(--ink);
+  }
+  .stat-sub {
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-top: 4px;
+  }
+
+  /* ============ SECTION COMMONS ============ */
+  section {
+    padding: 140px 48px;
+    position: relative;
+  }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 80px;
+    margin-bottom: 80px;
+    align-items: end;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 0.15em;
+  }
+  .section-title {
+    font-family: var(--display-cn);
+    font-weight: 300;
+    font-size: clamp(44px, 6vw, 88px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .section-title .accent {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .section-title .en {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--orange);
+  }
+
+  /* ============ WORK ============ */
+  .work {
+    background: var(--paper);
+  }
+  .project {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 60px;
+    padding: 64px 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    transition: padding .4s ease;
+  }
+  .project:hover { padding-left: 24px; }
+  .project::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    width: 4px; height: 0;
+    background: var(--orange);
+    transition: height .4s ease;
+  }
+  .project:hover::before { height: 60%; top: 20%; }
+
+  .project-meta { padding-top: 8px; }
+  .project-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--orange-deep);
+    border: 1px solid var(--orange);
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+    background: var(--orange-soft);
+  }
+  .project-title {
+    font-family: var(--display-cn);
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+  .project-title .accent { color: var(--orange); }
+  .project-desc {
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.85;
+    margin-bottom: 28px;
+    max-width: 420px;
+  }
+  .project-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+  }
+  .project-info strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 13px;
+    margin-top: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  .project-visual {
+    aspect-ratio: 4 / 3;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 20px 60px -20px rgba(26, 20, 16, 0.15);
+  }
+
+  /* P1: 数据看板 */
+  .visual-1 {
+    background: linear-gradient(135deg, var(--paper) 0%, #fff 100%);
+  }
+  .visual-1 .chart {
+    position: absolute;
+    inset: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .visual-1 .chart-head {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-bottom: auto;
+  }
+  .visual-1 .chart-head h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+  }
+  .visual-1 .big-num {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 64px;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .visual-1 .big-num span { color: var(--orange); }
+  .visual-1 .delta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--orange-deep);
+    margin-bottom: 24px;
+  }
+  .visual-1 .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 70px;
+  }
+  .visual-1 .bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--orange-deep), var(--orange-2));
+    border-radius: 2px 2px 0 0;
+    opacity: 0.3;
+    transition: opacity .3s, transform .3s;
+  }
+  .visual-1 .bar.active { opacity: 1; }
+  .project:hover .visual-1 .bar { transform: scaleY(1.1); }
+
+  /* P2: roadmap */
+  .visual-2 {
+    background: linear-gradient(135deg, #fff 0%, var(--bg-2) 100%);
+    padding: 32px;
+  }
+  .visual-2 .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    justify-content: center;
+  }
+  .visual-2 .lane {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+  }
+  .visual-2 .lane .stage-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .visual-2 .track {
+    height: 22px;
+    background: rgba(26, 20, 16, 0.04);
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .visual-2 .pill {
+    position: absolute;
+    top: 3px; bottom: 3px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-family: var(--sans);
+    font-size: 10px;
+    color: white;
+    font-weight: 500;
+  }
+  .visual-2 .pill.a { left: 4%; width: 36%; background: var(--orange); }
+  .visual-2 .pill.b { left: 22%; width: 48%; background: var(--orange-soft); border: 1px solid var(--orange); color: var(--orange-deep); }
+  .visual-2 .pill.c { left: 50%; width: 38%; background: var(--ink); }
+  .visual-2 .pill.d { left: 12%; width: 28%; background: rgba(26, 20, 16, 0.15); color: var(--ink); }
+  .visual-2 .pill.e { left: 38%; width: 52%; background: var(--orange-deep); }
+
+  /* P3: 用户访谈 */
+  .visual-3 {
+    background: linear-gradient(135deg, var(--orange-soft) 0%, var(--paper) 100%);
+    padding: 32px;
+  }
+  .visual-3 .quotes {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    justify-content: center;
+  }
+  .visual-3 .qcard {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: var(--display-cn);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    position: relative;
+    box-shadow: 0 4px 12px rgba(26, 20, 16, 0.04);
+  }
+  .visual-3 .qcard::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 14px;
+    font-size: 44px;
+    color: var(--orange);
+    font-family: var(--display);
+    line-height: 1;
+  }
+  .visual-3 .qmeta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* P4: A/B 测试 */
+  .visual-4 {
+    background: radial-gradient(circle at 30% 40%, var(--orange-soft) 0%, var(--paper) 80%);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+  }
+  .visual-4 .versus {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+  .visual-4 .variant {
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 18px;
+  }
+  .visual-4 .variant.win {
+    border-color: var(--orange);
+    background: white;
+    box-shadow: 0 8px 24px -8px rgba(232, 93, 26, 0.3);
+  }
+  .visual-4 .v-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+  .visual-4 .v-num {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .visual-4 .variant.win .v-num { color: var(--orange-deep); }
+  .visual-4 .v-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    margin-top: 6px;
+  }
+  .visual-4 .vs {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 24px;
+    color: var(--orange);
+    align-self: center;
+  }
+  .visual-4 .lift {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--orange);
+    border-radius: 6px;
+    color: white;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .visual-4 .lift strong {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  /* ============ EXPERIENCE ============ */
+  .experience {
+    background: var(--bg);
+  }
+  .timeline {
+    position: relative;
+  }
+  .exp-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 60px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+    transition: background .3s ease;
+  }
+  .exp-row:hover {
+    background: linear-gradient(90deg, transparent, rgba(232, 93, 26, 0.05), transparent);
+  }
+  .exp-period {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 0.08em;
+    padding-top: 6px;
+  }
+  .exp-period .now {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .exp-main h3 {
+    font-family: var(--display-cn);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .exp-company {
+    color: var(--ink-dim);
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .exp-company .role-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--orange-deep);
+    border: 1px solid var(--line-strong);
+    background: var(--orange-soft);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    letter-spacing: 0.05em;
+  }
+  .exp-points {
+    list-style: none;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.85;
+  }
+  .exp-points li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .exp-points li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px;
+    width: 8px; height: 1px;
+    background: var(--orange);
+  }
+  .exp-impact {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .impact {
+    padding: 14px 16px;
+    border-left: 2px solid var(--orange);
+    background: var(--orange-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .impact .num {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 30px;
+    color: var(--orange-deep);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .impact .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ============ SKILLS ============ */
+  .skills {
+    background: var(--paper);
+  }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .skills-intro {
+    font-family: var(--display-cn);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .skills-intro .accent {
+    color: var(--orange);
+    font-weight: 600;
+  }
+  .skill-cluster {
+    margin-bottom: 48px;
+  }
+  .skill-cluster:last-child { margin-bottom: 0; }
+  .skill-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+  }
+  .skill-label span:last-child { color: var(--ink-mute); }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tag {
+    padding: 9px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--ink);
+    transition: all .3s ease;
+    cursor: default;
+    background: var(--bg);
+  }
+  .tag:hover {
+    border-color: var(--orange);
+    background: var(--orange-soft);
+    color: var(--orange-deep);
+    transform: translateY(-2px);
+  }
+  .tag.primary {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+    font-weight: 500;
+  }
+  .tag.primary:hover {
+    background: var(--orange-deep);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* ============ CONTACT ============ */
+  .contact {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--orange-soft) 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 180px 48px 80px;
+  }
+  .contact::before {
+    content: '';
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 93, 26, 0.25) 0%, transparent 60%);
+    bottom: -400px; right: -200px;
+    filter: blur(20px);
+  }
+  .contact-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .contact h2 {
+    font-family: var(--display-cn);
+    font-weight: 300;
+    font-size: clamp(54px, 8vw, 128px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+    color: var(--ink);
+  }
+  .contact h2 .accent {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding-top: 60px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .contact-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .channel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    transition: padding .3s ease;
+  }
+  .channel:hover {
+    padding-left: 16px;
+    border-color: var(--orange);
+  }
+  .channel-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .channel-value {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .channel-arrow {
+    font-size: 20px;
+    color: var(--orange);
+    transition: transform .3s ease;
+  }
+  .channel:hover .channel-arrow {
+    transform: translate(4px, -4px);
+  }
+  .contact-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .contact-quote {
+    font-family: var(--display-cn);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 32px;
+    border-left: 3px solid var(--orange);
+    padding-left: 20px;
+  }
+  .contact-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border: 1px solid var(--orange);
+    background: var(--paper);
+    border-radius: 100px;
+    color: var(--orange-deep);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    align-self: flex-start;
+    margin-bottom: 32px;
+  }
+  .contact-status .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 12px var(--orange);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  footer {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 120px auto 0;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 960px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 120px 24px 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; gap: 24px; }
+    section { padding: 80px 24px; }
+    .section-head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 48px; }
+    .project { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
+    .exp-row { grid-template-columns: 1fr; gap: 20px; }
+    .skills-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact { padding: 120px 24px 60px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+</style>
 </head>
 <body>
-  <div class="page-aurora" aria-hidden="true"></div>
-  <div class="page-grain" aria-hidden="true"></div>
 
-  <header class="mobile-bar">
-    <button class="nav-toggle" id="navToggle" type="button" aria-label="打开导航" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-    <div class="mobile-brand">
-      <span>Codex Edition</span>
-      <strong>RAG for PM</strong>
-    </div>
-  </header>
+<nav>
+  <div class="logo">
+    <div class="logo-mark"></div>
+    郑传望
+  </div>
+  <div class="nav-links">
+    <a href="#work">作品</a>
+    <a href="#experience">经历</a>
+    <a href="#skills">能力</a>
+    <a href="#contact">联系</a>
+  </div>
+  <a href="#contact" class="nav-cta">
+    聊一聊
+    <span class="dot">→</span>
+  </a>
+</nav>
 
-  <aside class="floating-nav" id="sidebar" aria-label="章节导航">
-    <div class="floating-nav__brand">RAG · PM</div>
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg"></div>
 
-    <div class="search-bar">
-      <span class="search-bar__icon">⌕</span>
-      <input type="text" id="searchInput" placeholder="搜索课程内容...">
-    </div>
-
-    <div class="nav-chapter">
-      <a href="#hero" class="nav-pill nav-pill--chapter active" data-nav-link="hero">
-        <span class="nav-pill__index">00</span>
-        <span class="nav-pill__label">课程概览</span>
-      </a>
-      <div class="nav-subpills">
-        <a href="#s0-position" class="nav-pill nav-pill--sub" data-nav-link="s0-position">核心定位</a>
-        <a href="#s0-goals" class="nav-pill nav-pill--sub" data-nav-link="s0-goals">学习目标</a>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="pulse"></span>
+        AI 产品经理 · 工业 AI · 合规 AI
       </div>
-    </div>
-
-    <div class="nav-chapter">
-      <a href="#section-1" class="nav-pill nav-pill--chapter" data-nav-link="section-1">
-        <span class="nav-pill__index">01</span>
-        <span class="nav-pill__label">课程大纲</span>
-      </a>
-      <div class="nav-subpills">
-        <a href="#s1-prep" class="nav-pill nav-pill--sub" data-nav-link="s1-prep">课前准备</a>
-        <a href="#s1-chapters" class="nav-pill nav-pill--sub" data-nav-link="s1-chapters">8 节详细大纲</a>
-      </div>
+      <h1>
+        <span class="line"><span>用 AI 让</span></span>
+        <span class="line"><span>工业<span class="accent">合规</span></span></span>
+        <span class="line"><span>成为<span class="en">必然.</span></span></span>
+      </h1>
     </div>
 
-    <div class="nav-chapter">
-      <a href="#section-2" class="nav-pill nav-pill--chapter" data-nav-link="section-2">
-        <span class="nav-pill__index">02</span>
-        <span class="nav-pill__label">核心知识</span>
-      </a>
-      <div class="nav-subpills">
-        <a href="#s2-fit" class="nav-pill nav-pill--sub" data-nav-link="s2-fit">场景适配</a>
-        <a href="#s2-pipeline" class="nav-pill nav-pill--sub" data-nav-link="s2-pipeline">4 大环节</a>
-        <a href="#s2-kb" class="nav-pill nav-pill--sub" data-nav-link="s2-kb">知识库设计</a>
-        <a href="#s2-fallback" class="nav-pill nav-pill--sub" data-nav-link="s2-fallback">兜底逻辑</a>
+    <div class="hero-side">
+      <div class="hero-portrait">
+        <img src="portrait.png" alt="郑传望肖像" />
+      </div>
+      <p class="quote">电力行业 × AI 产品双栖<br/>从现场调试到产品落地。</p>
+      <p class="desc">我是郑传望，电气工程专业出身，深度了解 220kV 变电站现场调试。主导 2 个工业 AI 产品从用户调研到落地验收的完整周期，试验报告审核耗时压缩 97%，巡检缺陷上报时长压缩 90%。</p>
+      <div class="meta">
+        <div>当前<strong>贵州茗电 AI 产品经理</strong></div>
+        <div>状态<strong>已离职 · 月内到岗</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">— 01</div>
+      <div class="stat-label">2 个</div>
+      <div class="stat-sub">AI 产品 0→1</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">— 02</div>
+      <div class="stat-label">97%</div>
+      <div class="stat-sub">审核耗时压缩</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">— 03</div>
+      <div class="stat-label">90%</div>
+      <div class="stat-sub">上报时长压缩</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">— 04</div>
+      <div class="stat-label">21 项</div>
+      <div class="stat-sub">痛点提炼</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section class="work" id="work">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">/ 01 — 精选案例</div>
+      <h2 class="section-title">我交付过的<br/><span class="accent">产品</span><span class="en"> & cases.</span></h2>
+    </div>
+
+    <!-- Project 1 -->
+    <div class="project">
+      <div class="project-meta">
+        <span class="project-tag">AI 合规 · 2026</span>
+        <h3 class="project-title">电力试验报告<br/><span class="accent">AI 智能审核</span>系统</h3>
+        <p class="project-desc">变电站设备投运前需提交试验报告，审核人每天审核 8-10 份、每份耗时 30-60 分钟，约 30% 因温度修正错误或漏填被退回。主导从 0 到 1 的 AI 审核系统，内置 GB 50150 和 DL/T 596 国标判据库。</p>
+        <div class="project-info">
+          <div>角色<strong>产品设计 & AI 开发</strong></div>
+          <div>方法<strong>4 类角色访谈 · 21 项痛点</strong></div>
+          <div>周期<strong>2026</strong></div>
+          <div>结果<strong>审核耗时压缩 97%</strong></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <a href="https://zhengchaunwang.github.io/zheng/powerreview/" target="_blank" rel="noopener" class="project-link" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--orange);color:#fff;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1);">
+            HTML介绍 ↗
+          </a>
+          <a href="https://zhengchaunwang.github.io/zheng/powerreview-ai/" target="_blank" rel="noopener" class="project-link" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--ink);color:var(--bg);border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1);">
+            Demo ↗
+          </a>
+        </div>
+      </div>
+      <div class="project-visual visual-1">
+        <div class="chart">
+          <div class="chart-head">
+            <h4>单份审核耗时</h4>
+            <h4 style="color: var(--orange-deep);">↘ −97%</h4>
+          </div>
+          <div>
+            <div class="big-num">30<span>s</span></div>
+            <div class="delta">▲ 较基线 30-60 分钟</div>
+          </div>
+          <div class="bars">
+            <div class="bar" style="height: 100%;"></div>
+            <div class="bar" style="height: 100%;"></div>
+            <div class="bar" style="height: 100%;"></div>
+            <div class="bar" style="height: 95%;"></div>
+            <div class="bar" style="height: 100%;"></div>
+            <div class="bar" style="height: 100%;"></div>
+            <div class="bar active" style="height: 3%;"></div>
+            <div class="bar active" style="height: 4%;"></div>
+            <div class="bar active" style="height: 5%;"></div>
+            <div class="bar active" style="height: 4%;"></div>
+            <div class="bar active" style="height: 3%;"></div>
+            <div class="bar active" style="height: 5%;"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="nav-chapter">
-      <a href="#section-3" class="nav-pill nav-pill--chapter" data-nav-link="section-3">
-        <span class="nav-pill__index">03</span>
-        <span class="nav-pill__label">提示词撰写</span>
-      </a>
-      <div class="nav-subpills">
-        <a href="#s3-diff" class="nav-pill nav-pill--sub" data-nav-link="s3-diff">核心差异</a>
-        <a href="#s3-principles" class="nav-pill nav-pill--sub" data-nav-link="s3-principles">4 大原则</a>
-        <a href="#s3-templates" class="nav-pill nav-pill--sub" data-nav-link="s3-templates">通用模板</a>
+    <!-- Project 2 -->
+    <div class="project">
+      <div class="project-meta">
+        <span class="project-tag">AI 巡检 · 2025</span>
+        <h3 class="project-title">变电站巡检<br/><span class="accent">缺陷上报</span>工具</h3>
+        <p class="project-desc">运维工程师巡检发现缺陷后需人工填写纸质报告，新人缺陷等级误判率达 15%-20%，220kV 地下室信号覆盖不足。设计离线优先架构和 AI 识别链路，覆盖 7 类高频缺陷。</p>
+        <div class="project-info">
+          <div>角色<strong>产品设计 & AI 开发</strong></div>
+          <div>方法<strong>3 类角色 · 离线优先架构</strong></div>
+          <div>周期<strong>2025</strong></div>
+          <div>结果<strong>上报时长压缩 90%</strong></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <a href="https://zhengchaunwang.github.io/zheng/substation/" target="_blank" rel="noopener" class="project-link" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--orange);color:#fff;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1);">
+            HTML介绍 ↗
+          </a>
+          <a href="http://localhost:8765/inspection-demo.html" target="_blank" rel="noopener" class="project-link" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--ink);color:var(--bg);border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1);">
+            Demo ↗
+          </a>
+        </div>
+      </div>
+      <div class="project-visual visual-4">
+        <div class="versus">
+          <div class="variant">
+            <div class="v-label">人工上报</div>
+            <div class="v-num">5<span style="font-size: 20px;">min</span></div>
+            <div class="v-sub">单次上报</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="variant win">
+            <div class="v-label">AI 辅助</div>
+            <div class="v-num">30<span style="font-size: 20px;">s</span></div>
+            <div class="v-sub">拍照→识别→提交</div>
+          </div>
+        </div>
+        <div class="lift">
+          <span>效率提升</span>
+          <strong>10×</strong>
+        </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="nav-chapter">
-      <a href="#section-4" class="nav-pill nav-pill--chapter" data-nav-link="section-4">
-        <span class="nav-pill__index">04</span>
-        <span class="nav-pill__label">课程特色</span>
-      </a>
+<!-- ============ EXPERIENCE ============ -->
+<section class="experience" id="experience">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">/ 02 — 工作经历</div>
+      <h2 class="section-title">我<span class="accent">走过</span>的路<span class="en"> .</span></h2>
     </div>
 
-    <div class="nav-chapter">
-      <a href="#section-5" class="nav-pill nav-pill--chapter" data-nav-link="section-5">
-        <span class="nav-pill__index">05</span>
-        <span class="nav-pill__label">工具推荐</span>
-      </a>
-    </div>
-  </aside>
-
-  <button class="mobile-scrim" id="mobileScrim" type="button" aria-label="关闭导航"></button>
-
-  <main class="page">
-
-    <!-- ===== HERO ===== -->
-    <section id="hero" class="section hero-section" data-section="hero">
-      <div class="hero-grid">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">Codex Edition · PM 专属</p>
-          <h1 class="display-title">
-            <span class="display-title__line">产品经理专属</span>
-            <strong class="display-title__line">RAG 课程</strong>
-          </h1>
-          <p class="hero-lead">从入门到落地，聚焦产品认知、场景适配、产品设计、落地实操、问题优化。非技术开发课，是产品经理的 RAG 产品设计与落地实操课。</p>
-
-          <div class="hero-meta">
-            <div class="hero-meta__item">
-              <span>面向谁</span>
-              <p>想理解 RAG 产品逻辑，但不写代码的 AI PM</p>
-            </div>
-            <div class="hero-meta__item">
-              <span>核心能力</span>
-              <p>独立判断 RAG 场景、设计产品方案、撰写提示词</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-side reveal reveal-delay-1">
-          <div class="hero-summary">
-            <span class="hero-summary__tag">课程规模</span>
-            <strong>8 节 · 5 模块 · 4 案例</strong>
-            <p>6-8 小时完整知识体系，含行政智能助手实战，3 套可复用提示词模板。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="stats-row reveal reveal-delay-2">
-        <div class="stat-pill">
-          <span class="stat-pill__value">8</span>
-          <span class="stat-pill__label">课程节数</span>
-          <span class="stat-pill__sub">6-8 小时</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-pill__value">5</span>
-          <span class="stat-pill__label">核心模块</span>
-          <span class="stat-pill__sub">完整知识体系</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-pill__value">4</span>
-          <span class="stat-pill__label">实战案例</span>
-          <span class="stat-pill__sub">含行政智能助手</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-pill__value">3</span>
-          <span class="stat-pill__label">提示词模板</span>
-          <span class="stat-pill__sub">可直接复用</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 00: 核心定位 ===== -->
-    <section id="s0-position" class="section" data-section="s0-position">
-      <div class="section-head reveal">
-        <span class="section-number">00</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">核心定位</p>
-          <h2>非技术开发课，是<strong>产品经理的 RAG 产品设计与落地实操课</strong></h2>
-          <p class="section-summary">重点回答：产品经理该如何判断场景是否适合 RAG？如何设计 RAG 产品的核心架构和功能？如何和算法/开发配合落地 RAG？如何通过提示词/检索策略优化产品体验？</p>
-        </div>
-      </div>
-
-      <blockquote class="editorial-quote reveal">
-        先找答案，再写答案。
-      </blockquote>
-    </section>
-
-    <!-- ===== 00: 学习目标 ===== -->
-    <section id="s0-goals" class="section" data-section="s0-goals">
-      <div class="section-head reveal">
-        <span class="section-number">00</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">学习目标</p>
-          <h2>学完这门课，你将具备 <strong>6 项核心能力</strong></h2>
-        </div>
-      </div>
-
-      <div class="card-grid reveal">
-        <div class="info-card">
-          <span class="info-card__num">①</span>
-          <h3>理解核心逻辑</h3>
-          <p>理解 RAG 的核心逻辑，能区分"纯大模型问答"和"RAG 问答"的产品差异</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">②</span>
-          <h3>判断业务场景</h3>
-          <p>掌握 RAG 的产品适配场景，能独立判断业务需求是否适合做 RAG 落地</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">③</span>
-          <h3>全流程设计</h3>
-          <p>掌握 RAG 产品的全流程设计方法，能输出 RAG 产品的核心设计方案</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">④</span>
-          <h3>撰写提示词</h3>
-          <p>学会撰写产品视角的 RAG 提示词，能结合场景设计提示词模板并优化</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">⑤</span>
-          <h3>优化常见问题</h3>
-          <p>掌握 RAG 落地的常见问题（幻觉、检索不准等）的产品侧优化策略</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">⑥</span>
-          <h3>输出产品方案</h3>
-          <p>能结合实际业务（如智能助手、知识库问答、客服机器人）输出简易 RAG 产品方案</p>
-        </div>
-      </div>
-
-      <a href="#section-1" class="next-link reveal">
-        <span>下一章</span>
-        <strong>课程大纲</strong>
-      </a>
-    </section>
-
-    <!-- ===== 01: 课程大纲 ===== -->
-    <section id="section-1" class="section" data-section="section-1">
-      <div class="section-head reveal">
-        <span class="section-number">01</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">Chapter 01 · Syllabus</p>
-          <h2>课程详细大纲：<strong>6 节核心 + 1 实战 + 1 答疑</strong></h2>
-          <p class="section-summary">从课前准备到实战演练，构建完整的 RAG 产品知识体系。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s1-prep" class="section" data-section="s1-prep">
-      <div class="section-head reveal">
-        <span class="section-number">1.0</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">课前准备</p>
-          <h2>前置资料：<strong>三类准备</strong>，提前到位</h2>
-        </div>
-      </div>
-
-      <div class="step-cards reveal">
-        <div class="step-card active">
-          <span class="step-card__num">①</span>
-          <h3>基础认知</h3>
-          <p>大模型核心能力（生成、理解）、大模型产品的常见问题（幻觉、知识过时）</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">②</span>
-          <h3>实操工具</h3>
-          <p>推荐免费易上手的 RAG 工具（讯飞星火 RAG、智谱清言知识库、LangChain 快搭、豆包企业版），提前注册熟悉</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">③</span>
-          <h3>案例素材</h3>
-          <p>3 个 RAG 落地案例（企业智能助手、电商客服知识库、政务问答机器人）+ 行政制度智能助手素材</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s1-chapters" class="section" data-section="s1-chapters">
-      <div class="section-head reveal">
-        <span class="section-number">1.1</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">8 节详细大纲</p>
-          <h2>点击展开每节课的<strong>完整内容</strong></h2>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 1 节：RAG 基础认知 —— 产品经理必懂的 RAG 核心概念</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：搞懂 RAG 是什么、解决什么问题、和纯大模型的产品差异，建立产品视角的 RAG 认知框架</p>
-            <ul>
-              <li>从产品痛点切入：纯大模型产品的 3 大核心问题（知识过时、幻觉、专业领域回答不准），结合行政智能助手案例说明</li>
-              <li>RAG 的定义：检索增强生成（Retrieval-Augmented Generation）产品视角的解读 ——"先找答案，再写答案"</li>
-              <li>RAG 的核心价值：产品层面的 3 个核心作用（解决知识过时、降低幻觉、提升专业领域回答准确性）</li>
-              <li>RAG 与纯大模型、传统知识库的产品差异（表格对比，聚焦回答灵活性、知识准确性、更新成本、开发成本）</li>
-              <li>RAG 的适用边界：哪些场景不适合做 RAG（如无固定知识库、开放性创意生成）</li>
-              <li>小练习：判断 3 个业务场景是否适合 RAG</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 2 节：RAG 核心原理 —— 产品经理只需懂这些（避开纯技术）</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：理解 RAG 的 4 大核心环节，知道每个环节的产品影响点，能和开发/算法高效沟通</p>
-            <h4>RAG 的 4 大核心环节（产品视角拆解）</h4>
-            <ul>
-              <li><strong>知识库构建</strong>：把非结构化文档变成大模型能"检索"的格式，产品关注文档解析精度、知识库更新方式、权限管理</li>
-              <li><strong>检索</strong>：用户提问后，从知识库中找匹配的"上下文"，产品关注检索精度、检索速度、多关键词匹配能力</li>
-              <li><strong>提示词拼接</strong>：把"检索到的上下文 + 用户问题 + 指令"拼接成提示词发给大模型，产品关注提示词结构、上下文筛选规则</li>
-              <li><strong>生成</strong>：大模型基于拼接后的提示词输出答案，产品关注生成范围、答案贴合度、格式规范</li>
-            </ul>
-            <h4>核心组件（产品价值解读）</h4>
-            <ul>
-              <li><strong>向量数据库</strong>：影响"检索快慢/准度"</li>
-              <li><strong>嵌入模型</strong>：影响"文档和问题的匹配精度"</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 3 节：RAG 产品设计全流程 —— 产品经理的核心工作</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：掌握从"需求分析"到"产品落地"的 RAG 产品设计全流程，能输出核心设计方案</p>
-            <h4>第一步：需求分析与场景适配</h4>
-            <ul>
-              <li>核心判断标准：是否有结构化/非结构化的固定知识库？是否需要基于知识库的精准问答？是否需要频繁更新知识？</li>
-              <li>需求拆解要点：明确问答边界、答案格式要求、知识库更新频率</li>
-            </ul>
-            <h4>第二步：知识库产品设计</h4>
-            <ul>
-              <li>知识库类型设计：结构化/非结构化/混合</li>
-              <li>核心功能设计：文档上传、文档解析、知识更新、知识分册/标签、权限管理</li>
-            </ul>
-            <h4>第三步：检索策略产品设计</h4>
-            <ul>
-              <li>核心检索方式：关键词检索、向量检索（前者快，后者准，建议混合）</li>
-              <li>优化点：检索结果数量限制、相似度阈值设置、多轮检索</li>
-            </ul>
-            <h4>第四步：生成环节产品设计</h4>
-            <ul>
-              <li>答案格式规范：结构化/标注答案来源</li>
-              <li>兜底逻辑设计：检索不到匹配内容时的回复策略</li>
-            </ul>
-            <h4>第五步：产品架构与交互设计</h4>
-            <ul>
-              <li>核心架构：用户端→问答模块→检索模块→知识库→大模型→生成结果→用户端</li>
-              <li>交互设计：问答界面、知识库管理界面</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 4 节：RAG 提示词撰写 —— 产品经理专属方法论（核心重点）</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：掌握 RAG 提示词的核心逻辑，能撰写/设计不同场景的 RAG 提示词模板</p>
-            <ul>
-              <li>RAG 提示词与普通大模型提示词的核心差异：必须绑定"检索上下文"</li>
-              <li>产品经理撰写 RAG 提示词的核心原则（4 个）</li>
-              <li>RAG 提示词的通用结构（可直接复用）</li>
-              <li>不同场景的 RAG 提示词模板设计</li>
-              <li>产品侧的提示词优化技巧（无需改代码）</li>
-              <li>实操练习：为行政智能助手撰写基础问答提示词模板</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 5 节：RAG 落地常见问题 —— 产品侧优化策略</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：掌握 RAG 落地的 5 大常见问题，能从产品角度提出可落地的优化方案</p>
-            <ul>
-              <li><strong>检索不准</strong> —— 知识标签/切分、检索阈值调整、关键词补充</li>
-              <li><strong>仍有幻觉</strong> —— 强化提示词指令、限制生成范围、标注答案来源</li>
-              <li><strong>答案冗长/不贴合</strong> —— 提示词指定答案格式、上下文筛选</li>
-              <li><strong>知识库更新不及时</strong> —— 自动更新功能、更新提醒</li>
-              <li><strong>多轮追问混乱</strong> —— 多轮检索、加入历史对话信息</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 6 节：RAG 行业落地案例拆解 —— 产品设计思路复用</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：拆解 3 个典型 RAG 落地案例，提炼产品设计共性</p>
-            <ul>
-              <li><strong>案例 1</strong>：企业内部智能助手 —— 知识库轻量化、问答精准化</li>
-              <li><strong>案例 2</strong>：电商智能客服 —— 按品类/问题类型切分、多轮检索</li>
-              <li><strong>案例 3</strong>：政务问答机器人 —— 知识权威化、答案结构化</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 7 节：实战演练 —— 从 0 到 1 设计一个 RAG 产品</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <p><strong>核心目标</strong>：整合前 6 节知识，完成简易 RAG 产品的设计 + 实操</p>
-            <p><strong>实战场景：</strong>公司行政制度智能助手（RAG 版）</p>
-            <h4>实战步骤</h4>
-            <ul>
-              <li><strong>步骤 1</strong>：需求分析与场景适配</li>
-              <li><strong>步骤 2</strong>：知识库设计（文档上传、切分、标签设置）</li>
-              <li><strong>步骤 3</strong>：检索策略设计（混合检索）</li>
-              <li><strong>步骤 4</strong>：撰写提示词模板</li>
-              <li><strong>步骤 5</strong>：落地实操（用免费工具搭建并测试）</li>
-              <li><strong>步骤 6</strong>：输出产品设计方案</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header">
-            <span class="accordion-title">第 8 节：答疑 + RAG 产品未来趋势</span>
-            <span class="accordion-icon">▾</span>
-          </div>
-          <div class="accordion-content">
-            <ul>
-              <li>学员问题答疑（聚焦产品设计、落地实操、提示词优化）</li>
-              <li>未来趋势：多模态 RAG、RAG 与 Agent 结合、轻量化 RAG</li>
-              <li>能力提升建议：实操工具练习、行业案例拆解、与技术团队多沟通</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <a href="#section-2" class="next-link reveal">
-        <span>下一章</span>
-        <strong>核心知识</strong>
-      </a>
-    </section>
-
-    <!-- ===== 02: 核心知识 ===== -->
-    <section id="section-2" class="section" data-section="section-2">
-      <div class="section-head reveal">
-        <span class="section-number">02</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">Chapter 02 · Core Knowledge</p>
-          <h2>各章节<strong>核心知识</strong>（产品视角，避技术）</h2>
-          <p class="section-summary">四块核心知识，帮你建立 RAG 产品的完整认知体系。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s2-fit" class="section" data-section="s2-fit">
-      <div class="section-head reveal">
-        <span class="section-number">2.1</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">场景适配</p>
-          <h2>RAG 的产品适配与<strong>非适配场景</strong></h2>
-        </div>
-      </div>
-
-      <div class="two-column reveal">
-        <div class="info-card">
-          <span class="info-card__num">✓</span>
-          <h3>适配场景</h3>
-          <p class="info-card__lead">满足 1+2 即可</p>
-          <ul>
-            <li>有固定的知识库（文档/表格/数据库）</li>
-            <li>需要基于知识库的精准问答</li>
-            <li>知识需要频繁更新</li>
-            <li>专业领域问答（如企业制度、医疗、法律）</li>
+    <div class="timeline">
+      <div class="exp-row">
+        <div class="exp-period">2025.06 — 至今 <span class="now">在职</span></div>
+        <div class="exp-main">
+          <h3>贵州茗电工程有限公司</h3>
+          <div class="exp-company">AI 产品经理 <span class="role-tag">工业 AI · 电力</span></div>
+          <ul class="exp-points">
+            <li>主导电力试验报告 AI 智能审核系统从 0 到 1 落地，访谈 4 类角色提炼 21 项痛点，审核耗时从 30-60 分钟压缩至 30 秒以内</li>
+            <li>设计变电站巡检缺陷上报工具，离线优先架构 + AI 识别链路覆盖 7 类高频缺陷，单次上报从 5 分钟压缩至 30 秒</li>
+            <li>向团队引入 Claude Code 和 Cursor 进行报告模板自动化，单份报告填写时间从 40 分钟缩短至 15 分钟</li>
           </ul>
         </div>
-        <div class="info-card">
-          <span class="info-card__num">✗</span>
-          <h3>非适配场景</h3>
-          <p class="info-card__lead">不建议使用 RAG</p>
-          <ul>
-            <li>无固定知识库，纯开放性创意生成（如文案、故事）</li>
-            <li>不需要精准回答，只求灵感</li>
-            <li>知识几乎不更新，且内容极少</li>
+        <div class="exp-impact">
+          <div class="impact">
+            <div class="num">−97%</div>
+            <div class="label">审核耗时压缩</div>
+          </div>
+          <div class="impact">
+            <div class="num">−90%</div>
+            <div class="label">上报时长压缩</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row">
+        <div class="exp-period">2021.09 — 2025.07</div>
+        <div class="exp-main">
+          <h3>湖南工业大学</h3>
+          <div class="exp-company">电气工程及其自动化（本科）<span class="role-tag">学术</span></div>
+          <ul class="exp-points">
+            <li>专业排名前 10%，具备扎实的电气工程理论基础</li>
+            <li>院青年志愿者联合会主席，主导对接株洲市文旅局和红十字会等外部机构</li>
+            <li>2024 全国大学生志愿服务宣讲团入围 · 株洲优秀红十字志愿者</li>
           </ul>
         </div>
-      </div>
-    </section>
-
-    <section id="s2-pipeline" class="section" data-section="s2-pipeline">
-      <div class="section-head reveal">
-        <span class="section-number">2.2</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">4 大环节</p>
-          <h2>RAG 4 大环节的<strong>产品影响点</strong></h2>
-        </div>
-      </div>
-
-      <div class="table-wrap reveal">
-        <table>
-          <tr>
-            <th>核心环节</th>
-            <th>产品关注重点</th>
-            <th>对产品体验的影响</th>
-          </tr>
-          <tr>
-            <td>知识库构建</td>
-            <td>文档解析精度、知识切分粒度、更新方式、权限管理</td>
-            <td>解析不准→知识缺失；切分不合理→检索不准；更新复杂→知识过时</td>
-          </tr>
-          <tr>
-            <td>检索</td>
-            <td>检索精度、速度、结果数量、相似度阈值</td>
-            <td>精度低→答非所问；速度慢→交互卡顿；结果过多→答案冗长</td>
-          </tr>
-          <tr>
-            <td>提示词拼接</td>
-            <td>结构合理性、上下文筛选、指令清晰度</td>
-            <td>结构差→大模型理解错；指令模糊→幻觉/脱离上下文</td>
-          </tr>
-          <tr>
-            <td>生成</td>
-            <td>答案格式、来源标注、兜底逻辑</td>
-            <td>格式不规范→体验差；无来源→可信度低；无兜底→用户迷茫</td>
-          </tr>
-        </table>
-      </div>
-    </section>
-
-    <section id="s2-kb" class="section" data-section="s2-kb">
-      <div class="section-head reveal">
-        <span class="section-number">2.3</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">知识库设计</p>
-          <h2>知识库产品设计的<strong>核心要点</strong></h2>
-        </div>
-      </div>
-
-      <div class="step-cards reveal">
-        <div class="step-card active">
-          <span class="step-card__num">①</span>
-          <h3>文档支持</h3>
-          <p>优先支持企业常用格式（docx、pdf、excel、txt），如需解析图片/表格，需提前和技术确认</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">②</span>
-          <h3>知识切分</h3>
-          <p>建议按"问题粒度"切分，比按章节切分检索更准</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">③</span>
-          <h3>知识标签</h3>
-          <p>为每个知识块加标签（如"假期制度 - 年假"），支持按标签检索</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">④</span>
-          <h3>更新方式</h3>
-          <p>轻量场景设计手动更新，高频更新场景设计自动更新</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">⑤</span>
-          <h3>权限管理</h3>
-          <p>企业内部场景需设计按部门/角色权限</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s2-fallback" class="section" data-section="s2-fallback">
-      <div class="section-head reveal">
-        <span class="section-number">2.4</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">兜底逻辑</p>
-          <h2>RAG 产品的<strong>核心兜底逻辑</strong>（产品必须设计）</h2>
-        </div>
-      </div>
-
-      <div class="card-grid reveal">
-        <div class="info-card">
-          <span class="info-card__num">①</span>
-          <h3>检索不到匹配内容</h3>
-          <p>"暂无相关知识解答，建议咨询 XX 部门"，不允许大模型编造</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">②</span>
-          <h3>知识库未更新</h3>
-          <p>"当前知识库暂未更新该内容，敬请期待"</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">③</span>
-          <h3>超出问答边界</h3>
-          <p>"本助手仅解答 XX 问题，该问题请咨询 XX 部门"</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">④</span>
-          <h3>答案存疑</h3>
-          <p>"当前相关知识内容暂不明确，建议查阅 XX 文档或咨询 XX 部门"</p>
-        </div>
-      </div>
-
-      <a href="#section-3" class="next-link reveal">
-        <span>下一章</span>
-        <strong>提示词撰写</strong>
-      </a>
-    </section>
-
-    <!-- ===== 03: 提示词撰写 ===== -->
-    <section id="section-3" class="section" data-section="section-3">
-      <div class="section-head reveal">
-        <span class="section-number">03</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">Chapter 03 · Prompt Engineering</p>
-          <h2>RAG 提示词撰写 ——<strong>产品经理专属方法</strong></h2>
-          <p class="section-summary">掌握 RAG 提示词的核心差异、4 大原则和 3 套可直接复用的通用模板。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s3-diff" class="section" data-section="s3-diff">
-      <div class="section-head reveal">
-        <span class="section-number">3.1</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">核心差异</p>
-          <h2>RAG 提示词与普通提示词的<strong>本质区别</strong></h2>
-        </div>
-      </div>
-
-      <div class="step-cards reveal">
-        <div class="step-card">
-          <span class="step-card__num">普通</span>
-          <h3>普通大模型提示词</h3>
-          <p>指令 + 用户问题（如"请简洁回答，年假怎么申请？"）</p>
-        </div>
-        <div class="step-card active">
-          <span class="step-card__num">RAG</span>
-          <h3>RAG 提示词</h3>
-          <p>指令 + 检索上下文 + 用户问题（核心：绑定上下文，限制大模型仅基于上下文回答）</p>
-        </div>
-        <div class="step-card">
-          <span class="step-card__num">PM</span>
-          <h3>产品经理核心要求</h3>
-          <p>让提示词"标准化、模板化"，便于开发落地，且能快速优化</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s3-principles" class="section" data-section="s3-principles">
-      <div class="section-head reveal">
-        <span class="section-number">3.2</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">4 大原则</p>
-          <h2>产品经理撰写 RAG 提示词的<strong>核心原则</strong></h2>
-        </div>
-      </div>
-
-      <div class="card-grid reveal">
-        <div class="info-card">
-          <span class="info-card__num">①</span>
-          <h3>边界明确</h3>
-          <p>必须加"仅基于以下提供的上下文回答，不编造、不添加额外信息"</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">②</span>
-          <h3>格式指定</h3>
-          <p>明确答案格式（如"分点回答，条理清晰"），适配产品体验</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">③</span>
-          <h3>上下文聚焦</h3>
-          <p>"请从上下文中提取关键信息回答，不要冗长，无关信息无需提及"</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">④</span>
-          <h3>适配场景</h3>
-          <p>根据产品场景调整语气（企业助手：正式简洁；客服：口语亲切）</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="s3-templates" class="section" data-section="s3-templates">
-      <div class="section-head reveal">
-        <span class="section-number">3.3</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">通用模板</p>
-          <h2>3 套<strong>可直接复用</strong>的 RAG 提示词模板</h2>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="scene-strip">
-          <div class="scene-strip__head">
-            <span class="scene-strip__tag">基础版</span>
-            <span class="scene-strip__title">适用于单轮精准问答，如行政智能助手</span>
+        <div class="exp-impact">
+          <div class="impact">
+            <div class="num">前 10%</div>
+            <div class="label">专业排名</div>
+          </div>
+          <div class="impact">
+            <div class="num">220kV</div>
+            <div class="label">变电站调试经验</div>
           </div>
         </div>
-        <div class="code-block">
-          <button class="copy-btn" onclick="copyCode(this)">复制</button>
-指令：请你作为XX（产品角色，如公司行政智能助手），仅基于以下提供的上下文回答用户问题，严格遵循以下要求：
-1. 仅使用上下文的信息，不编造、不添加任何额外信息；
-2. 答案分点回答，条理清晰，语言简洁正式，贴合企业内部沟通场景；
-3. 若上下文无相关问题的解答，直接回复"暂无相关知识解答，建议咨询公司行政/财务部门"；
-4. 提取上下文关键信息即可，无需冗长表述。
+      </div>
+    </div>
+  </div>
+</section>
 
-上下文：{检索到的知识库内容，由系统自动填充}
+<!-- ============ SKILLS ============ -->
+<section class="skills" id="skills">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">/ 03 — 能力清单</div>
+      <h2 class="section-title">我的<span class="accent">工作方式</span><span class="en"> .</span></h2>
+    </div>
 
-用户问题：{用户的实际问题}
-        </div>
+    <div class="skills-grid">
+      <div class="skills-intro">
+        电气工程 × AI 产品<br/><span class="accent">双栖</span>背景，<br/>从现场到产品。
       </div>
 
-      <div class="reveal">
-        <div class="scene-strip" style="margin-top:24px;">
-          <div class="scene-strip__head">
-            <span class="scene-strip__tag">多轮版</span>
-            <span class="scene-strip__title">适用于需要上下文的多轮对话</span>
+      <div class="skills-list">
+        <div class="skill-cluster">
+          <div class="skill-label"><span>— 产品能力</span><span>核心</span></div>
+          <div class="skill-tags">
+            <span class="tag primary">用户访谈</span>
+            <span class="tag primary">PRD 撰写</span>
+            <span class="tag primary">竞品分析</span>
+            <span class="tag">需求优先级分析</span>
+            <span class="tag">产品原型（墨刀）</span>
+            <span class="tag">Agent 工作流设计</span>
+            <span class="tag">指标体系与评测</span>
           </div>
         </div>
-        <div class="code-block">
-          <button class="copy-btn" onclick="copyCode(this)">复制</button>
-指令：请你作为XX（产品角色），基于以下提供的上下文和历史对话信息，回答用户的最新问题，严格遵循以下要求：
-1. 仅使用上下文和历史对话中的信息，不编造、不添加任何额外信息；
-2. 答案分点回答，条理清晰，语言简洁正式；
-3. 若上下文和历史对话中无相关问题的解答，直接回复"暂无相关知识解答"；
-4. 提取关键信息即可，无需冗长表述。
 
-历史对话：{历史对话内容，由系统自动填充}
-
-上下文：{检索到的知识库内容，由系统自动填充}
-
-用户最新问题：{用户的实际问题}
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="scene-strip" style="margin-top:24px;">
-          <div class="scene-strip__head">
-            <span class="scene-strip__tag">客服版</span>
-            <span class="scene-strip__title">适用于电商客服场景</span>
+        <div class="skill-cluster">
+          <div class="skill-label"><span>— AI 工具链</span><span>熟练</span></div>
+          <div class="skill-tags">
+            <span class="tag primary">Claude / ChatGPT</span>
+            <span class="tag primary">Coze / Dify</span>
+            <span class="tag primary">Claude Code / Cursor</span>
+            <span class="tag">Prompt Engineering</span>
+            <span class="tag">RAG 基础原理</span>
+            <span class="tag">Python / Excel 数据分析</span>
           </div>
         </div>
-        <div class="code-block">
-          <button class="copy-btn" onclick="copyCode(this)">复制</button>
-指令：请你作为电商客服智能助手，基于以下提供的上下文回答用户问题，严格遵循以下要求：
-1. 仅使用上下文的信息，不编造、不添加任何额外信息；
-2. 答案口语化、亲切友好，符合客服沟通风格；
-3. 若上下文无相关问题的解答，直接回复"抱歉，暂时没有相关信息，建议您联系在线客服"；
-4. 回答简洁明了，重点突出。
 
-上下文：{检索到的知识库内容，由系统自动填充}
-
-用户问题：{用户的实际问题}
+        <div class="skill-cluster">
+          <div class="skill-label"><span>— 电气专业</span><span>持证</span></div>
+          <div class="skill-tags">
+            <span class="tag">电气 CAD</span>
+            <span class="tag">EPLAN</span>
+            <span class="tag">三菱 GX Works</span>
+            <span class="tag">西门子博图 S7-1200</span>
+            <span class="tag primary">高压电工证</span>
+            <span class="tag primary">高处作业证</span>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <a href="#section-4" class="next-link reveal">
-        <span>下一章</span>
-        <strong>课程特色</strong>
-      </a>
-    </section>
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <h2>一起做点<br/><span class="accent">值得交付</span>的<br/>产品<span class="en">.</span></h2>
 
-    <!-- ===== 04: 课程特色 ===== -->
-    <section id="section-4" class="section" data-section="section-4">
-      <div class="section-head reveal">
-        <span class="section-number">04</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">Chapter 04 · Features</p>
-          <h2>课程<strong>四大特色</strong></h2>
-        </div>
+    <div class="contact-grid">
+      <div class="contact-channels">
+        <a href="mailto:499021989@qq.com" class="channel">
+          <div>
+            <div class="channel-label">— 邮箱</div>
+            <div class="channel-value">499021989@qq.com</div>
+          </div>
+          <span class="channel-arrow">↗</span>
+        </a>
+        <a href="tel:13027333586" class="channel">
+          <div>
+            <div class="channel-label">— 电话</div>
+            <div class="channel-value">130 2733 3586</div>
+          </div>
+          <span class="channel-arrow">↗</span>
+        </a>
+        <a href="#" class="channel">
+          <div>
+            <div class="channel-label">— 简历</div>
+            <div class="channel-value">下载 PDF</div>
+          </div>
+          <span class="channel-arrow">↓</span>
+        </a>
       </div>
 
-      <div class="card-grid reveal">
-        <div class="info-card">
-          <span class="info-card__num">①</span>
-          <h3>产品视角 · 实战导向</h3>
-          <p>全程从产品经理角度出发，避开技术细节，聚焦产品设计与落地实操</p>
+      <div class="contact-side">
+        <div>
+          <p class="contact-quote">电力行业 × AI 产品的交叉点，需要既懂现场又懂产品的人。如果你正在寻找这样的人，我们聊聊。</p>
+          <div class="contact-status">
+            <span class="dot"></span>
+            已离职 · 月内到岗
+          </div>
         </div>
-        <div class="info-card">
-          <span class="info-card__num">②</span>
-          <h3>案例驱动 · 即学即用</h3>
-          <p>结合行政智能助手等真实场景，提供可直接复用的产品设计模板和提示词模板</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">③</span>
-          <h3>工具推荐 · 快速上手</h3>
-          <p>推荐免费易上手的 RAG 工具，无需技术背景也能快速搭建和测试</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">④</span>
-          <h3>系统学习 · 完整体系</h3>
-          <p>从基础认知到实战落地，构建完整的 RAG 产品知识体系</p>
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-mute); letter-spacing: 0.08em;">
+          AI 产品经理 · 工业 AI · 合规 AI
         </div>
       </div>
+    </div>
 
-      <a href="#section-5" class="next-link reveal">
-        <span>下一章</span>
-        <strong>工具推荐</strong>
-      </a>
-    </section>
+    <footer>
+      <div>© 2026 郑传望 · 保留所有权利</div>
+      <div>AI 辅助设计与构建</div>
+    </footer>
+  </div>
+</section>
 
-    <!-- ===== 05: 工具推荐 ===== -->
-    <section id="section-5" class="section" data-section="section-5">
-      <div class="section-head reveal">
-        <span class="section-number">05</span>
-        <div class="section-head__copy">
-          <p class="section-kicker">Chapter 05 · Tools</p>
-          <h2>推荐<strong>4 款 RAG 工具</strong></h2>
-          <p class="section-summary">免费易上手，让学员无需技术背景也能快速搭建和测试 RAG 应用。</p>
-        </div>
-      </div>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
 
-      <div class="card-grid reveal">
-        <div class="info-card">
-          <span class="info-card__num">①</span>
-          <h3>讯飞星火 RAG</h3>
-          <p>免费易用，支持多文档上传和知识库管理</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">②</span>
-          <h3>智谱清言知识库</h3>
-          <p>智能解析文档，支持多轮对话</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">③</span>
-          <h3>LangChain 快搭</h3>
-          <p>快速搭建 RAG 应用，支持自定义流程</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card__num">④</span>
-          <h3>豆包企业版</h3>
-          <p>企业级知识库解决方案，安全可靠</p>
-        </div>
-      </div>
+  document.querySelectorAll('.project, .exp-row, .skill-cluster').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.8s cubic-bezier(.2,.8,.2,1), transform 0.8s cubic-bezier(.2,.8,.2,1)';
+    observer.observe(el);
+  });
+</script>
 
-      <div class="hook-box reveal">
-        <p>RAG 不是一个技术方案，而是一种产品思维 ——</p>
-        <strong>让 AI 基于事实回答，而不是凭记忆猜测。</strong>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="page-footer">
-    <p>PM 专属 RAG 课程 · Codex Edition · 从入门到落地</p>
-  </footer>
-
-  <script src="js/main.js"></script>
 </body>
 </html>
