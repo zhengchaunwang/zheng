@@ -326,7 +326,7 @@ footer span{color:var(--amber);}
       </div>
     </div>
     <div class="hero-stats rv">
-      <div><div class="hstat-n" style="color:var(--amber);">≤30秒</div><div class="hstat-l">AI预审单份延迟</div></div>
+      <div><div class="hstat-n" style="color:var(--amber);">≤3分钟</div><div class="hstat-l">单份审核P50延迟</div></div>
       <div><div class="hstat-n" style="color:var(--blue);">≥99%</div><div class="hstat-l">判据比对准确率</div></div>
       <div><div class="hstat-n" style="color:var(--teal);">0%</div><div class="hstat-l">漏审率 SLA</div></div>
       <div><div class="hstat-n" style="color:var(--red);">0</div><div class="hstat-l">数据外泄事件</div></div>
@@ -339,48 +339,33 @@ footer span{color:var(--amber);}
 <!-- GLOSSARY - PM专业术语表 + 电力领域术语 -->
 <!-- ══════════════════════════════════════════════════ -->
 <section id="s-glossary">
-  <div class="sec-tag rv">01 项目背景</div>
-  <h2 class="sec-h rv">电力试验报告审核：人工逐页核对的时代该结束了</h2>
-  <p class="sec-p rv">全国电力行业每年产生数百万份试验报告，每份需经多级人工审核。然而，审核人80%时间花在格式规范、数据合格的"正常报告"上，真正需要专业判断的异常报告反而得不到足够关注——这是结构性效率灾难。</p>
-  <div class="bg-pain-grid rv" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;">
-    <div style="background:var(--blue-l);border:1px solid rgba(37,99,235,.15);border-radius:var(--r-md);padding:24px;">
-      <div style="font-size:16px;font-weight:600;color:var(--blue-d);margin-bottom:12px;">行业现状</div>
-      <ul style="margin:0;padding-left:18px;line-height:2;color:var(--ink-2);font-size:17px;">
-        <li>电力试验报告审核是电网安全的"守门员"</li>
-        <li>每份报告需经技术员→一级审核→总工三级审核</li>
-        <li>审核依赖人工逐页对照DL/T 596、GB 50150等标准</li>
-        <li>温度修正系数查表易出错，占返工原因60%</li>
-        <li>旺季报告堆积，审核人连续工作导致漏审风险</li>
-      </ul>
-    </div>
-    <div style="background:var(--amber-l);border:1px solid rgba(232,150,10,.2);border-radius:var(--r-md);padding:24px;">
-      <div style="font-size:16px;font-weight:600;color:var(--amber-d);margin-bottom:12px;">核心痛点</div>
-      <ul style="margin:0;padding-left:18px;line-height:2;color:var(--ink-2);font-size:17px;">
-        <li><strong>审核疲劳漏审</strong>：80%时间看合格报告，异常报告反被忽略</li>
-        <li><strong>温度修正查错</strong>：不同设备不同公式，手算+查表占返工60%</li>
-        <li><strong>数据结论矛盾</strong>：数据超标结论却写合格，最致命的漏审场景</li>
-        <li><strong>标准翻查耗时</strong>：多标准交叉冲突，人工翻查平均10分钟</li>
-        <li><strong>签字追责风险</strong>：审核签字终身负责，AI判定不可溯源不敢用</li>
-      </ul>
-    </div>
-  </div>
-  <div class="bg-impact rv" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0;">
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;text-align:center;">
-      <div style="font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;color:var(--red);">80%</div>
-      <div style="font-size:14px;color:var(--ink-3);margin-top:4px;">审核时间花在合格报告上</div>
-    </div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;text-align:center;">
-      <div style="font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;color:var(--orange);">60%</div>
-      <div style="font-size:14px;color:var(--ink-3);margin-top:4px;">返工因温度修正查错</div>
-    </div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;text-align:center;">
-      <div style="font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;color:var(--amber);">30-60min</div>
-      <div style="font-size:14px;color:var(--ink-3);margin-top:4px;">单份人工审核耗时</div>
-    </div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;text-align:center;">
-      <div style="font-family:'Noto Serif SC',serif;font-size:34px;font-weight:700;color:var(--blue);">92%</div>
-      <div style="font-size:14px;color:var(--ink-3);margin-top:4px;">审核人认为效率是最大瓶颈</div>
-    </div>
+  <div class="sec-tag rv">产品经理术语体系</div>
+  <h2 class="sec-h rv">贯穿全项目的核心术语与方法论</h2>
+  <p class="sec-p rv">本项目每个决策背后都有对应的产品方法论支撑。以下术语不是装饰，而是驱动产品从0到1的思维工具。</p>
+
+  <div class="glossary rv">
+    <div class="gloss-item"><div class="gloss-term">JTBD</div><div class="gloss-def">Jobs to be Done，用户要完成的"工作"。定义需求边界，换手段不换Job。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Kano Model</div><div class="gloss-def">必备/期望/兴奋三分类。必备无则不满，期望越多越满意，兴奋没有也行有了惊喜。</div></div>
+    <div class="gloss-item"><div class="gloss-term">RICE Scoring</div><div class="gloss-def">Reach×Impact×Confidence/Effort，需求优先级量化框架。避免拍脑袋排序。</div></div>
+    <div class="gloss-item"><div class="gloss-term">北极星指标</div><div class="gloss-def">North Star Metric，唯一最核心指标。本项目=审核人日均处理报告数，综合性强不可操纵。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Data Flywheel</div><div class="gloss-def">数据飞轮：使用→反馈→模型优化→准确率提升→使用更多。AI产品的核心增长引擎。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Graceful Degradation</div><div class="gloss-def">优雅降级：AI判据不可用时回退到人工审核，而非给出错误结果。坦诚比假装自信更重要。</div></div>
+    <div class="gloss-item"><div class="gloss-term">MVP</div><div class="gloss-def">Minimum Viable Product，最小可行产品。验证核心假设的最小成本方案。不是半成品。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Persona</div><div class="gloss-def">用户画像。基于8场深度访谈构建的典型用户模型，避免"我觉得用户需要"。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Pain Point Map</div><div class="gloss-def">痛点地图。频率×严重度四象限，做残酷取舍。v1.0只打必须解决区。</div></div>
+    <div class="gloss-item"><div class="gloss-term">AHA Moment</div><div class="gloss-def">顿悟时刻。用户第一次感受到产品核心价值的瞬间。上传报告3分钟出结果=第一次AHA。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Feature Creep</div><div class="gloss-def">功能蔓延。不加控制地增加功能导致MVP膨胀。用In/Out of Scope约束。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Moat / 护城河</div><div class="gloss-def">竞争壁垒。判据知识图谱+行业数据+私有化部署=越用越准的不可复制壁垒。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Switching Cost</div><div class="gloss-def">切换成本。用户从PMS迁移到本产品的代价。越低越容易推广。API对接降低迁移成本。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Cold Start Problem</div><div class="gloss-def">冷启动问题。知识图谱初始构建缺数据。用标准文档结构化+专家知识注入解决。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Opportunity Solution Tree</div><div class="gloss-def">机会方案树。从目标→机会→方案→实验的拆解框架，确保方案对齐目标。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Edge Case</div><div class="gloss-def">边缘场景。发生概率低但影响大的情况。多标准交叉冲突、罕见设备型号必须考虑。</div></div>
+    <div class="gloss-item"><div class="gloss-term">Brutal Prioritization</div><div class="gloss-def">残酷取舍。v1.0只做P0+P1，宁可功能少也不做半成品。Anti-Feature-Creep的核心。</div></div>
+    <div class="gloss-item"><div class="gloss-term">MoSCoW</div><div class="gloss-def">Must-Have / Should-Have / Could-Have / Won't-Have。需求分类方法。</div></div>
+    <div class="gloss-item"><div class="gloss-term">介损(tanδ)</div><div class="gloss-def">介质损耗角正切值。衡量变压器绝缘性能的关键指标，需温度修正至20°C基准值。</div></div>
+    <div class="gloss-item"><div class="gloss-term">温度修正</div><div class="gloss-def">将不同温度下测量值换算至20°C基准值。DL/T 596附录D提供修正系数表，手动查表易出错。</div></div>
+    <div class="gloss-item"><div class="gloss-term">预防性试验</div><div class="gloss-def">按DL/T 596标准定期对电力设备进行的检查试验，旨在发现潜在缺陷。春检/秋检高峰期。</div></div>
+    <div class="gloss-item"><div class="gloss-term">交接试验</div><div class="gloss-def">新设备投运前按GB 50150标准进行的验收试验。标准与预防性试验不同，存在交叉验证需求。</div></div>
   </div>
   <div class="rec rv" style="background:var(--purple-l);border:1px solid rgba(124,58,237,.2);">
     <div class="rec-body"><strong>为什么是AI预审而不是传统数字化？</strong>传统方案（表单+流程引擎）只能解决"流程效率"问题，但无法解决"判断质量"——判据自动比对、温度修正计算、数据-结论一致性校验，这些都需要<strong>标准知识图谱+规则引擎推理</strong>。AI产品经理的核心挑战在于：AI做预审，人做终审——既要让AI判断足够准，又要让审核人敢信任AI的判断——这就是<strong>AI信任边界</strong>问题，也是贯穿本项目的主线。</div>
@@ -448,187 +433,162 @@ footer span{color:var(--amber);}
       <marker id="ah1b" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#2563EB"/></marker>
       <marker id="ah1c" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#0D9E75"/></marker>
     </defs>
-    <rect x="0" y="0" width="880" height="620" rx="12" fill="#FEFCF5" stroke="rgba(15,12,7,.08)"/>
-    <text x="440" y="30" text-anchor="middle" font-size="13" font-weight="600" fill="#0F0C07">核心用户旅程 · 技术员填报→审核人终审</text>
-    <!-- 顶部流程节点 -->
-    <rect x="15" y="50" width="125" height="85" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.5" filter="url(#sh1)"/>
-    <text x="78" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#1E3A8A">技术员填报</text>
-    <text x="78" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">Excel/Word/PDF</text>
-    <text x="78" y="116" text-anchor="middle" font-size="10" fill="#2563EB">痛点: 手动录入易出错</text>
-    <line x1="140" y1="92" x2="160" y2="92" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
-    <rect x="160" y="50" width="125" height="85" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="1.5" filter="url(#sh1)"/>
-    <text x="223" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#B87200">上传报告</text>
-    <text x="223" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">多格式解析</text>
-    <text x="223" y="116" text-anchor="middle" font-size="10" fill="#E8960A">痛点: 格式不统一</text>
-    <line x1="285" y1="92" x2="310" y2="92" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
-    <rect x="310" y="50" width="140" height="85" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="2" filter="url(#sh1)"/>
-    <text x="380" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#B87200">AI智能预审</text>
-    <text x="380" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">判据比对+温度修正</text>
-    <text x="380" y="116" text-anchor="middle" font-size="10" fill="#E8960A">⚡ 顿悟时刻! ≤30秒</text>
-    <line x1="450" y1="92" x2="475" y2="92" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
-    <rect x="475" y="50" width="125" height="85" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="1.5" filter="url(#sh1)"/>
-    <text x="538" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#B87200">分级标记</text>
-    <text x="538" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">通过/异常/关注</text>
-    <text x="538" y="116" text-anchor="middle" font-size="10" fill="#E8960A">信任: AI建议人确认</text>
-    <line x1="600" y1="92" x2="625" y2="92" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
-    <rect x="625" y="50" width="125" height="85" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh1)"/>
-    <text x="688" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#064E3B">人工终审签字</text>
-    <text x="688" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">聚焦异常项</text>
-    <text x="688" y="116" text-anchor="middle" font-size="10" fill="#0D9E75">终审权归人</text>
-    <line x1="750" y1="92" x2="765" y2="92" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
-    <rect x="765" y="50" width="100" height="85" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh1)"/>
-    <text x="815" y="76" text-anchor="middle" font-size="13" font-weight="600" fill="#064E3B">归档</text>
-    <text x="815" y="96" text-anchor="middle" font-size="11" fill="#7A6D55">审计日志</text>
-    <text x="815" y="116" text-anchor="middle" font-size="10" fill="#0D9E75">100%可追溯</text>
-    <!-- 机会方案树 Opportunity Solution Tree -->
-    <rect x="15" y="160" width="850" height="445" rx="10" fill="rgba(15,12,7,.02)" stroke="rgba(15,12,7,.06)"/>
-    <text x="440" y="185" text-anchor="middle" font-size="13" font-weight="600" fill="#0F0C07">机会方案树 · Opportunity Solution Tree</text>
-    <!-- 三列标题 -->
-    <rect x="30" y="200" width="240" height="32" rx="6" fill="rgba(220,38,38,.08)"/>
-    <text x="150" y="221" text-anchor="middle" font-size="12" font-weight="600" fill="#DC2626">痛点 Pain</text>
-    <rect x="310" y="200" width="240" height="32" rx="6" fill="rgba(37,99,235,.08)"/>
-    <text x="430" y="221" text-anchor="middle" font-size="12" font-weight="600" fill="#2563EB">机会 Opportunity</text>
-    <rect x="600" y="200" width="250" height="32" rx="6" fill="rgba(13,158,117,.08)"/>
-    <text x="725" y="221" text-anchor="middle" font-size="12" font-weight="600" fill="#0D9E75">方案 Solution</text>
-    <!-- Row 1: P01 -->
-    <rect x="30" y="245" width="240" height="58" rx="8" fill="#FEF2F2" stroke="rgba(220,38,38,.15)"/>
-    <text x="45" y="267" font-size="11" fill="#DC2626" font-weight="600">P01</text>
-    <text x="72" y="267" font-size="12" fill="#0F0C07" font-weight="500">审核疲劳导致漏审</text>
-    <text x="45" y="289" font-size="10" fill="#7A6D55">80%时间看合格报告</text>
-    <line x1="270" y1="274" x2="310" y2="274" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1b)"/>
-    <rect x="310" y="245" width="240" height="58" rx="8" fill="#EFF6FF" stroke="rgba(37,99,235,.15)"/>
-    <text x="325" y="267" font-size="12" fill="#2563EB" font-weight="500">AI筛掉80%合格报告</text>
-    <text x="325" y="289" font-size="10" fill="#7A6D55">人只看异常项，效率10倍↑</text>
-    <line x1="550" y1="274" x2="600" y2="274" stroke="#0D9E75" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1c)"/>
-    <rect x="600" y="245" width="250" height="58" rx="8" fill="#E1F5EE" stroke="rgba(13,158,117,.15)"/>
-    <text x="615" y="267" font-size="12" fill="#0D9E75" font-weight="500">AI预审 + 异常看板</text>
-    <text x="615" y="289" font-size="10" fill="#7A6D55">分级标记，人只审L2/L3</text>
-    <!-- Row 2: P02 -->
-    <rect x="30" y="315" width="240" height="58" rx="8" fill="#FEF2F2" stroke="rgba(220,38,38,.15)"/>
-    <text x="45" y="337" font-size="11" fill="#DC2626" font-weight="600">P02</text>
-    <text x="72" y="337" font-size="12" fill="#0F0C07" font-weight="500">温度修正系数查错</text>
-    <text x="45" y="359" font-size="10" fill="#7A6D55">占返工原因60%</text>
-    <line x1="270" y1="344" x2="310" y2="344" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1b)"/>
-    <rect x="310" y="315" width="240" height="58" rx="8" fill="#EFF6FF" stroke="rgba(37,99,235,.15)"/>
-    <text x="325" y="337" font-size="12" fill="#2563EB" font-weight="500">自动化温度修正计算</text>
-    <text x="325" y="359" font-size="10" fill="#7A6D55">消除最大返工根因</text>
-    <line x1="550" y1="344" x2="600" y2="344" stroke="#0D9E75" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1c)"/>
-    <rect x="600" y="315" width="250" height="58" rx="8" fill="#E1F5EE" stroke="rgba(13,158,117,.15)"/>
-    <text x="615" y="337" font-size="12" fill="#0D9E75" font-weight="500">规则引擎+插值算法</text>
-    <text x="615" y="359" font-size="10" fill="#7A6D55">DL/T 596附录D自动匹配</text>
-    <!-- Row 3: P04 (致命!) -->
-    <rect x="30" y="385" width="240" height="58" rx="8" fill="#FEF2F2" stroke="rgba(220,38,38,.3)" stroke-width="1.5"/>
-    <text x="45" y="407" font-size="11" fill="#DC2626" font-weight="700">P04 ⚠</text>
-    <text x="82" y="407" font-size="12" fill="#0F0C07" font-weight="700">数据超标结论写合格</text>
-    <text x="45" y="429" font-size="10" fill="#DC2626" font-weight="500">致命漏审! 竞品全无</text>
-    <line x1="270" y1="414" x2="310" y2="414" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#ah1b)"/>
-    <rect x="310" y="385" width="240" height="58" rx="8" fill="#EFF6FF" stroke="rgba(37,99,235,.25)" stroke-width="1.5"/>
-    <text x="325" y="407" font-size="12" fill="#2563EB" font-weight="600">数据-结论一致性校验</text>
-    <text x="325" y="429" font-size="10" fill="#2563EB" font-weight="500">核心差异化 · 竞争壁垒</text>
-    <line x1="550" y1="414" x2="600" y2="414" stroke="#0D9E75" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#ah1c)"/>
-    <rect x="600" y="385" width="250" height="58" rx="8" fill="#E1F5EE" stroke="rgba(13,158,117,.25)" stroke-width="1.5"/>
-    <text x="615" y="407" font-size="12" fill="#0D9E75" font-weight="600">NLP语义比对</text>
-    <text x="615" y="429" font-size="10" fill="#0D9E75" font-weight="500">检测数据vs结论致命矛盾</text>
-    <!-- Row 4: P07 -->
-    <rect x="30" y="455" width="240" height="58" rx="8" fill="#FEF2F2" stroke="rgba(220,38,38,.15)"/>
-    <text x="45" y="477" font-size="11" fill="#DC2626" font-weight="600">P07</text>
-    <text x="72" y="477" font-size="12" fill="#0F0C07" font-weight="500">签字终身追责风险</text>
-    <text x="45" y="499" font-size="10" fill="#7A6D55">漏签问题报告事故追责</text>
-    <line x1="270" y1="484" x2="310" y2="484" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1b)"/>
-    <rect x="310" y="455" width="240" height="58" rx="8" fill="#EFF6FF" stroke="rgba(37,99,235,.15)"/>
-    <text x="325" y="477" font-size="12" fill="#2563EB" font-weight="500">AI预审+判据溯源</text>
-    <text x="325" y="499" font-size="10" fill="#7A6D55">可追溯性=信任基础</text>
-    <line x1="550" y1="484" x2="600" y2="484" stroke="#0D9E75" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1c)"/>
-    <rect x="600" y="455" width="250" height="58" rx="8" fill="#E1F5EE" stroke="rgba(13,158,117,.15)"/>
-    <text x="615" y="477" font-size="12" fill="#0D9E75" font-weight="500">条款号+审计日志</text>
-    <text x="615" y="499" font-size="10" fill="#7A6D55">每个判定附带标准依据</text>
-    <!-- Row 5: P05 -->
-    <rect x="30" y="525" width="240" height="58" rx="8" fill="#FEF2F2" stroke="rgba(220,38,38,.15)"/>
-    <text x="45" y="547" font-size="11" fill="#DC2626" font-weight="600">P05</text>
-    <text x="72" y="547" font-size="12" fill="#0F0C07" font-weight="500">标准条款翻查耗时</text>
-    <text x="45" y="569" font-size="10" fill="#7A6D55">多标准交叉，平均10min</text>
-    <line x1="270" y1="554" x2="310" y2="554" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1b)"/>
-    <rect x="310" y="525" width="240" height="58" rx="8" fill="#EFF6FF" stroke="rgba(37,99,235,.15)"/>
-    <text x="325" y="547" font-size="12" fill="#2563EB" font-weight="500">判据自动匹配标准</text>
-    <text x="325" y="569" font-size="10" fill="#7A6D55">设备→标准→阈值自动关联</text>
-    <line x1="550" y1="554" x2="600" y2="554" stroke="#0D9E75" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ah1c)"/>
-    <rect x="600" y="525" width="250" height="58" rx="8" fill="#E1F5EE" stroke="rgba(13,158,117,.15)"/>
-    <text x="615" y="547" font-size="12" fill="#0D9E75" font-weight="500">知识图谱推理</text>
-    <text x="615" y="569" font-size="10" fill="#7A6D55">设备→试验→标准→阈值</text>
+    <rect x="0" y="0" width="880" height="320" rx="12" fill="#FEFCF5" stroke="rgba(15,12,7,.08)"/>
+    <text x="440" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#0F0C07">核心User Journey · 技术员填报→审核人终审</text>
+    <rect x="20" y="55" width="120" height="70" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.5" filter="url(#sh1)"/>
+    <text x="80" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">📝 技术员填报</text>
+    <text x="80" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">Excel (.xlsx)</text>
+    <text x="80" y="110" text-anchor="middle" font-size="8" fill="#2563EB">Pain: 手动录入易出错</text>
+    <line x1="140" y1="90" x2="170" y2="90" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
+    <rect x="170" y="55" width="120" height="70" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="1.5" filter="url(#sh1)"/>
+    <text x="230" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">📤 上传报告</text>
+    <text x="230" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">多格式解析</text>
+    <text x="230" y="110" text-anchor="middle" font-size="8" fill="#E8960A">Pain: 格式不统一</text>
+    <line x1="290" y1="90" x2="320" y2="90" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
+    <rect x="320" y="55" width="130" height="70" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="2" filter="url(#sh1)"/>
+    <text x="385" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">⚡ AI智能预审</text>
+    <text x="385" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">判据比对+温度修正</text>
+    <text x="385" y="110" text-anchor="middle" font-size="8" fill="#E8960A">AHA Moment! 3-6分钟</text>
+    <line x1="450" y1="90" x2="480" y2="90" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
+    <rect x="480" y="55" width="120" height="70" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="1.5" filter="url(#sh1)"/>
+    <text x="540" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">🚦 分级标记</text>
+    <text x="540" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">通过/异常/关注</text>
+    <text x="540" y="110" text-anchor="middle" font-size="8" fill="#E8960A">Trust: AI建议人确认</text>
+    <line x1="600" y1="90" x2="630" y2="90" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
+    <rect x="630" y="55" width="120" height="70" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh1)"/>
+    <text x="690" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#064E3B">✍️ 人工终审签字</text>
+    <text x="690" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">聚焦异常项</text>
+    <text x="690" y="110" text-anchor="middle" font-size="8" fill="#0D9E75">终审权归人</text>
+    <line x1="750" y1="90" x2="770" y2="90" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah1)"/>
+    <rect x="770" y="55" width="90" height="70" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh1)"/>
+    <text x="815" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#064E3B">📄 归档</text>
+    <text x="815" y="95" text-anchor="middle" font-size="9" fill="#7A6D55">审计日志</text>
+    <text x="815" y="110" text-anchor="middle" font-size="8" fill="#0D9E75">100%可追溯</text>
+    <!-- 痛点-机会映射 -->
+    <rect x="20" y="155" width="840" height="145" rx="8" fill="rgba(15,12,7,.02)" stroke="rgba(15,12,7,.06)"/>
+    <text x="40" y="178" font-size="10" font-weight="600" fill="#0F0C07">痛点-机会映射 (Pain → Opportunity → Solution)</text>
+    <text x="40" y="200" font-size="9" fill="#DC2626" font-weight="500">P01: 审核疲劳导致漏审</text>
+    <text x="220" y="200" font-size="9" fill="#7A6D55">→</text>
+    <text x="240" y="200" font-size="9" fill="#2563EB" font-weight="500">Opp: AI筛掉80%合格报告</text>
+    <text x="440" y="200" font-size="9" fill="#7A6D55">→</text>
+    <text x="460" y="200" font-size="9" fill="#0D9E75" font-weight="500">Sol: AI预审+异常看板，人只看异常项</text>
+    <text x="40" y="220" font-size="9" fill="#DC2626" font-weight="500">P02: 温度修正系数查错行</text>
+    <text x="220" y="220" font-size="9" fill="#7A6D55">→</text>
+    <text x="240" y="220" font-size="9" fill="#2563EB" font-weight="500">Opp: 自动化温度修正计算</text>
+    <text x="440" y="220" font-size="9" fill="#7A6D55">→</text>
+    <text x="460" y="220" font-size="9" fill="#0D9E75" font-weight="500">Sol: 规则引擎自动匹配DL/T 596附录D+插值</text>
+    <text x="40" y="240" font-size="9" fill="#DC2626" font-weight="500">P04: 数据超标但结论合格</text>
+    <text x="220" y="240" font-size="9" fill="#7A6D55">→</text>
+    <text x="240" y="240" font-size="9" fill="#2563EB" font-weight="500">Opp: 一致性自动校验</text>
+    <text x="440" y="240" font-size="9" fill="#7A6D55">→</text>
+    <text x="460" y="240" font-size="9" fill="#0D9E75" font-weight="500">Sol: NLP语义比对数据与结论，检测致命矛盾</text>
+    <text x="40" y="260" font-size="9" fill="#DC2626" font-weight="500">P07: 签字终身追责风险</text>
+    <text x="220" y="260" font-size="9" fill="#7A6D55">→</text>
+    <text x="240" y="260" font-size="9" fill="#2563EB" font-weight="500">Opp: AI预审+判据溯源</text>
+    <text x="440" y="260" font-size="9" fill="#7A6D55">→</text>
+    <text x="460" y="260" font-size="9" fill="#0D9E75" font-weight="500">Sol: 每个判定附带标准条款号+审计日志</text>
+    <text x="40" y="280" font-size="9" fill="#DC2626" font-weight="500">P05: 标准条款翻查耗时</text>
+    <text x="220" y="280" font-size="9" fill="#7A6D55">→</text>
+    <text x="240" y="280" font-size="9" fill="#2563EB" font-weight="500">Opp: 判据自动匹配标准</text>
+    <text x="440" y="280" font-size="9" fill="#7A6D55">→</text>
+    <text x="460" y="280" font-size="9" fill="#0D9E75" font-weight="500">Sol: 知识图谱推理：设备→试验→标准→阈值</text>
   </svg>
   </div>
 
   <!-- AI审核推理链路 --><!-- AI审核推理链路 -->
   <div class="panel" id="fl_audit">
-  <svg class="svg-flow rv" viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg">
+  <svg class="svg-flow rv" viewBox="0 0 1100 420" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#7A6D55"/></marker>
       <filter id="sh2"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter>
     </defs>
-    <rect x="0" y="0" width="880" height="380" rx="12" fill="#FEFCF5" stroke="rgba(15,12,7,.08)"/>
-    <text x="440" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#0F0C07">AI审核推理链路 · 上传报告→审核结果</text>
-    <!-- 报告上传 -->
+    <rect x="0" y="0" width="1100" height="420" rx="12" fill="#FEFCF5" stroke="rgba(15,12,7,.08)"/>
+    <text x="550" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#0F0C07">AI审核推理链路 · 上传报告→审核结果</text>
+    <!-- Step 1: 报告上传 -->
     <rect x="20" y="50" width="100" height="60" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="70" y="75" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">上传</text>
-    <text x="70" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">Excel/Word/PDF</text>
-    <line x1="120" y1="80" x2="155" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
-    <!-- 文档解析 -->
-    <rect x="155" y="40" width="130" height="80" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="2" filter="url(#sh2)"/>
-    <text x="220" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">文档解析</text>
-    <text x="220" y="78" text-anchor="middle" font-size="9" fill="#7A6D55">PaddleOCR+LayoutLM</text>
-    <text x="220" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">表格还原+字段提取</text>
-    <text x="220" y="106" text-anchor="middle" font-size="8" fill="#E8960A">准确率≥98%</text>
-    <line x1="285" y1="80" x2="320" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
-    <!-- 规则引擎判据比对 -->
-    <rect x="320" y="40" width="140" height="80" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" filter="url(#sh2)"/>
-    <text x="390" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">️ 规则引擎</text>
-    <text x="390" y="78" text-anchor="middle" font-size="9" fill="#7A6D55">GB 50150/DL/T 596</text>
-    <text x="390" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">设备类型→标准→阈值</text>
-    <text x="390" y="106" text-anchor="middle" font-size="8" fill="#2563EB">知识图谱驱动 ✓</text>
-    <line x1="460" y1="80" x2="495" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
-    <!-- 判据置信度 -->
-    <polygon points="555,45 615,80 555,115 495,80" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="555" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#5B21B6">置信度</text>
-    <text x="555" y="90" text-anchor="middle" font-size="9" fill="#5B21B6">≥0.85?</text>
+    <text x="70" y="75" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">📄 上传</text>
+    <text x="70" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">Excel (.xlsx)</text>
+    <line x1="120" y1="80" x2="148" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 2: 文档解析 -->
+    <rect x="148" y="40" width="125" height="80" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="2" filter="url(#sh2)"/>
+    <text x="210" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">📋 文档解析</text>
+    <text x="210" y="78" text-anchor="middle" font-size="9" fill="#7A6D55">PaddleOCR+LayoutLM</text>
+    <text x="210" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">表格还原+字段提取</text>
+    <text x="210" y="106" text-anchor="middle" font-size="8" fill="#E8960A">准确率≥98%</text>
+    <line x1="273" y1="80" x2="300" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 3: 规则引擎判据比对 -->
+    <rect x="300" y="40" width="130" height="80" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" filter="url(#sh2)"/>
+    <text x="365" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">⚙️ 规则引擎</text>
+    <text x="365" y="78" text-anchor="middle" font-size="9" fill="#7A6D55">GB 50150/DL/T 596</text>
+    <text x="365" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">设备类型→标准→阈值</text>
+    <text x="365" y="106" text-anchor="middle" font-size="8" fill="#2563EB">知识图谱驱动 ✅</text>
+    <line x1="430" y1="80" x2="458" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 4: 派生指标计算 (NEW) -->
+    <rect x="458" y="40" width="135" height="80" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="2" filter="url(#sh2)"/>
+    <text x="525" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#EA580C">🧮 派生指标计算</text>
+    <text x="525" y="78" text-anchor="middle" font-size="9" fill="#7A6D55">温度修正(插值法)</text>
+    <text x="525" y="92" text-anchor="middle" font-size="9" fill="#7A6D55">吸收比/极化指数</text>
+    <text x="525" y="106" text-anchor="middle" font-size="8" fill="#EA580C">R-06 · RICE 1600</text>
+    <line x1="593" y1="80" x2="618" y2="80" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 5: 判据置信度 -->
+    <polygon points="680,45 740,80 680,115 620,80" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="680" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#5B21B6">置信度</text>
+    <text x="680" y="90" text-anchor="middle" font-size="9" fill="#5B21B6">≥0.85?</text>
     <!-- 高置信度路径 -->
-    <line x1="615" y1="80" x2="650" y2="80" stroke="#0D9E75" stroke-width="1.5" marker-end="url(#ah2)"/>
-    <text x="633" y="72" font-size="8" fill="#0D9E75" font-weight="500">≥0.85</text>
-    <rect x="650" y="50" width="110" height="60" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="705" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#064E3B">✓ Pass/Fail</text>
-    <text x="705" y="88" text-anchor="middle" font-size="9" fill="#7A6D55">条款号+阈值+依据</text>
-    <text x="705" y="100" text-anchor="middle" font-size="9" fill="#7A6D55">+温度修正结果</text>
-    <line x1="705" y1="110" x2="705" y2="140" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
-    <!-- 人工确认 -->
-    <rect x="640" y="140" width="140" height="60" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" filter="url(#sh2)"/>
-    <text x="710" y="162" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">️ 人工终审</text>
-    <text x="710" y="178" text-anchor="middle" font-size="9" fill="#7A6D55">AI预审 · 人工终审</text>
-    <text x="710" y="190" text-anchor="middle" font-size="8" fill="#2563EB">终审权归人</text>
+    <line x1="740" y1="80" x2="768" y2="80" stroke="#0D9E75" stroke-width="1.5" marker-end="url(#ah2)"/>
+    <text x="754" y="72" font-size="8" fill="#0D9E75" font-weight="500">≥0.85</text>
+    <!-- Step 6: Pass/Fail -->
+    <rect x="768" y="50" width="110" height="60" rx="10" fill="#E1F5EE" stroke="#0D9E75" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="823" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#064E3B">✅ Pass/Fail</text>
+    <text x="823" y="88" text-anchor="middle" font-size="9" fill="#7A6D55">条款号+阈值+依据</text>
+    <text x="823" y="100" text-anchor="middle" font-size="9" fill="#7A6D55">+温度修正结果</text>
+    <line x1="823" y1="110" x2="823" y2="135" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 7: 审核摘要生成 (NEW) -->
+    <rect x="753" y="135" width="140" height="55" rx="10" fill="#FFF8E7" stroke="#E8960A" stroke-width="2" filter="url(#sh2)"/>
+    <text x="823" y="155" text-anchor="middle" font-size="11" font-weight="600" fill="#B87200">📝 审核摘要</text>
+    <text x="823" y="170" text-anchor="middle" font-size="9" fill="#7A6D55">Executive Summary</text>
+    <text x="823" y="182" text-anchor="middle" font-size="8" fill="#E8960A">R-08 · RICE 1920</text>
+    <line x1="823" y1="190" x2="823" y2="218" stroke="#7A6D55" stroke-width="1.2" marker-end="url(#ah2)"/>
+    <!-- Step 8: 人工终审 -->
+    <rect x="753" y="218" width="140" height="60" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" filter="url(#sh2)"/>
+    <text x="823" y="240" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">✍️ 人工终审</text>
+    <text x="823" y="256" text-anchor="middle" font-size="9" fill="#7A6D55">AI预审 · 人工终审</text>
+    <text x="823" y="268" text-anchor="middle" font-size="8" fill="#2563EB">终审权归人</text>
     <!-- 低置信度路径 -->
-    <line x1="555" y1="115" x2="555" y2="160" stroke="#EA580C" stroke-width="1.5" marker-end="url(#ah2)"/>
-    <text x="565" y="140" font-size="8" fill="#EA580C" font-weight="500">&lt;0.85</text>
-    <rect x="480" y="160" width="140" height="60" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="550" y="182" text-anchor="middle" font-size="11" font-weight="600" fill="#EA580C">️ 需人工判断</text>
-    <text x="550" y="198" text-anchor="middle" font-size="9" fill="#7A6D55">标注"请重点确认"</text>
-    <text x="550" y="210" text-anchor="middle" font-size="8" fill="#EA580C">优雅降级</text>
+    <line x1="680" y1="115" x2="680" y2="165" stroke="#EA580C" stroke-width="1.5" marker-end="url(#ah2)"/>
+    <text x="690" y="145" font-size="8" fill="#EA580C" font-weight="500">&lt;0.85</text>
+    <rect x="610" y="165" width="130" height="60" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="675" y="187" text-anchor="middle" font-size="11" font-weight="600" fill="#EA580C">⚠️ 需人工判断</text>
+    <text x="675" y="203" text-anchor="middle" font-size="9" fill="#7A6D55">标注"请重点确认"</text>
+    <text x="675" y="215" text-anchor="middle" font-size="8" fill="#EA580C">Graceful Degradation</text>
     <!-- 一致性校验 -->
-    <rect x="180" y="175" width="260" height="55" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="310" y="195" text-anchor="middle" font-size="11" font-weight="600" fill="#5B21B6">数据-结论一致性校验</text>
-    <text x="310" y="211" text-anchor="middle" font-size="9" fill="#7A6D55">NLP语义比对：数据超标但结论合格→Critical Alert</text>
-    <text x="310" y="223" text-anchor="middle" font-size="8" fill="#7C3AED">独家差异化能力 · 竞争壁垒</text>
-    <line x1="390" y1="120" x2="310" y2="175" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah2)"/>
+    <rect x="180" y="180" width="260" height="55" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="310" y="200" text-anchor="middle" font-size="11" font-weight="600" fill="#5B21B6">🔍 数据-结论一致性校验</text>
+    <text x="310" y="216" text-anchor="middle" font-size="9" fill="#7A6D55">NLP语义比对：数据超标但结论合格→Critical Alert</text>
+    <text x="310" y="228" text-anchor="middle" font-size="8" fill="#7C3AED">独家差异化能力 · Competitive Moat</text>
+    <line x1="365" y1="120" x2="310" y2="180" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah2)"/>
     <!-- 修正数据回传 -->
-    <rect x="620" y="240" width="230" height="55" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="735" y="260" text-anchor="middle" font-size="11" font-weight="600" fill="#5B21B6">人工修正→规则引擎优化</text>
-    <text x="735" y="276" text-anchor="middle" font-size="9" fill="#7A6D55">修正样本→阈值微调→准确率提升</text>
-    <text x="735" y="288" text-anchor="middle" font-size="8" fill="#7C3AED">数据飞轮</text>
-    <line x1="710" y1="200" x2="735" y2="240" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah2)"/>
-    <text x="718" y="225" font-size="8" fill="#7C3AED">人工修正</text>
+    <rect x="730" y="310" width="230" height="55" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="845" y="330" text-anchor="middle" font-size="11" font-weight="600" fill="#5B21B6">🔄 人工修正→规则引擎优化</text>
+    <text x="845" y="346" text-anchor="middle" font-size="9" fill="#7A6D55">修正样本→阈值微调→准确率提升</text>
+    <text x="845" y="358" text-anchor="middle" font-size="8" fill="#7C3AED">Data Flywheel</text>
+    <line x1="823" y1="278" x2="845" y2="310" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah2)"/>
+    <text x="830" y="300" font-size="8" fill="#7C3AED">人工修正</text>
     <!-- 判据缺失 -->
-    <rect x="40" y="260" width="210" height="55" rx="10" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5" filter="url(#sh2)"/>
-    <text x="145" y="280" text-anchor="middle" font-size="11" font-weight="600" fill="#DC2626">✗ 新设备/新标准判据缺失</text>
-    <text x="145" y="296" text-anchor="middle" font-size="9" fill="#7A6D55">提示"当前无匹配判据，请人工审核"</text>
-    <text x="145" y="308" text-anchor="middle" font-size="8" fill="#DC2626">AI说不知道比乱判更安全</text>
-    <line x1="390" y1="120" x2="200" y2="260" stroke="#DC2626" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="40" y="270" width="210" height="55" rx="10" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5" filter="url(#sh2)"/>
+    <text x="145" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#DC2626">❌ 新设备/新标准判据缺失</text>
+    <text x="145" y="306" text-anchor="middle" font-size="9" fill="#7A6D55">提示"当前无匹配判据，请人工审核"</text>
+    <text x="145" y="318" text-anchor="middle" font-size="8" fill="#DC2626">AI说不知道比乱判更安全</text>
+    <line x1="365" y1="120" x2="200" y2="270" stroke="#DC2626" stroke-width="1" stroke-dasharray="4,3"/>
+    <!-- 流程步骤标注 -->
+    <text x="70" y="130" text-anchor="middle" font-size="8" fill="#7A6D55">Step 1</text>
+    <text x="210" y="138" text-anchor="middle" font-size="8" fill="#7A6D55">Step 2</text>
+    <text x="365" y="138" text-anchor="middle" font-size="8" fill="#7A6D55">Step 3</text>
+    <text x="525" y="138" text-anchor="middle" font-size="8" fill="#EA580C">Step 4 ★NEW</text>
+    <text x="680" y="138" text-anchor="middle" font-size="8" fill="#7A6D55">Step 5</text>
+    <text x="823" y="130" text-anchor="middle" font-size="8" fill="#7A6D55">Step 6</text>
+    <text x="823" y="205" text-anchor="middle" font-size="8" fill="#E8960A">Step 7 ★NEW</text>
+    <text x="823" y="293" text-anchor="middle" font-size="8" fill="#7A6D55">Step 8</text>
   </svg>
   </div>
 
@@ -674,7 +634,7 @@ footer span{color:var(--amber);}
     <rect x="170" y="160" width="420" height="70" rx="10" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5" filter="url(#sh4)"/>
     <text x="380" y="183" text-anchor="middle" font-size="11" font-weight="600" fill="#DC2626">返工通道 · Rework Loop · 当前30%报告需返工</text>
     <text x="380" y="200" text-anchor="middle" font-size="9" fill="#7A6D55">人工审核发现问题→打回技术员修正→重新填报→再次审核</text>
-    <text x="380" y="215" text-anchor="middle" font-size="9" fill="#DC2626">实验报告智能预审核目标：返工率30%→≤15% · AI预审拦截80%低级错误</text>
+    <text x="380" y="215" text-anchor="middle" font-size="9" fill="#DC2626">PowerReview AI目标：退回率30%→≤5% · AI预审拦截80%低级错误</text>
     <line x1="390" y1="120" x2="380" y2="160" stroke="#DC2626" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah4)"/>
     <text x="395" y="145" font-size="8" fill="#DC2626">异常</text>
   </svg>
@@ -721,8 +681,8 @@ footer span{color:var(--amber);}
     <rect x="730" y="130" width="130" height="95" rx="8" fill="rgba(15,12,7,.03)" stroke="rgba(15,12,7,.08)"/>
     <text x="795" y="150" text-anchor="middle" font-size="9" font-weight="600" fill="#0F0C07">飞轮健康指标</text>
     <text x="745" y="168" font-size="9" fill="#7A6D55">AI预审采纳率 ≥80%</text>
-    <text x="745" y="183" font-size="9" fill="#7A6D55">人工修正率 ≤15%</text>
-    <text x="745" y="198" font-size="9" fill="#7A6D55">判据覆盖率 ≥95%</text>
+    <text x="745" y="183" font-size="9" fill="#7A6D55">人工修正率 ≤10%</text>
+    <text x="745" y="198" font-size="9" fill="#7A6D55">判据覆盖率 ≥80%</text>
     <text x="745" y="213" font-size="9" fill="#7A6D55">NPS ≥40</text>
   </svg>
   </div>
@@ -827,7 +787,7 @@ footer span{color:var(--amber);}
     <div class="know-card"><div class="know-card-label" style="color:var(--amber);">洞察3 · 准入门槛</div><div class="know-card-title">数据不出内网=准入门槛</div><div class="know-card-body">电力行业等保2.0三级要求，数据不可出网。公有云SaaS方案直接 disqualified。私有化部署是准入门槛而非加分项。</div></div>
     <div class="know-card"><div class="know-card-label" style="color:var(--blue);">洞察4 · 信任模型</div><div class="know-card-title">AI可信度 = 可追溯(可追溯) + 不替代签字（不替代签字）</div><div class="know-card-body">"AI预审+人终审"是唯一可接受模型。判据必须100%可溯源到标准条款号。没有依据的AI判定=没有判定。</div></div>
     <div class="know-card"><div class="know-card-label" style="color:var(--teal);">洞察5 · 知识断层</div><div class="know-card-title">资深审核专家即将退休，知识仅存于个人笔记</div><div class="know-card-body">知识图谱是唯一的规模化传承路径。Cold Start用标准文档结构化+专家知识注入解决。</div></div>
-    <div class="know-card"><div class="know-card-label" style="color:var(--ink-3);">洞察6 · MVP闭环</div><div class="know-card-title">v1.0最小闭环</div><div class="know-card-body">上传→解析→判据比对→温度修正→异常标记→人工终审，覆盖P01-P03三个核心痛点。</div></div>
+    <div class="know-card"><div class="know-card-label" style="color:var(--ink-3);">洞察6 · MVP闭环</div><div class="know-card-title">v1.0最小闭环(Minimum Viable Loop)</div><div class="know-card-body">上传→解析→判据比对→温度修正→异常标记→人工终审，覆盖P01-P04三个核心痛点。</div></div>
   </div>
 </section>
 
@@ -836,12 +796,13 @@ footer span{color:var(--amber);}
 <!-- ══════════════════════════════════════════════════ -->
 <section id="s-pain">
   <div class="sec-tag rv">02 痛点地图</div>
-  <h2 class="sec-h rv">21个痛点 · 痛点地图 · 频率×严重度四象限</h2>
-  <p class="sec-p rv">不是所有痛点都值得v1.0解决。用频率-严重度矩阵做残酷取舍，v1.0只打①必须解决区。功能蔓延的解药。</p>
+  <h2 class="sec-h rv">18个痛点 · Pain Point Map · 频率×严重度四象限</h2>
+  <p class="sec-p rv">不是所有痛点都值得v1.0解决。用频率-严重度矩阵做残酷取舍(Brutal Prioritization)，v1.0只打①必须解决区。Feature Creep的解药。</p>
 
   <div class="pain-grid rv">
     <div class="pain-quad" style="background:var(--orange-l);border-color:rgba(234,88,12,.2);">
-      <div class="pain-quad-h" style="border-color:var(--orange);color:var(--orange);">② 战略投入区 · 高严重×低频 · v1.1 (应该有)</div>
+      <div class="pain-quad-h" style="border-color:var(--orange);color:var(--orange);">② 战略投入区 · 高严重×低频 · v1.1 (Should-Have)</div>
+      <div class="pain-item"><span class="pain-id" style="background:var(--orange);color:#fff;">P06</span>标准版本管理混乱——不同班组用不同判据版本</div>
       <div class="pain-item"><span class="pain-id" style="background:var(--orange);color:#fff;">P07</span>签字终身追责，漏签问题报告事故追责首当其冲</div>
       <div class="pain-item"><span class="pain-id" style="background:var(--orange);color:#fff;">P08</span>仪器系统偏差导致整班组数据异常，人工无法识别</div>
       <div class="pain-item"><span class="pain-id" style="background:var(--orange);color:#fff;">P09</span>跨标准交叉验证缺失（GB与DL/T条款冲突未察觉）</div>
@@ -882,7 +843,7 @@ footer span{color:var(--amber);}
 <!-- ══════════════════════════════════════════════════ -->
 <section id="s-scenario" style="background:var(--paper-2);">
   <div class="sec-tag rv">03 用户场景与痛点映射 · Scenario × Pain Point</div>
-  <h2 class="sec-h rv">5个核心场景，21个痛点，每个痛点都有真实场景锚定</h2>
+  <h2 class="sec-h rv">5个核心场景，18个痛点，每个痛点都有真实场景锚定</h2>
   <p class="sec-p rv">痛点脱离场景就是空洞的数据。用Scenario-Based Analysis把每个痛点锚定到真实工作场景，让需求从场景中生长而非从假设中推导。</p>
 
   <div class="scenario-card rv">
@@ -1011,29 +972,29 @@ footer span{color:var(--amber);}
       <div class="req-pool-title">需求池总览（需求待办）</div>
       <div class="req-pool-count" style="background:var(--amber-l);color:var(--amber-d);">共20条需求</div>
     </div>
-    <div class="req-row" style="background:var(--paper-2);font-weight:500;font-size:12px;color:var(--ink-3);letter-spacing:.04em;">
-      <div>ID</div><div>需求名称</div><div>来源</div><div>优先级</div><div>版本</div><div>状态</div>
+    <div class="req-row" style="background:var(--paper-2);font-weight:500;font-size:10px;color:var(--ink-3);letter-spacing:.04em;">
+      <div>ID</div><div>需求名称</div><div>来源</div><div>R</div><div>I</div><div>C</div><div>E</div><div>RICE</div><div>优先级</div><div>版本</div><div>状态</div>
     </div>
-    <div class="req-row"><div class="req-id">R-01</div><div class="req-name">判据自动比对（全量Pass/Fail）</div><div class="req-source">P01,P05 李建华</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
-    <div class="req-row"><div class="req-id">R-02</div><div class="req-name">标准条款100%可追溯</div><div class="req-source">P07 合规</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
-    <div class="req-row"><div class="req-id">R-03</div><div class="req-name">温度修正自动计算(插值)</div><div class="req-source">P02 张磊</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
-    <div class="req-row"><div class="req-id">R-04</div><div class="req-name">数据-结论一致性校验</div><div class="req-source">P04 李建华</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
-    <div class="req-row"><div class="req-id">R-05</div><div class="req-name">多模态报告解析(Excel/Word/PDF)</div><div class="req-source">P03,P14 张磊</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
-    <div class="req-row"><div class="req-id">R-06</div><div class="req-name">派生指标自动计算</div><div class="req-source">P02 张磊</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
-    <div class="req-row"><div class="req-id">R-07</div><div class="req-name">上传即审(Zero-Click Audit)</div><div class="req-source">P01 张磊</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
-    <div class="req-row"><div class="req-id">R-08</div><div class="req-name">审核摘要（执行摘要）</div><div class="req-source">P10 王德明</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
-    <div class="req-row"><div class="req-id">R-09</div><div class="req-name">设备台账管理与历史关联</div><div class="req-source">P13 陈思</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-10</div><div class="req-name">历史趋势对比（同比）</div><div class="req-source">P10 王德明</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-11</div><div class="req-name">异常摘要看板（异常仪表盘）</div><div class="req-source">P01 李建华</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-12</div><div class="req-name">批量审核与批量确认</div><div class="req-source">P01 李建华</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-13</div><div class="req-name">PDF审核报告导出(含审计追踪)</div><div class="req-source">P07 合规</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-14</div><div class="req-name">同族设备横向对比</div><div class="req-source">P11 王德明</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-15</div><div class="req-name">质量统计报表(Pareto/趋势/对比)</div><div class="req-source">P12 陈思</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-16</div><div class="req-name">仪器数据直连(RS232/蓝牙/API)</div><div class="req-source">P08 仪器</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-17</div><div class="req-name">PMS对接（开放API）</div><div class="req-source">Integration</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
-    <div class="req-row"><div class="req-id">R-18</div><div class="req-name">移动端审核App</div><div class="req-source">P18 Mobile</div><div class="req-priority" style="background:var(--ink-3);color:var(--white);background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v2.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
-    <div class="req-row"><div class="req-id">R-19</div><div class="req-name">设备劣化趋势预测</div><div class="req-source">P10 Frontier</div><div class="req-priority" style="background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v3.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
-    <div class="req-row"><div class="req-id">R-20</div><div class="req-name">多标准支持(IEC国际标准)</div><div class="req-source">P19 IEC</div><div class="req-priority" style="background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v3.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
+    <div class="req-row"><div class="req-id">R-01</div><div class="req-name">判据自动比对（全量Pass/Fail）</div><div class="req-source">P01,P05 李建华</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2000</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">100%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">3000</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
+    <div class="req-row"><div class="req-id">R-02</div><div class="req-name">标准条款100%可追溯</div><div class="req-source">P07 合规</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2000</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">100%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">4000</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
+    <div class="req-row"><div class="req-id">R-03</div><div class="req-name">温度修正自动计算(插值)</div><div class="req-source">P02 张磊</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1500</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">100%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">3000</div><div class="req-priority" style="background:var(--red-l);color:var(--red);">P0</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
+    <div class="req-row"><div class="req-id">R-04</div><div class="req-name">数据-结论一致性校验</div><div class="req-source">P04 李建华</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2000</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1600</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
+    <div class="req-row"><div class="req-id">R-05</div><div class="req-name">多模态报告解析(Excel/Word/PDF)</div><div class="req-source">P03,P14 张磊</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1500</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1200</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--teal-l);color:var(--teal-d);">Done</div></div>
+    <div class="req-row"><div class="req-id">R-06</div><div class="req-name">派生指标自动计算</div><div class="req-source">P02 张磊</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1500</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1600</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
+    <div class="req-row"><div class="req-id">R-07</div><div class="req-name">上传即审(Zero-Click Audit)</div><div class="req-source">P01 张磊</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2000</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1600</div><div class="req-priority" style="background:var(--orange-l);color:var(--orange);">P1</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
+    <div class="req-row"><div class="req-id">R-08</div><div class="req-name">审核摘要(Executive Summary)</div><div class="req-source">P10 王德明</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1800</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1920</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.0</div><div class="req-status" style="background:var(--amber-l);color:var(--amber-d);">WIP</div></div>
+    <div class="req-row"><div class="req-id">R-09</div><div class="req-name">设备台账管理与历史关联</div><div class="req-source">P13 陈思</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">800</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">320</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-10</div><div class="req-name">历史趋势对比(YoY)</div><div class="req-source">P10 王德明</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1200</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">960</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-11</div><div class="req-name">异常摘要看板(Exception Dashboard)</div><div class="req-source">P01 李建华</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1500</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">1200</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-12</div><div class="req-name">批量审核与批量确认</div><div class="req-source">P01 李建华</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1000</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">533</div><div class="req-priority" style="background:var(--amber-l);color:var(--amber-d);">P2</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-13</div><div class="req-name">PDF审核报告导出(含审计追踪)</div><div class="req-source">P07 合规</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">800</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">320</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v1.1</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-14</div><div class="req-name">同族设备横向对比</div><div class="req-source">P11 王德明</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">600</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">150</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-15</div><div class="req-name">质量统计报表(Pareto/趋势/对比)</div><div class="req-source">P12 陈思</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">500</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">0.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">80%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">100</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-16</div><div class="req-name">仪器数据直连(RS232/蓝牙/API)</div><div class="req-source">P08 仪器</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">400</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">4</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">75</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-17</div><div class="req-name">PMS对接(Open API)</div><div class="req-source">Integration</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">600</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">1</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">100</div><div class="req-priority" style="background:var(--teal-l);color:var(--teal-d);">P3</div><div class="req-ver">v2.0</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Plan</div></div>
+    <div class="req-row"><div class="req-id">R-18</div><div class="req-name">移动端审核App</div><div class="req-source">P18 Mobile</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">300</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">0.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">4</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">19</div><div class="req-priority" style="background:var(--ink-3);color:var(--white);background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v2.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
+    <div class="req-row"><div class="req-id">R-19</div><div class="req-name">设备劣化趋势预测</div><div class="req-source">P10 Frontier</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">400</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">2</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">133</div><div class="req-priority" style="background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v3.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
+    <div class="req-row"><div class="req-id">R-20</div><div class="req-name">多标准支持(IEC国际标准)</div><div class="req-source">P19 IEC</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">200</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">0.5</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">50%</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;">3</div><div style="font-family:"Space Mono",monospace;font-size:10px;text-align:center;font-weight:600;">17</div><div class="req-priority" style="background:rgba(15,12,7,.1);color:var(--ink-3);">P4</div><div class="req-ver">v3.0+</div><div class="req-status" style="background:var(--paper-2);color:var(--ink-3);">Idea</div></div>
   </div>
 
   <div class="grid-4 rv" style="margin-bottom:16px;">
@@ -1095,7 +1056,7 @@ footer span{color:var(--amber);}
     <rect x="90" y="474" width="8" height="8" rx="2" fill="#EA580C"/>
     <text x="104" y="482" font-size="8" fill="#3D3520">L2 安全合规: 数据不出内网(私有化) + AI信任模型(判据可追溯) + 审计日志 + 不替代签字</text>
     <rect x="90" y="488" width="8" height="8" rx="2" fill="#E8960A"/>
-    <text x="104" y="496" font-size="8" fill="#3D3520">L3 效率协作: 单份审核30秒 + 温度修正自动化 + 一致性校验 + 异常看板 + 批量审核</text>
+    <text x="104" y="496" font-size="8" fill="#3D3520">L3 效率协作: 单份审核3分钟 + 温度修正自动化 + 一致性校验 + 异常看板 + 批量审核</text>
     <rect x="460" y="460" width="8" height="8" rx="2" fill="#2563EB"/>
     <text x="474" y="468" font-size="8" fill="#3D3520">L4 专业感: Executive Summary + YoY趋势 + 同族设备对比 + 知识图谱</text>
     <rect x="460" y="474" width="8" height="8" rx="2" fill="#7C3AED"/>
@@ -1120,7 +1081,7 @@ footer span{color:var(--amber);}
       <div class="know-card" style="border-left:3px solid var(--amber);margin-bottom:10px;">
         <div class="know-card-label" style="color:var(--amber-d);">L3 · 效率协作（效率） · v1.0-v1.1</div>
         <div class="know-card-title">用起来爽不爽？</div>
-        <div class="know-card-body">30秒出审核结果=消除等待的爽感。异常看板批量通过=审核效率提升60%。Executive Summary=管理决策一目了然。这是马斯洛的"归属需求"——<strong>用起来爽才会持续用</strong>。</div>
+        <div class="know-card-body">3分钟出审核结果=消除等待的爽感。异常看板批量通过=审核效率提升60%。Executive Summary=管理决策一目了然。这是马斯洛的"归属需求"——<strong>用起来爽才会持续用</strong>。</div>
         <div class="know-card-tip" style="background:var(--amber-l);color:var(--amber-d);">对应: R-04一致性校验 + R-07上传即审 + R-08摘要 + R-11看板</div>
       </div>
       <div class="know-card" style="border-left:3px solid var(--blue);margin-bottom:10px;">
@@ -1447,8 +1408,8 @@ footer span{color:var(--amber);}
       <div class="tab-p" id="tp3">
         <div class="card" style="padding:28px;">
           <div style="padding:14px 18px;background:var(--amber-l);border-radius:var(--r-sm);border-left:3px solid var(--amber);margin-bottom:20px;">
-            <strong style="color:var(--amber-d);">B端定位：校验Agent，不是撰写Agent</strong>
-            <p style="margin:6px 0 0;font-size:16px;color:var(--ink-2);">核心价值不是"帮用户写报告"（C端思路），而是<strong>"帮用户写对报告"</strong>（B端思路）。技术员必须对数据负责，Agent的角色是质检员，不是代笔人。嵌入现有工作流（PMS），不改变用户习惯。</p>
+            <strong style="color:var(--amber-d);">B端定位：AI预审Agent，不是撰写Agent</strong>
+            <p style="margin:6px 0 0;font-size:13px;color:var(--ink-2);">核心价值不是"帮用户写报告"（C端思路），而是<strong>"帮用户写对报告"</strong>（B端思路）。技术员必须对数据负责，Agent的角色是质检员，不是代笔人。嵌入现有工作流（PMS），不改变用户习惯。</p>
           </div>
           <h4 style="margin-bottom:14px;">双链路架构：规则引擎（确定性）+ RAG（检索增强）</h4>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
@@ -1464,12 +1425,12 @@ footer span{color:var(--amber);}
           <h4 style="margin-bottom:12px;">Agent 演进路线</h4>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--amber-l);border-radius:var(--r-sm);">
-              <span style="font-family:'Space Mono';font-size:14px;color:var(--amber-d);white-space:nowrap;margin-top:2px;">v1.0</span>
-              <div><strong style="font-size:17px;">校验Agent</strong><p style="font-size:15px;color:var(--ink-2);margin-top:4px;">实时校验：计算校验 · 完整性校验 · 单位校验 · 判据校验 · 历史对比 · 一致性校验 → 退回率30%→5%</p></div>
+              <span style="font-family:'Space Mono';font-size:11px;color:var(--amber-d);white-space:nowrap;margin-top:2px;">v1.0</span>
+              <div><strong style="font-size:14px;">AI预审Agent</strong><p style="font-size:12px;color:var(--ink-2);margin-top:4px;">AI预审：判据比对 · 温度修正 · 异常标记 · 历史对比 · 一致性校验 → 退回率30%→5%</p></div>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--blue-l);border-radius:var(--r-sm);">
-              <span style="font-family:'Space Mono';font-size:14px;color:var(--blue-d);white-space:nowrap;margin-top:2px;">v1.1</span>
-              <div><strong style="font-size:17px;">辅助Agent</strong><p style="font-size:15px;color:var(--ink-2);margin-top:4px;">填写实时校验 · 判据库版本管理 · 覆盖扩展4→6类 · Vue3升级 → 退回率5%→≤2%</p></div>
+              <span style="font-family:'Space Mono';font-size:11px;color:var(--blue-d);white-space:nowrap;margin-top:2px;">v1.1</span>
+              <div><strong style="font-size:14px;">辅助Agent</strong><p style="font-size:12px;color:var(--ink-2);margin-top:4px;">实时校验 · 历史数据自动填入 · 修正系数自动查表 · 判据推荐 → 填写效率+50%</p></div>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--teal-l);border-radius:var(--r-sm);">
               <span style="font-family:'Space Mono';font-size:14px;color:var(--teal-d);white-space:nowrap;margin-top:2px;">v2.0</span>
